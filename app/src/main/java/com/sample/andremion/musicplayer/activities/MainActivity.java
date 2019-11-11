@@ -30,7 +30,7 @@ import com.sample.andremion.musicplayer.R;
 import com.sample.andremion.musicplayer.music.MusicContent;
 import com.sample.andremion.musicplayer.view.RecyclerViewAdapter;
 
-public class MainActivity extends PlayerActivity {
+public class MainActivity extends PlayActivity {
 
     private View mCoverView;
     private View mTitleView;

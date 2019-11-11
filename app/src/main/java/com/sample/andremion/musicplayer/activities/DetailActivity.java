@@ -24,7 +24,7 @@ import com.andremion.music.MusicCoverView;
 import com.sample.andremion.musicplayer.R;
 import com.sample.andremion.musicplayer.view.TransitionAdapter;
 
-public class DetailActivity extends PlayerActivity {
+public class DetailActivity extends PlayActivity {
 
     private MusicCoverView mCoverView;
 

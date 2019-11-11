@@ -27,21 +27,21 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ProgressBar;
-
 import com.sample.andremion.musicplayer.R;
 
 public class ProgressView extends View {
 
-    private static final float STROKE_SIZE = 4;
-    private static final float START_ANGLE = 135;
-    private static final float MIDDLE_ANGLE = 270;
-    private static final float GAP_ANGLE = 90;
-    private static final float FULLPROGRESS_ANGLE = 360 - GAP_ANGLE;
+    private static final float PROGRESS_SIZE = 4;
+    private static final float START_ANGLE = 135;         //进度条开始的角度
+    private static final float MIDDLE_ANGLE = 270;        //进度条中间的角度
+    private static final float GAP_ANGLE = 90;            //进度条空缺间隔的角度
+    //整个进度条的角度
+    private static final float FULL_PROGRESS_ANGLE = 360 - GAP_ANGLE;
 
     private final RectF mBounds = new RectF();
     private final Paint mPaint = new Paint();
 
-    private final float mStrokeSize;
+    private final float mProgressSize;
     private final int mBackgroundColor;
     private final int mForegroundColor;
 
@@ -61,12 +61,12 @@ public class ProgressView extends View {
         super(context, attrs, defStyleAttr);
 
         final float density = getResources().getDisplayMetrics().density;
-        mStrokeSize = STROKE_SIZE * density;
+        mProgressSize = PROGRESS_SIZE * density;
 
-        mPaint.setAntiAlias(true);
-        mPaint.setStyle(Paint.Style.STROKE);
-        mPaint.setStrokeWidth(mStrokeSize);
-        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setAntiAlias(true);              //设置抗锯齿
+        mPaint.setStyle(Paint.Style.STROKE);    //设置描边
+        mPaint.setStrokeWidth(mProgressSize);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);   //设置笔触
 
         TypedValue outValue = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.colorAccent, outValue, true);
@@ -75,7 +75,7 @@ public class ProgressView extends View {
         mBackgroundColor = outValue.data;
 
         mProgress = 0;
-        mMax = 100;
+        mMax = 335;
     }
 
     public int getProgress() {
@@ -134,8 +134,8 @@ public class ProgressView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-        int width = Math.max(getSuggestedMinimumWidth(), (int) mStrokeSize);
-        int height = Math.max(getSuggestedMinimumHeight(), (int) mStrokeSize);
+        int width = Math.max(getSuggestedMinimumWidth(), (int) mProgressSize);
+        int height = Math.max(getSuggestedMinimumHeight(), (int) mProgressSize);
 
         width += getPaddingLeft() + getPaddingRight();
         height += getPaddingTop() + getPaddingBottom();
@@ -149,7 +149,7 @@ public class ProgressView extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 
         // Extra padding to avoid cuttings on arc.
-        float xpad = mStrokeSize / 2f;
+        float xpad = mProgressSize / 2f;
 
         mBounds.top = getPaddingTop() + xpad;
         mBounds.bottom = h - getPaddingBottom() - xpad;
@@ -162,9 +162,9 @@ public class ProgressView extends View {
 
         final float scale = mMax > 0 ? mProgress / (float) mMax : 0;
         float startAngle = MIDDLE_ANGLE - START_ANGLE * mMorph;
-        float sweepAngle = FULLPROGRESS_ANGLE * mMorph;
+        float sweepAngle = FULL_PROGRESS_ANGLE * mMorph;
 
-        if (mBounds.height() <= mStrokeSize) {
+        if (mBounds.height() <= mProgressSize) {
 
             // Draw the line
 

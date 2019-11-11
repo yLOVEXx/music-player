@@ -19,11 +19,10 @@
         </activity>
         <activity
             android:name=".activities.DetailActivity"
-            android:theme="@style/AppTheme.Detail">
-        </activity>
+            android:theme="@style/AppTheme.Detail" />
 
         <service
-            android:name=".music.PlayerService"
+            android:name=".music.PlayService"
             android:enabled="true"
             android:exported="false" />
     </application>

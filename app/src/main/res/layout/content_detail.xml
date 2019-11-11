@@ -10,7 +10,9 @@
     <com.andremion.music.MusicCoverView
         android:id="@+id/cover"
         android:layout_width="match_parent"
-        android:layout_centerInParent="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:scaleType="centerInside"
         android:src="@drawable/album_cover_daft_punk"
         android:transitionName="@string/transition_name_cover"
