@@ -16,8 +16,11 @@
 
 package com.sample.andremion.musicplayer.view;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -26,7 +29,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.andremion.music.MusicCoverView;
 import com.sample.andremion.musicplayer.R;
+import com.sample.andremion.musicplayer.activities.MainActivity;
 import com.sample.andremion.musicplayer.model.Song;
 import com.sample.andremion.musicplayer.music.MusicContent;
 import com.sample.andremion.musicplayer.music.PlayService;
@@ -38,11 +43,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
     private final List<Song> mSongList;
     private final Context mContext;
+    private final LocalBroadcastManager broadcastManager;
 
     public SongAdapter(Context context, List<Song> mSongList) {
         this.mContext = context;
         this.mSongList = mSongList;
+        broadcastManager = LocalBroadcastManager.getInstance(mContext);
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -52,7 +60,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         //获取对应位置的song
         holder.song = mSongList.get(position);
 
@@ -68,6 +76,12 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 PlayService.play(holder.song);
+                /*
+                send broadcast to activity
+                 */
+                Intent intent = new Intent("musicPlayer.broadcast.SONG_SELECTED");
+                intent.putExtra("songIndex", position);
+                broadcastManager.sendBroadcast(intent);
             }
         });
     }
@@ -88,10 +102,10 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mCoverView = (ImageView) view.findViewById(R.id.cover);
-            mTitleView = (TextView) view.findViewById(R.id.title);
-            mArtistView = (TextView) view.findViewById(R.id.artist);
-            mDurationView = (TextView) view.findViewById(R.id.duration);
+            mCoverView = view.findViewById(R.id.cover);
+            mTitleView = view.findViewById(R.id.title);
+            mArtistView = view.findViewById(R.id.artist);
+            mDurationView = view.findViewById(R.id.duration);
         }
     }
 
