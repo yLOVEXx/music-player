@@ -35,6 +35,8 @@ import java.io.InputStream;
 import java.util.List;
 
 public class MusicContent {
+    private static final int SMALL_SIZE = 40;
+    private static final int BIG_SIZE = 350;
 
     public static List<Song> SONG_LIST = LitePal.findAll(Song.class);
     private static final Uri ALBUM_ART_URI = Uri.parse("content://media/external/audio/albumart");
@@ -121,9 +123,9 @@ public class MusicContent {
                 options.inJustDecodeBounds = true;
                 BitmapFactory.decodeStream(in, null, options);
                 if(small)
-                    options.inSampleSize = calculateSampleSize(options, 40, 40);
+                    options.inSampleSize = calculateSampleSize(options, SMALL_SIZE, SMALL_SIZE);
                 else
-                    options.inSampleSize = calculateSampleSize(options, 500, 500);
+                    options.inSampleSize = calculateSampleSize(options, BIG_SIZE, BIG_SIZE);
 
                 options.inJustDecodeBounds = false;
                 options.inDither = false;
@@ -184,9 +186,9 @@ public class MusicContent {
             BitmapFactory.decodeFileDescriptor(fd, null, options);
             // 调用calculateSampleSize得到图片缩放的比例
             if(small)
-                options.inSampleSize = calculateSampleSize(options, 40, 40);
+                options.inSampleSize = calculateSampleSize(options, SMALL_SIZE, SMALL_SIZE);
             else
-                options.inSampleSize = calculateSampleSize(options, 500, 500);
+                options.inSampleSize = calculateSampleSize(options, BIG_SIZE, BIG_SIZE);
 
             options.inJustDecodeBounds = false;
             options.inDither = false;
@@ -204,9 +206,9 @@ public class MusicContent {
         BitmapFactory.Options option = new BitmapFactory.Options();
         option.inPreferredConfig = Bitmap.Config.RGB_565;
         if(small)
-            option.inSampleSize = calculateSampleSize(option, 40, 40);
+            option.inSampleSize = calculateSampleSize(option, SMALL_SIZE, SMALL_SIZE);
         else
-            option.inSampleSize = calculateSampleSize(option, 500, 500);
+            option.inSampleSize = calculateSampleSize(option, BIG_SIZE, BIG_SIZE);
 
         return BitmapFactory.decodeResource(context.getResources(),
                 R.drawable.album_default, option);
