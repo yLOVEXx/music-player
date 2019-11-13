@@ -31,6 +31,7 @@ import android.text.format.DateUtils;
 import android.widget.TextView;
 
 import com.sample.andremion.musicplayer.R;
+import com.sample.andremion.musicplayer.model.Song;
 import com.sample.andremion.musicplayer.music.PlayService;
 import com.sample.andremion.musicplayer.view.ProgressView;
 
@@ -117,8 +118,8 @@ public abstract class PlayActivity extends AppCompatActivity {
         mUpdateProgressHandler.removeMessages(0);
     }
 
-    public void play() {
-        mService.play();
+    public void play(Song song) {
+        mService.play(song);
     }
 
     public void pause() {

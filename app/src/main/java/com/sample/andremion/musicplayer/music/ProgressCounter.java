@@ -5,13 +5,14 @@ import android.util.Log;
 import static android.content.ContentValues.TAG;
 
 class ProgressCounter extends Thread {
-    private int mDuration = 335;
+    private int mDuration;            //歌曲秒数
     private boolean mPaused;
     private int mPosition;
 
     public ProgressCounter(){
         mPaused = false;
         mPosition = 0;
+        mDuration = 0;
     }
 
     public ProgressCounter(int duration){
@@ -19,6 +20,7 @@ class ProgressCounter extends Thread {
         mPaused = false;
         mPosition = 0;
     }
+
 
     @Override
     public void run() {
@@ -34,19 +36,23 @@ class ProgressCounter extends Thread {
         }
     }
 
-    void doResume() {
+    void restart() {
         mPaused = false;
     }
 
-    void doPause() {
+    void pause() {
         mPaused = true;
-    }
-
-    boolean isPlaying() {
-        return !mPaused;
     }
 
     int getPosition() {
         return mPosition;
+    }
+
+    //释放线程
+    void release(){
+        pause();
+        if(isAlive()){
+            interrupt();
+        }
     }
 }

@@ -49,7 +49,7 @@ public class DetailActivity extends PlayActivity {
         getWindow().getSharedElementEnterTransition().addListener(new TransitionAdapter() {
             @Override
             public void onTransitionEnd(Transition transition) {
-                play();
+                //play();
                 mCoverView.start();
             }
         });

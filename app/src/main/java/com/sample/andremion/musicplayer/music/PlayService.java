@@ -18,55 +18,81 @@ package com.sample.andremion.musicplayer.music;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
+
+import com.sample.andremion.musicplayer.model.Song;
 
 import java.io.IOException;
 
 public class PlayService extends Service {
 
-    private static final int DURATION = 335;
-
     // Binder given to clients
     private final IBinder mBinder = new PlayBinder();
-    private MediaPlayer mPlayer;
-    private ProgressCounter mCounter;
+    private static MediaPlayer mPlayer = new MediaPlayer();
+    private static ProgressCounter mCounter = new ProgressCounter();
+    private static Song mSongInPlayer;
 
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        initMediaPlayer();
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
 
-    public void play() {
-        mPlayer.start();
+    public static void play(Song song) {
+        if(!isPlaying()){
+            if(mSongInPlayer != null && mSongInPlayer.getId() == song.getId()){
+                mPlayer.start();
+                mCounter.restart();
+            }
+            else{
+                mSongInPlayer = song;
+                resetPlayer(mSongInPlayer.getPath());
+                mPlayer.start();
 
-        if(mCounter == null){
-            mCounter = new ProgressCounter();
-            mCounter.start();
+                resetCounter((int)(mSongInPlayer.getDuration() / 1000));
+                mCounter.start();
+            }
         }
         else{
-            mCounter.doResume();
+            if(mSongInPlayer.getId() != song.getId()){
+
+                mSongInPlayer = song;
+                resetPlayer(mSongInPlayer.getPath());
+                mPlayer.start();
+
+                resetCounter((int)(mSongInPlayer.getDuration() / 1000));
+                mCounter.start();
+            }
         }
     }
 
-    public boolean isPlaying() {
-        return mCounter != null && mCounter.isPlaying();
+    private static void resetPlayer(String path){
+        try {
+            mPlayer.reset();
+            mPlayer.setDataSource(path);
+            mPlayer.prepare();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void pause() {
+    private static void resetCounter(int duration){
+        mCounter.release();
+        mCounter = new ProgressCounter(duration);
+    }
+
+    public static boolean isPlaying() {
+        return mPlayer.isPlaying();
+    }
+
+    public static void pause() {
         mPlayer.pause();
 
         if(mCounter != null){
-            mCounter.doPause();
+            mCounter.pause();
         }
     }
 
@@ -78,21 +104,11 @@ public class PlayService extends Service {
     }
 
     public int getDuration() {
-        return DURATION;
+        if(mSongInPlayer == null)
+            return 0;
+        else
+            return (int)(mSongInPlayer.getDuration() / 1000);
     }
-
-    public void initMediaPlayer(){
-        mPlayer = new MediaPlayer();
-        AssetFileDescriptor fd = null;
-        try {
-            fd = getAssets().openFd("Muroki - 2A0X.mp3");
-            mPlayer.setDataSource(fd);
-            mPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     /**
      * Class used for the client Binder. Because we know this service always
@@ -111,6 +127,6 @@ public class PlayService extends Service {
         super.onDestroy();
         mPlayer.stop();
         mPlayer.release();
-        mCounter.interrupt();
+        mCounter.release();
     }
 }
