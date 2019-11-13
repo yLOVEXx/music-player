@@ -16,22 +16,18 @@
 
 package com.sample.andremion.musicplayer.view;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.andremion.music.MusicCoverView;
 import com.sample.andremion.musicplayer.R;
-import com.sample.andremion.musicplayer.activities.MainActivity;
 import com.sample.andremion.musicplayer.model.Song;
 import com.sample.andremion.musicplayer.music.MusicContent;
 import com.sample.andremion.musicplayer.music.PlayService;
@@ -60,7 +56,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, int position) {
         //获取对应位置的song
         holder.song = mSongList.get(position);
 
@@ -77,10 +73,10 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
             public void onClick(View v) {
                 PlayService.play(holder.song);
                 /*
-                send broadcast to activity
+                send broadcast to activity for loading the album cover
                  */
                 Intent intent = new Intent("musicPlayer.broadcast.SONG_SELECTED");
-                intent.putExtra("songIndex", position);
+                intent.putExtra("songIndex", holder.getAdapterPosition());
                 broadcastManager.sendBroadcast(intent);
             }
         });
@@ -91,7 +87,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         return mSongList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final ImageView mCoverView;
         public final TextView mTitleView;

@@ -67,6 +67,7 @@ public class MainActivity extends PlayActivity {
         mProgressView = findViewById(R.id.progress);
         mFabView = findViewById(R.id.fab);
 
+        //当接受到 SONG_SELECTED 时设置专辑图片
         broadcastManager = LocalBroadcastManager.getInstance(this);
         intentFilter = new IntentFilter();
         intentFilter.addAction("musicPlayer.broadcast.SONG_SELECTED");
