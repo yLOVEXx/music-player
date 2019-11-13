@@ -17,13 +17,18 @@
 package com.sample.andremion.musicplayer.activities;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,7 +36,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.andremion.music.MusicCoverView;
 import com.sample.andremion.musicplayer.R;
+import com.sample.andremion.musicplayer.model.Song;
 import com.sample.andremion.musicplayer.music.MusicContent;
 import com.sample.andremion.musicplayer.view.SongAdapter;
 
@@ -43,6 +50,10 @@ public class MainActivity extends PlayActivity {
     private View mDurationView;
     private View mProgressView;
     private View mFabView;
+
+    private IntentFilter intentFilter;
+    private SongSelectedReceiver receiver;
+    private LocalBroadcastManager broadcastManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +67,22 @@ public class MainActivity extends PlayActivity {
         mProgressView = findViewById(R.id.progress);
         mFabView = findViewById(R.id.fab);
 
+        broadcastManager = LocalBroadcastManager.getInstance(this);
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("musicPlayer.broadcast.SONG_SELECTED");
+        receiver = new SongSelectedReceiver();
+        broadcastManager.registerReceiver(receiver, intentFilter);
+
         //获取读取sd卡的权限
         getPermissionAndContent();
 
         // Set the recycler adapter
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.tracks);
+        RecyclerView recyclerView = findViewById(R.id.tracks);
         assert recyclerView != null;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new SongAdapter(this, MusicContent.SONG_LIST));
     }
+
 
     public void onFabClick(View view) {
         //noinspection unchecked
@@ -110,5 +128,26 @@ public class MainActivity extends PlayActivity {
 
             default:
         }
+    }
+
+    class SongSelectedReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int index = intent.getIntExtra("songIndex", -1);
+
+            if(index != -1){
+                MusicCoverView coverView = findViewById(R.id.cover);
+                Song song = MusicContent.SONG_LIST.get(index);
+                Bitmap cover = MusicContent.getArtwork(MainActivity.this,
+                        song.getId(), song.getAlbumId(), false);
+                coverView.setImageBitmap(cover);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        broadcastManager.unregisterReceiver(receiver);
     }
 }
