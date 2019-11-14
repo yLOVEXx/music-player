@@ -1,0 +1,132 @@
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- 你的主界面内容，必须放置在DrawerLayout中的第一个位置-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- 设置普通指示器 -->
+
+        <!-- 设置数字指示器 -->
+        <!--<com.donkingliang.banner.CustomBanner-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/banner"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="180dp"-->
+        <!--app:indicatorStyle="NUMBER"-->
+        <!--app:indicatorGravity="RIGHT"/>-->
+
+        <!-- 设置没有指示器 -->
+        <!--<com.donkingliang.banner.CustomBanner-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/banner"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="180dp"-->
+        <!--app:indicatorStyle="NONE"/>-->
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#130C0C"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:layout_constraintBottom_toTopOf="@+id/banner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
+
+            <com.donkingliang.banner.CustomBanner
+                android:id="@+id/banner"
+                android:layout_width="413dp"
+                android:layout_height="190dp"
+                app:indicatorGravity="CENTER"
+                app:indicatorInterval="5dp"
+                app:indicatorSelectRes="@drawable/shape_point_select"
+                app:indicatorStyle="ORDINARY"
+                app:indicatorUnSelectRes="@drawable/shape_point_unselect"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            </com.donkingliang.banner.CustomBanner>
+
+            <RelativeLayout
+                android:id="@+id/playlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/music_image"
+                android:gravity="center_vertical"
+                android:padding="@dimen/activity_vertical_margin"
+                android:transitionGroup="true"
+                app:layout_constraintBottom_toTopOf="@+id/recycle_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/banner"
+                tools:ignore="NotSibling,UnknownId">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="我的歌单"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+<!--
+                <TextView
+                    android:id="@+id/counter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/name"
+                    android:text="4"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+-->
+                <ImageView
+                    android:id="@+id/options"
+                    android:layout_width="@dimen/design_fab_size_mini"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:src="@drawable/ic_more_vert_white_24dp" />
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycle_view"
+                android:layout_width="408dp"
+                android:layout_height="361dp"
+                android:layout_below="@+id/playlist"
+                android:layout_marginBottom="51dp"
+                app:layoutManager="LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/playlist" />
+             tools:listitem="@layout/mainlist_item" />
+
+        </android.support.constraint.ConstraintLayout>
+    </FrameLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/nav_menu"></android.support.design.widget.NavigationView>
+
+
+</android.support.v4.widget.DrawerLayout>

@@ -1,0 +1,60 @@
+
+    <!-- 你的主界面内容，必须放置在DrawerLayout中的第一个位置-->
+        <!-- 设置普通指示器 -->
+
+        <!-- 设置数字指示器 -->
+        <!--<com.donkingliang.banner.CustomBanner-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/banner"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="180dp"-->
+        <!--app:indicatorStyle="NUMBER"-->
+        <!--app:indicatorGravity="RIGHT"/>-->
+
+        <!-- 设置没有指示器 -->
+        <!--<com.donkingliang.banner.CustomBanner-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/banner"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="180dp"-->
+        <!--app:indicatorStyle="NONE"/>-->
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/constraintlayout"
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="49dp"
+            android:layout_height="46dp"
+            app:layout_constraintEnd_toStartOf="@+id/button"
+            app:layout_constraintTop_toBottomOf="@+id/banner"
+            app:srcCompat="@drawable/musiclist" />
+
+        <com.donkingliang.banner.CustomBanner
+            android:id="@+id/banner"
+            android:layout_width="415dp"
+            android:layout_height="190dp"
+            app:indicatorGravity="CENTER"
+            app:indicatorInterval="5dp"
+            app:indicatorSelectRes="@drawable/shape_point_select"
+            app:indicatorStyle="ORDINARY"
+            app:indicatorUnSelectRes="@drawable/shape_point_unselect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </com.donkingliang.banner.CustomBanner>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="85dp"
+            android:layout_height="46dp"
+            android:text="我的歌单"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/banner" />
+    </android.support.constraint.ConstraintLayout>
+

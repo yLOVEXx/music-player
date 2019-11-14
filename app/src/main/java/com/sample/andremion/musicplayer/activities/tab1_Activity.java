@@ -10,51 +10,31 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
 import com.donkingliang.banner.CustomBanner;
 import com.sample.andremion.musicplayer.R;
-import com.sample.andremion.musicplayer.view.MusicListAdapter;
+
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class tab1_Activity extends AppCompatActivity {
 
     private CustomBanner<String> mBanner;
-    private Toolbar toolbar;
-    private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
-    private ActionBarDrawerToggle mToggle;
-    private List<Music> music =new ArrayList<>();
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_tab1);
         Button button=(Button)findViewById(R.id.button);
         ImageButton imageButton=(ImageButton)findViewById(R.id.imageButton);
-        setSupportActionBar(toolbar);
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
-        ActionBar actionBar=getSupportActionBar();
-
-        if(actionBar !=null){
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.menu_white);
-        }
 /*
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 */
-
         mBanner = (CustomBanner) findViewById(R.id.banner);
 
         ArrayList<String> images = new ArrayList<>();
@@ -80,29 +59,8 @@ public class MainActivity extends AppCompatActivity {
         images.add("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3513269361,2662598514&fm=23&gp=0.jpg");
         setBean(images);
 
-
-        mNavigationView.setCheckedItem(R.id.nav_call);
-        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                mDrawerLayout.closeDrawers();
-                return true;
-            }
-        });
-
-        initMusicList();
-        RecyclerView recyclerView = findViewById(R.id.recycle_view);
-        assert recyclerView != null;
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new MusicListAdapter(music,this));
-
     }
-
-    private void initMusicList(){
-        Music myfavorite=new Music("favorite",R.drawable.collect,"100");
-        music.add(myfavorite);
-    }
-
+    /*
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu,menu);
         return true;
@@ -117,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return true;
     }
-
+*/
     private void setBean(final ArrayList<String> beans) {
         mBanner.setPages(new CustomBanner.ViewCreator<String>() {
             @Override
@@ -188,4 +146,3 @@ public class MainActivity extends AppCompatActivity {
 //                .startTurning(5000);
 //    }
 }
-

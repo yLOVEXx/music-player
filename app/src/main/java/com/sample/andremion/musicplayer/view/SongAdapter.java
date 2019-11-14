@@ -16,22 +16,18 @@
 
 package com.sample.andremion.musicplayer.view;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.andremion.music.MusicCoverView;
 import com.sample.andremion.musicplayer.R;
-import com.sample.andremion.musicplayer.activities.MainActivity;
 import com.sample.andremion.musicplayer.model.Song;
 import com.sample.andremion.musicplayer.music.MusicContent;
 import com.sample.andremion.musicplayer.music.PlayService;
@@ -108,5 +104,4 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
             mDurationView = view.findViewById(R.id.duration);
         }
     }
-
 }
