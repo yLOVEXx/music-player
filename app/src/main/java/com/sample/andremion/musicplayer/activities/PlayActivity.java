@@ -80,6 +80,7 @@ public abstract class PlayActivity extends AppCompatActivity {
             mDurationView.setText(DateUtils.formatElapsedTime(duration));
         }
         if (mProgressView != null) {
+            mProgressView.setMax(duration);
             mProgressView.setProgress(position);
         }
     }
@@ -95,9 +96,9 @@ public abstract class PlayActivity extends AppCompatActivity {
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
-        mTimeView = (TextView) findViewById(R.id.time);
-        mDurationView = (TextView) findViewById(R.id.duration);
-        mProgressView = (ProgressView) findViewById(R.id.progress);
+        mTimeView = findViewById(R.id.time);
+        mDurationView = findViewById(R.id.duration);
+        mProgressView = findViewById(R.id.progress);
     }
 
     @Override
@@ -119,11 +120,22 @@ public abstract class PlayActivity extends AppCompatActivity {
     }
 
     public void play(Song song) {
-        mService.play(song);
+        PlayService.play(song);
     }
 
     public void pause() {
-        mService.pause();
+        PlayService.pause();
     }
 
+    public void restart(){
+        PlayService.restart();
+    }
+
+    public Song getSongInPlayer(){
+        return PlayService.getSongInPlayer();
+    }
+
+    public boolean isPlaying(){
+        return PlayService.isPlaying();
+    }
 }

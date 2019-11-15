@@ -1,8 +1,5 @@
 package com.sample.andremion.musicplayer.model;
 
-import android.graphics.Bitmap;
-
-import org.litepal.LitePal;
 import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 

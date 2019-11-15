@@ -45,8 +45,8 @@ public class ProgressView extends View {
     private final int mBackgroundColor;
     private final int mForegroundColor;
 
-    private int mProgress;
-    private int mMax;
+    private int mProgress;              //当前进度条的值
+    private int mMax;                   //进度条最大值
     private float mMorph;
 
     public ProgressView(Context context) {
@@ -75,7 +75,7 @@ public class ProgressView extends View {
         mBackgroundColor = outValue.data;
 
         mProgress = 0;
-        mMax = 335;
+        mMax = 0;
     }
 
     public int getProgress() {

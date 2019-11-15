@@ -23,8 +23,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -33,14 +36,18 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andremion.music.MusicCoverView;
 import com.sample.andremion.musicplayer.R;
 import com.sample.andremion.musicplayer.model.Song;
 import com.sample.andremion.musicplayer.music.MusicContent;
-import com.sample.andremion.musicplayer.view.SongAdapter;
+import com.sample.andremion.musicplayer.adapter.SongAdapter;
+import com.sample.andremion.musicplayer.music.PlayService;
 
 public class MainActivity extends PlayActivity {
 
@@ -49,11 +56,18 @@ public class MainActivity extends PlayActivity {
     private View mTimeView;
     private View mDurationView;
     private View mProgressView;
-    private View mFabView;
+    private View mPlayButtonView;
 
     private IntentFilter intentFilter;
     private SongSelectedReceiver receiver;
     private LocalBroadcastManager broadcastManager;
+
+    /*
+    songIndex用来保存当前Activity加载的歌曲，通过
+    检查songIndex的值来避免不必要的图像加载
+     */
+    private int mSongIndex;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +79,16 @@ public class MainActivity extends PlayActivity {
         mTimeView = findViewById(R.id.time);
         mDurationView = findViewById(R.id.duration);
         mProgressView = findViewById(R.id.progress);
-        mFabView = findViewById(R.id.fab);
+        mPlayButtonView = findViewById(R.id.play_button_in_list);
 
-        //当接受到 SONG_SELECTED 时设置专辑图片
+        //当接受到 SONG_SELECTED 时设置专辑图片与信息与按钮动画
         broadcastManager = LocalBroadcastManager.getInstance(this);
         intentFilter = new IntentFilter();
         intentFilter.addAction("musicPlayer.broadcast.SONG_SELECTED");
         receiver = new SongSelectedReceiver();
         broadcastManager.registerReceiver(receiver, intentFilter);
+
+        mSongIndex = -1;
 
         //获取读取sd卡的权限
         getPermissionAndContent();
@@ -86,16 +102,26 @@ public class MainActivity extends PlayActivity {
 
 
     public void onFabClick(View view) {
-        //noinspection unchecked
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                new Pair<>(mCoverView, ViewCompat.getTransitionName(mCoverView)),
-                new Pair<>(mTitleView, ViewCompat.getTransitionName(mTitleView)),
-                new Pair<>(mTimeView, ViewCompat.getTransitionName(mTimeView)),
-                new Pair<>(mDurationView, ViewCompat.getTransitionName(mDurationView)),
-                new Pair<>(mProgressView, ViewCompat.getTransitionName(mProgressView)),
-                new Pair<>(mFabView, ViewCompat.getTransitionName(mFabView)));
-        ActivityCompat.startActivity(this, new Intent(this, DetailActivity.class), options.toBundle());
+        if(getSongInPlayer() == null)
+            return;
+
+        FloatingActionButton playButton = (FloatingActionButton)view;
+        AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable)playButton.getDrawable();
+
+        //如果当前音乐正在播放
+        if(isPlaying()){
+            pause();
+            playDrawable.start();
+            new PlayButtonAnimationTask().execute(true);
+        }
+        else{
+            restart();
+            playDrawable.start();
+            new PlayButtonAnimationTask().execute(false);
+        }
     }
+
+
 
     public void getPermissionAndContent(){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
@@ -131,19 +157,110 @@ public class MainActivity extends PlayActivity {
         }
     }
 
+    public void onPaneClick(View view) {
+        if(PlayService.getSongInPlayer() != null){
+
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                    new Pair<>(mCoverView, ViewCompat.getTransitionName(mCoverView)),
+                    new Pair<>(mTitleView, ViewCompat.getTransitionName(mTitleView)),
+                    new Pair<>(mTimeView, ViewCompat.getTransitionName(mTimeView)),
+                    new Pair<>(mDurationView, ViewCompat.getTransitionName(mDurationView)),
+                    new Pair<>(mProgressView, ViewCompat.getTransitionName(mProgressView)),
+                    new Pair<>(mPlayButtonView, ViewCompat.getTransitionName(mPlayButtonView)));
+
+            ActivityCompat.startActivity(this, new Intent(this, DetailActivity.class),
+                    options.toBundle());
+        }
+    }
+
+    /*
+    延迟设置View中的src动画，防止动画被后续代码截断
+     */
+    class PlayButtonAnimationTask extends AsyncTask<Boolean, Boolean, Void>{
+
+        @Override
+        protected Void doInBackground(Boolean... booleans) {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            publishProgress(booleans);
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Boolean... values) {
+            super.onProgressUpdate(values);
+
+            FloatingActionButton playButton = findViewById(R.id.play_button_in_list);
+            if(values[0]){
+                playButton.setImageResource(R.drawable.ic_play_animatable);
+            }
+            else{
+                playButton.setImageResource(R.drawable.ic_pause_animatable);
+            }
+        }
+    }
+
+
     class SongSelectedReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
             int index = intent.getIntExtra("songIndex", -1);
+            boolean isPlaying = intent.getBooleanExtra("isPlaying", false);
 
-            if(index != -1){
+            if(index != mSongIndex){
+                /*
+                load album with bitmap
+                 */
                 MusicCoverView coverView = findViewById(R.id.cover);
                 Song song = MusicContent.SONG_LIST.get(index);
                 Bitmap cover = MusicContent.getArtwork(MainActivity.this,
                         song.getId(), song.getAlbumId(), false);
                 coverView.setImageBitmap(cover);
+                /*
+                update the information in the title
+                 */
+                TextView songName = findViewById(R.id.song_name);
+                TextView artistName = findViewById(R.id.artist_name);
+                TextView separator = findViewById(R.id.separator);
+                songName.setText(song.getName());
+                artistName.setText(song.getArtist());
+                separator.setText(" - ");
+
+                //设置播放按钮动画
+                if(!isPlaying) {
+                    FloatingActionButton playButton = findViewById(R.id.play_button_in_list);
+                    AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable) playButton.getDrawable();
+                    playDrawable.start();
+                    new PlayButtonAnimationTask().execute(false);
+                }
+
+                mSongIndex = index;
+            }
+            else{
+                if(!isPlaying) {
+                    FloatingActionButton playButton = findViewById(R.id.play_button_in_list);
+                    AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable) playButton.getDrawable();
+                    playDrawable.start();
+                    new PlayButtonAnimationTask().execute(false);
+                }
             }
         }
+    }
+
+    /*
+    当用户回退时保证Activity不销毁
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -151,4 +268,5 @@ public class MainActivity extends PlayActivity {
         super.onDestroy();
         broadcastManager.unregisterReceiver(receiver);
     }
+
 }

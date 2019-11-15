@@ -21,10 +21,9 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.sample.andremion.musicplayer.model.Song;
-
 import java.io.IOException;
 
 public class PlayService extends Service {
@@ -33,7 +32,9 @@ public class PlayService extends Service {
     private final IBinder mBinder = new PlayBinder();
     private static MediaPlayer mPlayer = new MediaPlayer();
     private static ProgressCounter mCounter = new ProgressCounter();
-    private static Song mSongInPlayer;
+
+    private static Song mSongInPlayer;          //当前歌曲
+    private static Song mPrevSongInPlayer;      //前一首歌
 
 
     @Override
@@ -44,11 +45,15 @@ public class PlayService extends Service {
     public static void play(Song song) {
         if(!isPlaying()){
             if(mSongInPlayer != null && mSongInPlayer.getId() == song.getId()){
+                //当前播放的歌曲处于暂停状态，重新启动播放器
                 mPlayer.start();
                 mCounter.restart();
             }
             else{
+                //为播放器设置新歌且记录旧歌
+                mPrevSongInPlayer = mSongInPlayer;
                 mSongInPlayer = song;
+
                 resetPlayer(mSongInPlayer.getPath());
                 mPlayer.start();
 
@@ -59,7 +64,9 @@ public class PlayService extends Service {
         else{
             if(mSongInPlayer.getId() != song.getId()){
 
+                mPrevSongInPlayer = mSongInPlayer;
                 mSongInPlayer = song;
+
                 resetPlayer(mSongInPlayer.getPath());
                 mPlayer.start();
 
@@ -97,24 +104,32 @@ public class PlayService extends Service {
         }
     }
 
-    public int getPosition() {
+    public static void restart(){
+        if(mSongInPlayer != null){
+            mPlayer.start();
+            mCounter.restart();
+        }
+    }
+
+
+    public static int getPosition() {
         if (mCounter != null) {
             return mCounter.getPosition();
         }
         return 0;
     }
 
-    public int getDuration() {
+    public static int getDuration() {
         if(mSongInPlayer == null)
             return 0;
         else
             return (int)(mSongInPlayer.getDuration() / 1000);
     }
 
-    /**
-     * Class used for the client Binder. Because we know this service always
-     * runs in the same process as its clients, we don't need to deal with IPC.
-     */
+    public static Song getSongInPlayer(){
+        return mSongInPlayer;
+    }
+
     public class PlayBinder extends Binder {
 
         public PlayService getService() {
@@ -122,6 +137,7 @@ public class PlayService extends Service {
             return PlayService.this;
         }
     }
+
 
     @Override
     public void onDestroy() {

@@ -6,22 +6,25 @@
     android:transitionName="@string/transition_name_title">
 
     <TextView
+        android:id="@+id/song_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Instant Crush"
+        android:text=" "
         android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
     <TextView
+        android:id="@+id/separator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" - "
+        android:text="  "
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="?android:attr/textColorSecondary"/>
 
     <TextView
+        android:id="@+id/artist_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Daft Punk"
+        android:text=" "
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
         android:textColor="?android:attr/textColorSecondary"/>
 

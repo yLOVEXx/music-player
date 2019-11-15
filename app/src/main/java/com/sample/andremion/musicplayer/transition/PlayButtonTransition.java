@@ -30,11 +30,11 @@ import com.sample.andremion.musicplayer.R;
 
 public class PlayButtonTransition extends Transition {
 
-    public static final int MODE_PLAY = 0;
-    public static final int MODE_PAUSE = 1;
+    private static final int MODE_PLAY = 0;
+    private static final int MODE_PAUSE = 1;
 
-    private static final String PROPNAME_DRAWABLE = PlayButtonTransition.class.getName() + ":drawable";
-    private static final String[] sTransitionProperties = {PROPNAME_DRAWABLE};
+    private static final String PROP_NAME_DRAWABLE = PlayButtonTransition.class.getName() + ":drawable";
+    private static final String[] sTransitionProperties = {PROP_NAME_DRAWABLE};
 
     private final int mMode;
 
@@ -42,7 +42,7 @@ public class PlayButtonTransition extends Transition {
         super(context, attrs);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PlayButton);
         int mode = a.getInt(R.styleable.PlayButton_mode, MODE_PLAY);
-        a.recycle();
+        a.recycle();        //回收TypedArray
         mMode = mode;
     }
 
@@ -65,7 +65,8 @@ public class PlayButtonTransition extends Transition {
 
     private void captureValues(TransitionValues transitionValues, Object value) {
         if (transitionValues.view instanceof FloatingActionButton) {
-            transitionValues.values.put(PROPNAME_DRAWABLE, value);
+
+            transitionValues.values.put(PROP_NAME_DRAWABLE, value);
         }
     }
 
