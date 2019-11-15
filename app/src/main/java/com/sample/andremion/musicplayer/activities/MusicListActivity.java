@@ -23,8 +23,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.AnimatedVectorDrawable;
-import android.os.AsyncTask;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -38,7 +39,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +49,7 @@ import com.sample.andremion.musicplayer.music.MusicContent;
 import com.sample.andremion.musicplayer.adapter.SongAdapter;
 import com.sample.andremion.musicplayer.music.PlayService;
 
-public class MainActivity extends PlayActivity {
+public class MusicListActivity extends PlayActivity {
 
     private View mCoverView;
     private View mTitleView;
@@ -110,14 +110,14 @@ public class MainActivity extends PlayActivity {
 
         //如果当前音乐正在播放
         if(isPlaying()){
+            playDrawable.registerAnimationCallback(new PlayButtonAnimation(true));
             pause();
             playDrawable.start();
-            new PlayButtonAnimationTask().execute(true);
         }
         else{
+            playDrawable.registerAnimationCallback(new PlayButtonAnimation(false));
             restart();
             playDrawable.start();
-            new PlayButtonAnimationTask().execute(false);
         }
     }
 
@@ -174,28 +174,22 @@ public class MainActivity extends PlayActivity {
     }
 
     /*
-    延迟设置View中的src动画，防止动画被后续代码截断
+    监听Animation的结束，结束时设置新的vector animation
      */
-    class PlayButtonAnimationTask extends AsyncTask<Boolean, Boolean, Void>{
+    private class PlayButtonAnimation extends Animatable2.AnimationCallback {
 
-        @Override
-        protected Void doInBackground(Boolean... booleans) {
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        boolean isPlaying;
 
-            publishProgress(booleans);
-            return null;
+        public PlayButtonAnimation(boolean bool){
+            isPlaying = bool;
         }
 
         @Override
-        protected void onProgressUpdate(Boolean... values) {
-            super.onProgressUpdate(values);
+        public void onAnimationEnd(Drawable drawable) {
+            super.onAnimationEnd(drawable);
 
-            FloatingActionButton playButton = findViewById(R.id.play_button_in_list);
-            if(values[0]){
+            FloatingActionButton playButton = (FloatingActionButton)mPlayButtonView;
+            if(isPlaying){
                 playButton.setImageResource(R.drawable.ic_play_animatable);
             }
             else{
@@ -217,7 +211,7 @@ public class MainActivity extends PlayActivity {
                  */
                 MusicCoverView coverView = findViewById(R.id.cover);
                 Song song = MusicContent.SONG_LIST.get(index);
-                Bitmap cover = MusicContent.getArtwork(MainActivity.this,
+                Bitmap cover = MusicContent.getArtwork(MusicListActivity.this,
                         song.getId(), song.getAlbumId(), false);
                 coverView.setImageBitmap(cover);
                 /*
@@ -230,23 +224,15 @@ public class MainActivity extends PlayActivity {
                 artistName.setText(song.getArtist());
                 separator.setText(" - ");
 
-                //设置播放按钮动画
-                if(!isPlaying) {
-                    FloatingActionButton playButton = findViewById(R.id.play_button_in_list);
-                    AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable) playButton.getDrawable();
-                    playDrawable.start();
-                    new PlayButtonAnimationTask().execute(false);
-                }
-
                 mSongIndex = index;
             }
-            else{
-                if(!isPlaying) {
-                    FloatingActionButton playButton = findViewById(R.id.play_button_in_list);
-                    AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable) playButton.getDrawable();
-                    playDrawable.start();
-                    new PlayButtonAnimationTask().execute(false);
-                }
+
+            //设置播放按钮动画
+            if(!isPlaying) {
+                FloatingActionButton playButton = (FloatingActionButton)mPlayButtonView;
+                AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable) playButton.getDrawable();
+                playDrawable.registerAnimationCallback(new PlayButtonAnimation(false));
+                playDrawable.start();
             }
         }
     }
