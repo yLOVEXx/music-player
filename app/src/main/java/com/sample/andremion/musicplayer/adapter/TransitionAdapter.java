@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sample.andremion.musicplayer.view;
+package com.sample.andremion.musicplayer.adapter;
 
 import android.transition.Transition;
 

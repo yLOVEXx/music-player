@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.sample.andremion.musicplayer.activities;
 
 import android.Manifest;
@@ -22,8 +23,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Animatable2;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,14 +37,17 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andremion.music.MusicCoverView;
 import com.sample.andremion.musicplayer.R;
 import com.sample.andremion.musicplayer.model.Song;
 import com.sample.andremion.musicplayer.music.MusicContent;
-import com.sample.andremion.musicplayer.view.SongAdapter;
+import com.sample.andremion.musicplayer.adapter.SongAdapter;
+import com.sample.andremion.musicplayer.music.PlayService;
 
 public class MusicListActivity extends PlayActivity {
 
@@ -48,11 +56,18 @@ public class MusicListActivity extends PlayActivity {
     private View mTimeView;
     private View mDurationView;
     private View mProgressView;
-    private View mFabView;
+    private View mPlayButtonView;
 
     private IntentFilter intentFilter;
     private SongSelectedReceiver receiver;
     private LocalBroadcastManager broadcastManager;
+
+    /*
+    songIndex用来保存当前Activity加载的歌曲，通过
+    检查songIndex的值来避免不必要的图像加载
+     */
+    private int mSongIndex;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +79,16 @@ public class MusicListActivity extends PlayActivity {
         mTimeView = findViewById(R.id.time);
         mDurationView = findViewById(R.id.duration);
         mProgressView = findViewById(R.id.progress);
-        mFabView = findViewById(R.id.fab);
+        mPlayButtonView = findViewById(R.id.play_button_in_list);
 
+        //当接受到 SONG_SELECTED 时设置专辑图片与信息与按钮动画
         broadcastManager = LocalBroadcastManager.getInstance(this);
         intentFilter = new IntentFilter();
         intentFilter.addAction("musicPlayer.broadcast.SONG_SELECTED");
         receiver = new SongSelectedReceiver();
         broadcastManager.registerReceiver(receiver, intentFilter);
+
+        mSongIndex = -1;
 
         //获取读取sd卡的权限
         getPermissionAndContent();
@@ -84,16 +102,26 @@ public class MusicListActivity extends PlayActivity {
 
 
     public void onFabClick(View view) {
-        //noinspection unchecked
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
-                new Pair<>(mCoverView, ViewCompat.getTransitionName(mCoverView)),
-                new Pair<>(mTitleView, ViewCompat.getTransitionName(mTitleView)),
-                new Pair<>(mTimeView, ViewCompat.getTransitionName(mTimeView)),
-                new Pair<>(mDurationView, ViewCompat.getTransitionName(mDurationView)),
-                new Pair<>(mProgressView, ViewCompat.getTransitionName(mProgressView)),
-                new Pair<>(mFabView, ViewCompat.getTransitionName(mFabView)));
-        ActivityCompat.startActivity(this, new Intent(this, DetailActivity.class), options.toBundle());
+        if(getSongInPlayer() == null)
+            return;
+
+        FloatingActionButton playButton = (FloatingActionButton)view;
+        AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable)playButton.getDrawable();
+
+        //如果当前音乐正在播放
+        if(isPlaying()){
+            playDrawable.registerAnimationCallback(new PlayButtonAnimation(true));
+            pause();
+            playDrawable.start();
+        }
+        else{
+            playDrawable.registerAnimationCallback(new PlayButtonAnimation(false));
+            restart();
+            playDrawable.start();
+        }
     }
+
+
 
     public void getPermissionAndContent(){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
@@ -129,19 +157,96 @@ public class MusicListActivity extends PlayActivity {
         }
     }
 
+    public void onPaneClick(View view) {
+        if(PlayService.getSongInPlayer() != null){
+
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                    new Pair<>(mCoverView, ViewCompat.getTransitionName(mCoverView)),
+                    new Pair<>(mTitleView, ViewCompat.getTransitionName(mTitleView)),
+                    new Pair<>(mTimeView, ViewCompat.getTransitionName(mTimeView)),
+                    new Pair<>(mDurationView, ViewCompat.getTransitionName(mDurationView)),
+                    new Pair<>(mProgressView, ViewCompat.getTransitionName(mProgressView)),
+                    new Pair<>(mPlayButtonView, ViewCompat.getTransitionName(mPlayButtonView)));
+
+            ActivityCompat.startActivity(this, new Intent(this, DetailActivity.class),
+                    options.toBundle());
+        }
+    }
+
+    /*
+    监听Animation的结束，结束时设置新的vector animation
+     */
+    private class PlayButtonAnimation extends Animatable2.AnimationCallback {
+
+        boolean isPlaying;
+
+        public PlayButtonAnimation(boolean bool){
+            isPlaying = bool;
+        }
+
+        @Override
+        public void onAnimationEnd(Drawable drawable) {
+            super.onAnimationEnd(drawable);
+
+            FloatingActionButton playButton = (FloatingActionButton)mPlayButtonView;
+            if(isPlaying){
+                playButton.setImageResource(R.drawable.ic_play_animatable);
+            }
+            else{
+                playButton.setImageResource(R.drawable.ic_pause_animatable);
+            }
+        }
+    }
+
+
     class SongSelectedReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
             int index = intent.getIntExtra("songIndex", -1);
+            boolean isPlaying = intent.getBooleanExtra("isPlaying", false);
 
-            if(index != -1){
+            if(index != mSongIndex){
+                /*
+                load album with bitmap
+                 */
                 MusicCoverView coverView = findViewById(R.id.cover);
                 Song song = MusicContent.SONG_LIST.get(index);
                 Bitmap cover = MusicContent.getArtwork(MusicListActivity.this,
                         song.getId(), song.getAlbumId(), false);
                 coverView.setImageBitmap(cover);
+                /*
+                update the information in the title
+                 */
+                TextView songName = findViewById(R.id.song_name);
+                TextView artistName = findViewById(R.id.artist_name);
+                TextView separator = findViewById(R.id.separator);
+                songName.setText(song.getName());
+                artistName.setText(song.getArtist());
+                separator.setText(" - ");
+
+                mSongIndex = index;
+            }
+
+            //设置播放按钮动画
+            if(!isPlaying) {
+                FloatingActionButton playButton = (FloatingActionButton)mPlayButtonView;
+                AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable) playButton.getDrawable();
+                playDrawable.registerAnimationCallback(new PlayButtonAnimation(false));
+                playDrawable.start();
             }
         }
+    }
+
+    /*
+    当用户回退时保证Activity不销毁
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -149,4 +254,5 @@ public class MusicListActivity extends PlayActivity {
         super.onDestroy();
         broadcastManager.unregisterReceiver(receiver);
     }
+
 }

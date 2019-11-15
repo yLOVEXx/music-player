@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/album_cover_daft_punk"
+        android:src="@drawable/album_default"
         android:transitionName="@string/transition_name_cover"
         app:layout_heightPercent="35%"/>
 
@@ -32,11 +32,14 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/cover"
         android:orientation="vertical"
-        android:padding="@dimen/activity_vertical_margin">
+        android:padding="@dimen/activity_vertical_margin"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="onPaneClick">
 
         <include
             android:id="@+id/title"
-            layout="@layout/track_title"/>
+            layout="@layout/song_title"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,8 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:transitionName="@string/transition_name_time"
-                tools:text="02:30"/>
+                android:transitionName="@string/transition_name_time" />
 
             <com.sample.andremion.musicplayer.view.ProgressView
                 android:id="@+id/progress"
@@ -65,8 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:transitionName="@string/transition_name_duration"
-                tools:text="04:30"/>
+                android:transitionName="@string/transition_name_duration" />
 
             <Space
                 android:id="@+id/fab_placeholder"
@@ -87,6 +88,8 @@
         android:padding="@dimen/activity_vertical_margin"
         android:transitionGroup="true">
 
+
+        <!--歌单名称-->
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
@@ -94,6 +97,7 @@
             android:text="My favorites"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
 
+        <!--歌单歌曲数目-->
         <TextView
             android:id="@+id/counter"
             android:layout_width="wrap_content"
@@ -119,11 +123,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/playlist"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
         app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/content_list_item"/>
+        tools:listitem="@layout/content_list_item" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/play_button_in_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/cover"

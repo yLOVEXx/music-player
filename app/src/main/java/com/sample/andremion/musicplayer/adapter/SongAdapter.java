@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sample.andremion.musicplayer.view;
+package com.sample.andremion.musicplayer.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sample.andremion.musicplayer.R;
+import com.sample.andremion.musicplayer.activities.PlayActivity;
 import com.sample.andremion.musicplayer.model.Song;
 import com.sample.andremion.musicplayer.music.MusicContent;
 import com.sample.andremion.musicplayer.music.PlayService;
@@ -71,6 +72,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
+                send broadcast to activity for loading the album cover and starting the play button
+                animation when click the song item
+                 */
+                Intent intent = new Intent("musicPlayer.broadcast.SONG_SELECTED");
+                intent.putExtra("songIndex", holder.getAdapterPosition());
+                intent.putExtra("isPlaying", PlayService.isPlaying());
+                broadcastManager.sendBroadcast(intent);
                 PlayService.play(holder.song);
                 /*
                 send broadcast to activity
@@ -87,7 +96,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         return mSongList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final ImageView mCoverView;
         public final TextView mTitleView;

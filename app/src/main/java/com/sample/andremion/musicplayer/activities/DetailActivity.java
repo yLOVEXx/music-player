@@ -22,7 +22,7 @@ import android.view.View;
 
 import com.andremion.music.MusicCoverView;
 import com.sample.andremion.musicplayer.R;
-import com.sample.andremion.musicplayer.view.TransitionAdapter;
+import com.sample.andremion.musicplayer.adapter.TransitionAdapter;
 
 public class DetailActivity extends PlayActivity {
 
