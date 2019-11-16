@@ -1,19 +1,12 @@
-package com.sample.andremion.musicplayer.activities;
+package com.sample.andremion.musicplayer.model;
 
-public class Music {
+public class MusicListAlbum {
     private String name;
     private int imageId;
-    private String number;
 
-    public Music(String name,int imageId,String number){
+    public MusicListAlbum(String name, int imageId){
         this.name=name;
         this.imageId=imageId;
-        this.number=number;
-    }
-
-
-    public String getNumber(){
-        return number;
     }
 
     public String getName(){
@@ -26,10 +19,6 @@ public class Music {
 
     public void setName(String name){
         this.name=name;
-    }
-
-    public void setNumber(String number){
-        this.number=number;
     }
 
     public void setImageId(int imageId){

@@ -81,12 +81,6 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 intent.putExtra("isPlaying", PlayService.isPlaying());
                 broadcastManager.sendBroadcast(intent);
                 PlayService.play(holder.song);
-                /*
-                send broadcast to activity
-                 */
-                Intent intent = new Intent("musicPlayer.broadcast.SONG_SELECTED");
-                intent.putExtra("songIndex", position);
-                broadcastManager.sendBroadcast(intent);
             }
         });
     }

@@ -1,7 +1,6 @@
 package com.sample.andremion.musicplayer.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,17 +12,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.donkingliang.banner.CustomBanner;
 import com.sample.andremion.musicplayer.R;
-import com.sample.andremion.musicplayer.view.MusicListAdapter;
+import com.sample.andremion.musicplayer.model.MusicListAlbum;
+import com.sample.andremion.musicplayer.adapter.MusicListAlbumAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private ActionBarDrawerToggle mToggle;
-    private List<Music> music =new ArrayList<>();
+    private List<MusicListAlbum> music =new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,13 +94,20 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycle_view);
         assert recyclerView != null;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new MusicListAdapter(music,this));
+        recyclerView.setAdapter(new MusicListAlbumAdapter(music,this));
 
     }
 
     private void initMusicList(){
-        Music myfavorite=new Music("favorite",R.drawable.collect,"100");
+        MusicListAlbum myfavorite=new MusicListAlbum("我喜欢的音乐",R.drawable.collect);
         music.add(myfavorite);
+
+        MusicListAlbum classmusic=new MusicListAlbum("古典音乐",R.drawable.collect);
+        music.add(classmusic);
+
+        MusicListAlbum popmusic=new MusicListAlbum("流行音乐",R.drawable.collect);
+        music.add(popmusic);
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -187,5 +194,16 @@ public class MainActivity extends AppCompatActivity {
 //                //设置自动翻页
 //                .startTurning(5000);
 //    }
+       /*
+    当用户回退时保证Activity不销毁
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }
 
