@@ -43,16 +43,16 @@ public class MusicListAlbumAdapter extends RecyclerView.Adapter<MusicListAlbumAd
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view= LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.mainlist_item,parent,false);
+                .inflate(R.layout.music_list_item, parent,false);
         final ViewHolder holder=new ViewHolder(view);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position =holder.getAdapterPosition();
-                MusicListAlbum music=myMusicList.get(position);
+                int position = holder.getAdapterPosition();
+                MusicListAlbum music = myMusicList.get(position);
                 //Toast.makeText(v.getContext(),"sdadasdddsad", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(mContext,MusicListActivity.class);
+                Intent intent = new Intent(mContext, MusicListActivity.class);
                 //  ComponentName componentName = new ComponentName("com.sample.andremion.musicplayer.view", "com.sample.andremion.musicplayer.v");
                 // intent.setComponent(componentName);
                 mContext.startActivity(intent);

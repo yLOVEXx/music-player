@@ -37,7 +37,6 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,9 +44,9 @@ import android.widget.Toast;
 import com.andremion.music.MusicCoverView;
 import com.sample.andremion.musicplayer.R;
 import com.sample.andremion.musicplayer.model.Song;
-import com.sample.andremion.musicplayer.music.MusicContent;
+import com.sample.andremion.musicplayer.utils.MusicContentUtils;
 import com.sample.andremion.musicplayer.adapter.SongAdapter;
-import com.sample.andremion.musicplayer.music.PlayService;
+import com.sample.andremion.musicplayer.service.PlayService;
 
 public class MusicListActivity extends PlayActivity {
 
@@ -81,6 +80,15 @@ public class MusicListActivity extends PlayActivity {
         mProgressView = findViewById(R.id.progress);
         mPlayButtonView = findViewById(R.id.play_button_in_list);
 
+        //设置播放按钮图片
+        if(isPlaying()){
+            ((FloatingActionButton)mPlayButtonView).setImageResource(R.drawable.ic_pause_animatable);
+        }
+        else{
+            ((FloatingActionButton)mPlayButtonView).setImageResource(R.drawable.ic_play_animatable);
+        }
+        initCover();        //加载歌曲图片与信息
+
         //当接受到 SONG_SELECTED 时设置专辑图片与信息与按钮动画
         broadcastManager = LocalBroadcastManager.getInstance(this);
         intentFilter = new IntentFilter();
@@ -97,7 +105,29 @@ public class MusicListActivity extends PlayActivity {
         RecyclerView recyclerView = findViewById(R.id.tracks);
         assert recyclerView != null;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SongAdapter(this, MusicContent.SONG_LIST));
+        recyclerView.setAdapter(new SongAdapter(this, MusicContentUtils.SONG_LIST));
+    }
+
+    private void initCover(){
+        if(getSongInPlayer() != null){
+            /*
+            load album with bitmap
+           */
+            MusicCoverView coverView = (MusicCoverView)mCoverView;
+            Song song = getSongInPlayer();
+            Bitmap cover = MusicContentUtils.getArtwork(MusicListActivity.this,
+                    song.getId(), song.getAlbumId(), false);
+            coverView.setImageBitmap(cover);
+            /*
+            update the information in the title
+             */
+            TextView songName = findViewById(R.id.song_name);
+            TextView artistName = findViewById(R.id.artist_name);
+            TextView separator = findViewById(R.id.separator);
+            songName.setText(song.getName());
+            artistName.setText(song.getArtist());
+            separator.setText(" - ");
+        }
     }
 
 
@@ -123,7 +153,7 @@ public class MusicListActivity extends PlayActivity {
 
 
 
-    public void getPermissionAndContent(){
+    private void getPermissionAndContent(){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
             PackageManager.PERMISSION_GRANTED){
 
@@ -131,8 +161,8 @@ public class MusicListActivity extends PlayActivity {
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
         else{
-            if(MusicContent.SONG_LIST.isEmpty()) {
-                MusicContent.getContent(this);
+            if(MusicContentUtils.SONG_LIST.isEmpty()) {
+                MusicContentUtils.getContent(this);
             }
         }
     }
@@ -145,8 +175,8 @@ public class MusicListActivity extends PlayActivity {
         switch (requestCode){
             case 1:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if(MusicContent.SONG_LIST.isEmpty())
-                        MusicContent.getContent(this);
+                    if(MusicContentUtils.SONG_LIST.isEmpty())
+                        MusicContentUtils.getContent(this);
                 }
                 else{
                     Toast.makeText(this, "您拒绝了请求", Toast.LENGTH_SHORT).show();
@@ -210,8 +240,8 @@ public class MusicListActivity extends PlayActivity {
                 load album with bitmap
                  */
                 MusicCoverView coverView = findViewById(R.id.cover);
-                Song song = MusicContent.SONG_LIST.get(index);
-                Bitmap cover = MusicContent.getArtwork(MusicListActivity.this,
+                Song song = MusicContentUtils.SONG_LIST.get(index);
+                Bitmap cover = MusicContentUtils.getArtwork(MusicListActivity.this,
                         song.getId(), song.getAlbumId(), false);
                 coverView.setImageBitmap(cover);
                 /*

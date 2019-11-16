@@ -4,7 +4,7 @@ import android.util.Log;
 
 import static android.content.ContentValues.TAG;
 
-class ProgressCounter extends Thread {
+public class ProgressCounter extends Thread {
     private int mDuration;            //歌曲秒数
     private boolean mPaused;
     private int mPosition;
@@ -36,20 +36,20 @@ class ProgressCounter extends Thread {
         }
     }
 
-    void restart() {
+    public void restart() {
         mPaused = false;
     }
 
-    void pause() {
+    public void pause() {
         mPaused = true;
     }
 
-    int getPosition() {
+    public int getPosition() {
         return mPosition;
     }
 
     //释放线程
-    void release(){
+    public void release(){
         pause();
         if(isAlive()){
             interrupt();

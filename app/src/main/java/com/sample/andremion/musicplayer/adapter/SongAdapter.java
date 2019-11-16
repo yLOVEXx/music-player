@@ -28,10 +28,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sample.andremion.musicplayer.R;
-import com.sample.andremion.musicplayer.activities.PlayActivity;
 import com.sample.andremion.musicplayer.model.Song;
-import com.sample.andremion.musicplayer.music.MusicContent;
-import com.sample.andremion.musicplayer.music.PlayService;
+import com.sample.andremion.musicplayer.utils.MusicContentUtils;
+import com.sample.andremion.musicplayer.service.PlayService;
 
 import java.util.List;
 
@@ -61,13 +60,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         //获取对应位置的song
         holder.song = mSongList.get(position);
 
-        Bitmap album = MusicContent.getArtwork(mContext,
+        Bitmap album = MusicContentUtils.getArtwork(mContext,
                 holder.song.getId(), holder.song.getAlbumId(), true);
         holder.mCoverView.setImageBitmap(album);
 
         holder.mTitleView.setText(holder.song.getName());
         holder.mArtistView.setText(holder.song.getArtist());
-        holder.mDurationView.setText(MusicContent.formatTime(holder.song.getDuration()));
+        holder.mDurationView.setText(MusicContentUtils.formatTime(holder.song.getDuration()));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

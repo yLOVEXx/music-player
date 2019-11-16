@@ -32,8 +32,14 @@ import android.widget.TextView;
 
 import com.sample.andremion.musicplayer.R;
 import com.sample.andremion.musicplayer.model.Song;
-import com.sample.andremion.musicplayer.music.PlayService;
+import com.sample.andremion.musicplayer.service.PlayService;
 import com.sample.andremion.musicplayer.view.ProgressView;
+
+
+/*
+PlayActivity为程序其他Activity的基类
+通过bind PlayService负责程序后台音乐的播放与view组件的同步
+ */
 
 public abstract class PlayActivity extends AppCompatActivity {
 
@@ -92,6 +98,7 @@ public abstract class PlayActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PlayService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
+
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {

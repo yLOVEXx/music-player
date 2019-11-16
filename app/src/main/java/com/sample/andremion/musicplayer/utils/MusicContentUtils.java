@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sample.andremion.musicplayer.music;
+package com.sample.andremion.musicplayer.utils;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-public class MusicContent {
+public class MusicContentUtils {
     private static final int SMALL_SIZE = 40;
     private static final int BIG_SIZE = 350;
 

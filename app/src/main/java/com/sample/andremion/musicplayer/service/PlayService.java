@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package com.sample.andremion.musicplayer.music;
+package com.sample.andremion.musicplayer.service;
 
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.sample.andremion.musicplayer.model.Song;
+import com.sample.andremion.musicplayer.music.ProgressCounter;
+
 import java.io.IOException;
 
 public class PlayService extends Service {
