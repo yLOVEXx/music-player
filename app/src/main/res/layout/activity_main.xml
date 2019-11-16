@@ -76,7 +76,7 @@
                 tools:ignore="NotSibling,UnknownId">
 
                 <TextView
-                    android:id="@+id/name"
+                    android:id="@+id/music_list_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="我的歌单"

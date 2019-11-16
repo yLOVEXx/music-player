@@ -71,7 +71,7 @@ public class MusicListActivity extends PlayActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_list);
+        setContentView(R.layout.activity_music_list);
 
         mCoverView = findViewById(R.id.cover);
         mTitleView = findViewById(R.id.title);
