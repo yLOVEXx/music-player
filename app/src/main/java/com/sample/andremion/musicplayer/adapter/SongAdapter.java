@@ -57,7 +57,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         //获取对应位置的song
         holder.song = mSongList.get(position);
 
@@ -107,5 +107,4 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
             mDurationView = view.findViewById(R.id.duration);
         }
     }
-
 }

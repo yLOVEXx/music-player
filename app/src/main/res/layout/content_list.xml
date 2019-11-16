@@ -10,6 +10,7 @@
     <com.andremion.music.MusicCoverView
         android:id="@+id/cover"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/album_default"
         android:transitionName="@string/transition_name_cover"
