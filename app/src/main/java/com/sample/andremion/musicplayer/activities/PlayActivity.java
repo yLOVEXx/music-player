@@ -130,6 +130,10 @@ public abstract class PlayActivity extends AppCompatActivity {
         PlayService.play(song);
     }
 
+    public void play(Song song, Context context){
+        PlayService.play(song, context);
+    }
+
     public void pause() {
         PlayService.pause();
     }
