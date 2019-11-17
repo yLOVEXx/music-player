@@ -17,33 +17,35 @@
 package team.fzo.puppas.mini_player.activities;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.transition.Transition;
-import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.andremion.music.MusicCoverView;
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.adapter.TransitionAdapter;
+import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.service.PlayService;
 
 public class DetailActivity extends PlayActivity {
 
     private MusicCoverView mCoverView;
-    private Bitmap coverImage;      //the image has been resized
+    private Bitmap mCoverImage;      //the image has been resized
+    private LinearLayout mTitleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        coverImage = PlayService.getCoverImage();
-        coverImage = imageScale(coverImage, 900, 900);
+        mCoverImage = PlayService.getCoverImage();
+        mCoverImage = imageScale(mCoverImage, 900, 900);
 
         mCoverView = findViewById(R.id.cover);
-        mCoverView.setImageBitmap(coverImage);
+        mCoverView.setImageBitmap(mCoverImage);
         //将trackline的透明度设为1
         mCoverView.setTrackColor(0x01ffffff);
 
@@ -65,6 +67,16 @@ public class DetailActivity extends PlayActivity {
                 mCoverView.start();
             }
         });
+
+        //set the title
+        mTitleView = findViewById(R.id.title);
+        Song song = PlayService.getSongInPlayer();
+        TextView songName = mTitleView.findViewById(R.id.song_name);
+        TextView separator = mTitleView.findViewById(R.id.separator);
+        TextView artistName = mTitleView.findViewById(R.id.artist_name);
+        songName.setText(song.getName());
+        separator.setText(" - ");
+        artistName.setText(song.getArtist());
     }
 
     @Override
