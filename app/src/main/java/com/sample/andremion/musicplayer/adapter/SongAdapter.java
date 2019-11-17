@@ -75,11 +75,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 send broadcast to activity for loading the album cover and starting the play button
                 animation when click the song item
                  */
+                boolean isPlaying = PlayService.isPlaying();
+                PlayService.play(holder.song, mContext);
+
                 Intent intent = new Intent("musicPlayer.broadcast.SONG_SELECTED");
                 intent.putExtra("songIndex", holder.getAdapterPosition());
-                intent.putExtra("isPlaying", PlayService.isPlaying());
+                intent.putExtra("isPlaying", isPlaying);
                 broadcastManager.sendBroadcast(intent);
-                PlayService.play(holder.song);
             }
         });
     }
