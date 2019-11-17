@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.sample.andremion.musicplayer.view.InsetsPercentRelativeLayout
+<team.fzo.puppas.mini_player.view.InsetsPercentRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,7 +26,7 @@
         android:layout_centerHorizontal="true"
         app:layout_marginTopPercent="10%"/>
 
-    <com.sample.andremion.musicplayer.view.ProgressView
+    <team.fzo.puppas.mini_player.view.ProgressView
         android:id="@+id/progress"
         android:layout_centerInParent="true"
         android:transitionName="@string/transition_name_progress"
@@ -139,4 +139,4 @@
 
     </LinearLayout>
 
-</com.sample.andremion.musicplayer.view.InsetsPercentRelativeLayout>
+</team.fzo.puppas.mini_player.view.InsetsPercentRelativeLayout>

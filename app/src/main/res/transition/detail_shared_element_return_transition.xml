@@ -11,7 +11,7 @@
         <changeClipBounds />
         <changeImageTransform />
         <transition
-            class="com.sample.andremion.musicplayer.transition.ProgressViewTransition"
+            class="team.fzo.puppas.mini_player.transition.ProgressViewTransition"
             app:morph="1" />
         <targets>
             <target android:targetId="@id/progress" />

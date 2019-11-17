@@ -4,7 +4,7 @@
     android:duration="@integer/anim_duration_default">
 
     <transition
-        class="com.sample.andremion.musicplayer.transition.PlayButtonTransition"
+        class="team.fzo.puppas.mini_player.transition.PlayButtonTransition"
         app:mode="pause" />
 
 </transitionSet>

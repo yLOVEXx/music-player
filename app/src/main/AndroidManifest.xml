@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sample.andremion.musicplayer">
+    package="team.fzo.puppas.mini_player">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activities.MainActivity">
+        <activity android:name="team.fzo.puppas.mini_player.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MusicListActivity"
+            android:name="team.fzo.puppas.mini_player.activities.MusicListActivity"
             android:theme="@style/AppTheme.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,11 +32,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.DetailActivity"
+            android:name="team.fzo.puppas.mini_player.activities.DetailActivity"
             android:theme="@style/AppTheme.Detail" />
 
         <service
-            android:name=".service.PlayService"
+            android:name="team.fzo.puppas.mini_player.service.PlayService"
             android:enabled="true"
             android:exported="false" />
     </application>

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
 
     defaultConfig {
-        applicationId "com.sample.andremion.musicplayer"
+        applicationId "team.fzo.puppas.mini_player"
         minSdkVersion 24
         targetSdkVersion 27
         versionCode 3
