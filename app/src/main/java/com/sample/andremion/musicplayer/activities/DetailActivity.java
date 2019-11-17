@@ -27,13 +27,18 @@ import com.sample.andremion.musicplayer.adapter.TransitionAdapter;
 public class DetailActivity extends PlayActivity {
 
     private MusicCoverView mCoverView;
+    private Bitmap coverImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_music_list);
+        setContentView(R.layout.activity_detail);
 
-        mCoverView = (MusicCoverView) findViewById(R.id.cover);
+        coverImage = PlayService.getCoverImage();
+        coverImage = imageScale(coverImage, 900, 900);
+
+        mCoverView = findViewById(R.id.cover);
+        mCoverView.setImageBitmap(coverImage);
         mCoverView.setCallbacks(new MusicCoverView.Callbacks() {
             @Override
             public void onMorphEnd(MusicCoverView coverView) {
@@ -64,5 +69,18 @@ public class DetailActivity extends PlayActivity {
         pause();
         mCoverView.stop();
     }
+
+    private static Bitmap imageScale(Bitmap bitmap, int dst_w, int dst_h) {
+        int src_w = bitmap.getWidth();
+        int src_h = bitmap.getHeight();
+        float scale_w = ((float) dst_w) / src_w;
+        float scale_h = ((float) dst_h) / src_h;
+        Matrix matrix = new Matrix();
+        matrix.postScale(scale_w, scale_h);
+        Bitmap dstbmp = Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix,
+                true);
+        return dstbmp;
+    }
+
 
 }
