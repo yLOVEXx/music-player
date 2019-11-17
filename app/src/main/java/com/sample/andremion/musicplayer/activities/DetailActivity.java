@@ -31,7 +31,7 @@ public class DetailActivity extends PlayActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_detail);
+        setContentView(R.layout.activity_music_list);
 
         mCoverView = (MusicCoverView) findViewById(R.id.cover);
         mCoverView.setCallbacks(new MusicCoverView.Callbacks() {
