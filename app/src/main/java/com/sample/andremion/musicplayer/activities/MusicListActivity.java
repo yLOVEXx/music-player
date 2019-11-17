@@ -115,8 +115,7 @@ public class MusicListActivity extends PlayActivity {
            */
             MusicCoverView coverView = (MusicCoverView)mCoverView;
             Song song = getSongInPlayer();
-            Bitmap cover = MusicContentUtils.getArtwork(MusicListActivity.this,
-                    song.getId(), song.getAlbumId(), false);
+            Bitmap cover = PlayService.getCoverImage();
             coverView.setImageBitmap(cover);
             /*
             update the information in the title
@@ -131,7 +130,7 @@ public class MusicListActivity extends PlayActivity {
     }
 
 
-    public void onFabClick(View view) {
+    public void onPlayButtonClick(View view) {
         if(getSongInPlayer() == null)
             return;
 
@@ -241,8 +240,7 @@ public class MusicListActivity extends PlayActivity {
                  */
                 MusicCoverView coverView = findViewById(R.id.cover);
                 Song song = MusicContentUtils.SONG_LIST.get(index);
-                Bitmap cover = MusicContentUtils.getArtwork(MusicListActivity.this,
-                        song.getId(), song.getAlbumId(), false);
+                Bitmap cover = PlayService.getCoverImage();
                 coverView.setImageBitmap(cover);
                 /*
                 update the information in the title
