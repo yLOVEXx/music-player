@@ -36,6 +36,7 @@ public class PlayService extends Service {
 
     private static Song mSongInPlayer;          //当前歌曲
     private static Song mPrevSongInPlayer;      //前一首歌
+    private static Bitmap mCoverImage;
 
 
     @Override
@@ -50,6 +51,39 @@ public class PlayService extends Service {
             mPrevSongInPlayer = mSongInPlayer;
             mSongInPlayer = song;
 
+            resetPlayer(mSongInPlayer.getPath());
+            mPlayer.start();
+
+            resetCounter((int)(mSongInPlayer.getDuration() / 1000));
+            mCounter.start();
+        }
+        else{
+            if(!isPlaying()){
+                //当前播放的歌曲处于暂停状态，重新启动播放器
+                mPlayer.start();
+                mCounter.restart();
+            }
+        }
+    }
+
+    private static void setCoverImage(Context context){
+          mCoverImage = MusicContentUtils.getArtwork(context,
+                mSongInPlayer.getId(), mSongInPlayer.getAlbumId(), false);
+    }
+
+    public static Bitmap getCoverImage(Context context){
+        return mCoverImage;
+    }
+
+    public static void play(Song song, Context contex) {
+
+        if(mSongInPlayer == null || mSongInPlayer.getId() != song.getId()){
+            //为播放器设置新歌且记录旧歌
+            mPrevSongInPlayer = mSongInPlayer;
+            mSongInPlayer = song;
+
+            setCoverImage(contex);
+            
             resetPlayer(mSongInPlayer.getPath());
             mPlayer.start();
 
