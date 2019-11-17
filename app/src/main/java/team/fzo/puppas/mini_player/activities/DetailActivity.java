@@ -32,7 +32,7 @@ import team.fzo.puppas.mini_player.service.PlayService;
 public class DetailActivity extends PlayActivity {
 
     private MusicCoverView mCoverView;
-    private Bitmap coverImage;
+    private Bitmap coverImage;      //the image has been resized
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class DetailActivity extends PlayActivity {
 
         mCoverView = findViewById(R.id.cover);
         mCoverView.setImageBitmap(coverImage);
+        //将trackline的透明度设为1
         mCoverView.setTrackColor(0x01ffffff);
 
         mCoverView.setCallbacks(new MusicCoverView.Callbacks() {
@@ -61,7 +62,6 @@ public class DetailActivity extends PlayActivity {
         getWindow().getSharedElementEnterTransition().addListener(new TransitionAdapter() {
             @Override
             public void onTransitionEnd(Transition transition) {
-                //play();
                 mCoverView.start();
             }
         });
@@ -69,13 +69,13 @@ public class DetailActivity extends PlayActivity {
 
     @Override
     public void onBackPressed() {
-        onPlayButtonClick(null);
+        mCoverView.stop();
     }
 
     public void onPlayButtonClick(View view) {
         pause();
-        mCoverView.stop();
     }
+
 
     private static Bitmap imageScale(Bitmap bitmap, int dst_w, int dst_h) {
         int src_w = bitmap.getWidth();

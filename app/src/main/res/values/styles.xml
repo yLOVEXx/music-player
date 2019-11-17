@@ -18,12 +18,6 @@
         <item name="android:windowReenterTransition">
             @transition/list_content_reenter_transition
         </item>
-        <item name="android:windowSharedElementExitTransition">
-            @transition/list_shared_element_exit_transition
-        </item>
-        <item name="android:windowSharedElementReenterTransition">
-            @transition/list_shared_element_reenter_transition
-        </item>
     </style>
 
     <style name="AppTheme.Detail">
