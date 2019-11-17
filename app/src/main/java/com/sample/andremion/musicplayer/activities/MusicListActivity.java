@@ -78,7 +78,7 @@ public class MusicListActivity extends PlayActivity {
         mTimeView = findViewById(R.id.time);
         mDurationView = findViewById(R.id.duration);
         mProgressView = findViewById(R.id.progress);
-        mPlayButtonView = findViewById(R.id.play_button_in_list);
+        mPlayButtonView = findViewById(R.id.play_button);
 
         //设置播放按钮图片
         if(isPlaying()){

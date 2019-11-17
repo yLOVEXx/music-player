@@ -17,13 +17,16 @@
 package com.sample.andremion.musicplayer.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 
 import com.sample.andremion.musicplayer.model.Song;
 import com.sample.andremion.musicplayer.music.ProgressCounter;
+import com.sample.andremion.musicplayer.utils.MusicContentUtils;
 
 import java.io.IOException;
 
@@ -71,7 +74,7 @@ public class PlayService extends Service {
                 mSongInPlayer.getId(), mSongInPlayer.getAlbumId(), false);
     }
 
-    public static Bitmap getCoverImage(Context context){
+    public static Bitmap getCoverImage(){
         return mCoverImage;
     }
 

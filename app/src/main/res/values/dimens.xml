@@ -4,6 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="inner_padding">8dp</dimen>
     <dimen name="cover_size_mini">40dp</dimen>
+    <dimen name="cover_size_maxi">400dp</dimen>
     <dimen name="fab_vertical_margin">-20dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 </resources>

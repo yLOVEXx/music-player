@@ -129,14 +129,14 @@
         tools:listitem="@layout/song_item" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/play_button_in_list"
+        android:id="@+id/play_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/cover"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="@dimen/fab_vertical_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:onClick="onFabClick"
+        android:onClick="onPlayButtonClick"
         android:scaleType="center"
         android:src="@drawable/ic_play_animatable"
         android:transitionName="@string/transition_name_fab"

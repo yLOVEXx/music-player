@@ -40,8 +40,6 @@ public class MainActivity extends PlayActivity {
         setContentView(R.layout.activity_main);
 
         toolbar = findViewById(R.id.toolbar);
-        Button button = findViewById(R.id.button);
-        ImageButton imageButton = findViewById(R.id.imageButton);
         setSupportActionBar(toolbar);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);

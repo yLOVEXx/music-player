@@ -16,6 +16,8 @@
 
 package com.sample.andremion.musicplayer.activities;
 
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.transition.Transition;
 import android.view.View;
@@ -23,6 +25,7 @@ import android.view.View;
 import com.andremion.music.MusicCoverView;
 import com.sample.andremion.musicplayer.R;
 import com.sample.andremion.musicplayer.adapter.TransitionAdapter;
+import com.sample.andremion.musicplayer.service.PlayService;
 
 public class DetailActivity extends PlayActivity {
 
@@ -62,10 +65,10 @@ public class DetailActivity extends PlayActivity {
 
     @Override
     public void onBackPressed() {
-        onFabClick(null);
+        onPlayButtonClick(null);
     }
 
-    public void onFabClick(View view) {
+    public void onPlayButtonClick(View view) {
         pause();
         mCoverView.stop();
     }

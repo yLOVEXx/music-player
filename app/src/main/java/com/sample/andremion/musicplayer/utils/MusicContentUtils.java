@@ -35,8 +35,8 @@ import java.io.InputStream;
 import java.util.List;
 
 public class MusicContentUtils {
-    private static final int SMALL_SIZE = 40;
-    private static final int BIG_SIZE = 350;
+    private static final int SMALL_SIZE = R.dimen.cover_size_mini;
+    private static final int BIG_SIZE = R.dimen.cover_size_maxi;
 
     public static List<Song> SONG_LIST = LitePal.findAll(Song.class);
     private static final Uri ALBUM_ART_URI = Uri.parse("content://media/external/audio/albumart");
