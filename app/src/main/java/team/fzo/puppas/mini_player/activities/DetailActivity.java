@@ -22,22 +22,19 @@ import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.transition.Transition;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.adapter.TransitionAdapter;
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.service.PlayService;
-import team.fzo.puppas.mini_player.view.MarqueeTextView;
 import team.fzo.puppas.mini_player.view.MusicCoverView;
+import team.fzo.puppas.mini_player.view.MarqueeTextView;
 
 public class DetailActivity extends PlayActivity {
 
     private MusicCoverView mCoverView;
     private Bitmap mCoverImage;      //the image has been resized
-    private TextView mTitleView;
+    private MarqueeTextView mTitleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

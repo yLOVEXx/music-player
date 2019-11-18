@@ -35,8 +35,8 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
+
 
 import team.fzo.puppas.mini_player.view.MarqueeTextView;
 import team.fzo.puppas.mini_player.view.MusicCoverView;
@@ -112,7 +112,7 @@ public class MusicListActivity extends PlayActivity {
             /*
             update the information in the title
              */
-            TextView titleInfo = (TextView)mTitleView;
+            MarqueeTextView titleInfo = (MarqueeTextView)mTitleView;
             String info = song.getName() + " - " + song.getArtist();
             titleInfo.setText(info);
         }
@@ -221,7 +221,7 @@ public class MusicListActivity extends PlayActivity {
                 /*
                 update the information in the title
                  */
-                TextView titleInfo = (TextView)mTitleView;
+                MarqueeTextView titleInfo = (MarqueeTextView)mTitleView;
                 String info = song.getName() + " - " + song.getArtist();
                 titleInfo.setText(info);
 
