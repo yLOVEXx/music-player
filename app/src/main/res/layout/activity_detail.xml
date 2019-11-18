@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <com.andremion.music.MusicCoverView
+    <team.fzo.puppas.mini_player.view.MusicCoverView
         android:id="@+id/cover"
         android:layout_width="match_parent"
         android:layout_alignParentStart="true"

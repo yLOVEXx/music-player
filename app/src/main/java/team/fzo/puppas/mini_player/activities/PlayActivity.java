@@ -20,12 +20,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.drawable.Animatable2;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateUtils;
 import android.widget.TextView;
@@ -44,9 +47,11 @@ public abstract class PlayActivity extends AppCompatActivity {
 
     private PlayService mService;
     private boolean mBound = false;
-    private TextView mTimeView;
-    private TextView mDurationView;
-    private ProgressView mProgressView;
+    public TextView mTimeView;
+    public TextView mDurationView;
+    public ProgressView mProgressView;
+
+
 
     private final Handler mUpdateProgressHandler = new Handler() {
         @Override
@@ -147,5 +152,30 @@ public abstract class PlayActivity extends AppCompatActivity {
 
     public boolean isPlaying(){
         return PlayService.isPlaying();
+    }
+
+    /*
+    监听Animation的结束，结束时设置新的vector animation
+     */
+    protected class PlayButtonAnimation extends Animatable2.AnimationCallback {
+
+        boolean isPlaying;
+
+        public PlayButtonAnimation(boolean bool){
+            isPlaying = bool;
+        }
+
+        @Override
+        public void onAnimationEnd(Drawable drawable) {
+            super.onAnimationEnd(drawable);
+
+            FloatingActionButton playButton = (FloatingActionButton)mPlayButtonView;
+            if(isPlaying){
+                playButton.setImageResource(R.drawable.ic_play_animatable);
+            }
+            else{
+                playButton.setImageResource(R.drawable.ic_pause_animatable);
+            }
+        }
     }
 }

@@ -41,7 +41,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.andremion.music.MusicCoverView;
+import team.fzo.puppas.mini_player.view.MusicCoverView;
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.utils.MusicContentUtils;
@@ -66,6 +66,7 @@ public class MusicListActivity extends PlayActivity {
     检查songIndex的值来避免不必要的图像加载
      */
     private int mSongIndex;
+
 
 
     @Override
@@ -129,6 +130,16 @@ public class MusicListActivity extends PlayActivity {
         }
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(isPlaying()){
+            ((FloatingActionButton)mPlayButtonView).setImageResource(R.drawable.ic_pause_animatable);
+        }
+        else{
+            ((FloatingActionButton)mPlayButtonView).setImageResource(R.drawable.ic_play_animatable);
+        }
+    }
 
     public void onPlayButtonClick(View view) {
         if(getSongInPlayer() == null)

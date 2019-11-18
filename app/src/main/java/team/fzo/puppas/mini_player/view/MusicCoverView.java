@@ -51,12 +51,11 @@ import android.view.animation.LinearInterpolator;
 
 import com.andremion.music.MusicCoverViewTransition;
 import team.fzo.puppas.mini_player.R;
-import junit.framework.Test;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public class TestCoverView extends android.support.v7.widget.AppCompatImageView implements Animatable {
+public class MusicCoverView extends android.support.v7.widget.AppCompatImageView implements Animatable {
 
     public static final int SHAPE_RECTANGLE = 0;
     public static final int SHAPE_CIRCLE = 1;
@@ -70,7 +69,7 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
 
     private static final float FULL_ANGLE = 360;
     private static final float HALF_ANGLE = FULL_ANGLE / 2;
-    private static final int DURATION = 2500;
+    private static final int DURATION = 5000;
     private static final float DURATION_PER_DEGREES = DURATION / FULL_ANGLE;
 
     private final ValueAnimator mStartRotateAnimator;
@@ -89,18 +88,18 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
     private boolean mIsMorphing;
     private float mRadius = 0;
 
-    private TestCoverView.Callbacks mCallbacks;
+    private MusicCoverView.Callbacks mCallbacks;
     private int mShape;
 
-    public TestCoverView(Context context) {
+    public MusicCoverView(Context context) {
         this(context, null, 0);
     }
 
-    public TestCoverView(Context context, AttributeSet attrs) {
+    public MusicCoverView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TestCoverView(Context context, AttributeSet attrs, final int defStyleAttr) {
+    public MusicCoverView(Context context, AttributeSet attrs, final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         // TODO: Canvas.clipPath works wrong when running with hardware acceleration on Android N
@@ -124,13 +123,14 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
                 float current = getRotation();
                 float target = current > HALF_ANGLE ? FULL_ANGLE : 0; // Choose the shortest distance to 0 rotation
                 float diff = target > 0 ? FULL_ANGLE - current : current;
+
                 mEndRotateAnimator.setFloatValues(current, target);
-                mEndRotateAnimator.setDuration((int) (DURATION_PER_DEGREES * diff));
+                mEndRotateAnimator.setDuration((int) (DURATION_PER_DEGREES * diff / 4));
                 mEndRotateAnimator.start();
             }
         });
 
-        mEndRotateAnimator = ObjectAnimator.ofFloat(TestCoverView.this, View.ROTATION, 0);
+        mEndRotateAnimator = ObjectAnimator.ofFloat(MusicCoverView.this, View.ROTATION, 0);
         mEndRotateAnimator.setInterpolator(new LinearInterpolator());
         mEndRotateAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -142,16 +142,16 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
                     @Override
                     public void run() {
                         if (mCallbacks != null) {
-                            mCallbacks.onRotateEnd(TestCoverView.this);
+                            mCallbacks.onBackPressed(MusicCoverView.this);
                         }
                     }
                 });
             }
         });
 
-        mRectToCircleTransition = new TestCoverView.MorphTransition(SHAPE_RECTANGLE);
+        mRectToCircleTransition = new MusicCoverView.MorphTransition(SHAPE_RECTANGLE);
         mRectToCircleTransition.addTarget(this);
-        mRectToCircleTransition.addListener(new TestCoverView.TransitionAdapter() {
+        mRectToCircleTransition.addListener(new MusicCoverView.TransitionAdapter() {
             @Override
             public void onTransitionStart(Transition transition) {
                 mIsMorphing = true;
@@ -162,14 +162,14 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
                 mIsMorphing = false;
                 mShape = SHAPE_CIRCLE;
                 if (mCallbacks != null) {
-                    mCallbacks.onMorphEnd(TestCoverView.this);
+                    mCallbacks.onMorphEnd(MusicCoverView.this);
                 }
             }
         });
 
-        mCircleToRectTransition = new TestCoverView.MorphTransition(SHAPE_CIRCLE);
+        mCircleToRectTransition = new MusicCoverView.MorphTransition(SHAPE_CIRCLE);
         mCircleToRectTransition.addTarget(this);
-        mCircleToRectTransition.addListener(new TestCoverView.TransitionAdapter() {
+        mCircleToRectTransition.addListener(new MusicCoverView.TransitionAdapter() {
             @Override
             public void onTransitionStart(Transition transition) {
                 mIsMorphing = true;
@@ -180,7 +180,7 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
                 mIsMorphing = false;
                 mShape = SHAPE_RECTANGLE;
                 if (mCallbacks != null) {
-                    mCallbacks.onMorphEnd(TestCoverView.this);
+                    mCallbacks.onMorphEnd(MusicCoverView.this);
                 }
             }
         });
@@ -196,7 +196,7 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
         setScaleType();
     }
 
-    public void setCallbacks(TestCoverView.Callbacks callbacks) {
+    public void setCallbacks(MusicCoverView.Callbacks callbacks) {
         mCallbacks = callbacks;
     }
 
@@ -204,7 +204,7 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
         return mShape;
     }
 
-    public void setShape(@com.andremion.music.MusicCoverView.Shape int shape) {
+    public void setShape(@Shape int shape) {
         if (shape != mShape) {
             mShape = shape;
             setScaleType();
@@ -361,6 +361,23 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
         if (mStartRotateAnimator.isRunning()) {
             mStartRotateAnimator.cancel();
         }
+        else{
+            mEndRotateAnimator.setFloatValues(0, 0);
+            mEndRotateAnimator.setDuration(0);
+            mEndRotateAnimator.start();
+        }
+    }
+
+    public void pause(){
+        mStartRotateAnimator.pause();
+    }
+
+    public void resume(){
+        mStartRotateAnimator.resume();
+    }
+
+    public boolean isStarted(){
+        return mStartRotateAnimator.isStarted();
     }
 
     @Override
@@ -374,9 +391,11 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
     }
 
     public interface Callbacks {
-        void onMorphEnd(TestCoverView coverView);
+        void onMorphEnd(MusicCoverView coverView);
 
-        void onRotateEnd(TestCoverView coverView);
+        void onRotateEnd(MusicCoverView coverView);
+
+        void onBackPressed(MusicCoverView coverView);
     }
 
     private static class MorphTransition extends TransitionSet {
@@ -388,14 +407,10 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
         }
     }
 
-    /**
-     * {@link com.andremion.music.MusicCoverView.SavedState} methods
-     */
-
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
-        TestCoverView.SavedState ss = new TestCoverView.SavedState(superState);
+        MusicCoverView.SavedState ss = new MusicCoverView.SavedState(superState);
         ss.shape = getShape();
         ss.trackColor = getTrackColor();
         ss.isRotating = mStartRotateAnimator.isRunning();
@@ -404,7 +419,7 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        TestCoverView.SavedState ss = (TestCoverView.SavedState) state;
+        MusicCoverView.SavedState ss = (MusicCoverView.SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
         setShape(ss.shape);
         setTrackColor(ss.trackColor);
@@ -440,21 +455,21 @@ public class TestCoverView extends android.support.v7.widget.AppCompatImageView 
 
         @Override
         public String toString() {
-            return TestCoverView.class.getSimpleName() + "." + TestCoverView.SavedState.class.getSimpleName() + "{"
+            return MusicCoverView.class.getSimpleName() + "." + MusicCoverView.SavedState.class.getSimpleName() + "{"
                     + Integer.toHexString(System.identityHashCode(this))
                     + " shape=" + shape + ", trackColor=" + trackColor + ", isRotating=" + isRotating + "}";
         }
 
-        public static final Parcelable.Creator<TestCoverView.SavedState> CREATOR
-                = ParcelableCompat.newCreator(new ParcelableCompatCreatorCallbacks<TestCoverView.SavedState>() {
+        public static final Parcelable.Creator<MusicCoverView.SavedState> CREATOR
+                = ParcelableCompat.newCreator(new ParcelableCompatCreatorCallbacks<MusicCoverView.SavedState>() {
             @Override
-            public TestCoverView.SavedState createFromParcel(Parcel parcel, ClassLoader loader) {
-                return new TestCoverView.SavedState(parcel, loader);
+            public MusicCoverView.SavedState createFromParcel(Parcel parcel, ClassLoader loader) {
+                return new MusicCoverView.SavedState(parcel, loader);
             }
 
             @Override
-            public TestCoverView.SavedState[] newArray(int size) {
-                return new TestCoverView.SavedState[size];
+            public MusicCoverView.SavedState[] newArray(int size) {
+                return new MusicCoverView.SavedState[size];
             }
         });
     }

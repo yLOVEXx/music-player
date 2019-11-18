@@ -16,25 +16,32 @@
 
 package team.fzo.puppas.mini_player.activities;
 
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.drawable.Animatable2;
+import android.graphics.drawable.AnimatedVectorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.transition.Transition;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.andremion.music.MusicCoverView;
+
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.adapter.TransitionAdapter;
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.service.PlayService;
+import team.fzo.puppas.mini_player.view.MusicCoverView;
 
 public class DetailActivity extends PlayActivity {
 
     private MusicCoverView mCoverView;
     private Bitmap mCoverImage;      //the image has been resized
     private LinearLayout mTitleView;
+    private FloatingActionButton mPlayButtonView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,16 @@ public class DetailActivity extends PlayActivity {
 
             @Override
             public void onRotateEnd(MusicCoverView coverView) {
+
+            }
+
+            @Override
+            public void onBackPressed(MusicCoverView coverView) {
+                /*
+                调用 finishAfterTransition
+                Reverses the Activity Scene entry Transition and triggers the calling Activity to
+                reverse its exit Transition.
+                * */
                 supportFinishAfterTransition();
             }
         });
@@ -64,12 +81,14 @@ public class DetailActivity extends PlayActivity {
         getWindow().getSharedElementEnterTransition().addListener(new TransitionAdapter() {
             @Override
             public void onTransitionEnd(Transition transition) {
-                mCoverView.start();
+                if(isPlaying()) {
+                    mCoverView.start();
+                }
             }
         });
 
         //set the title
-        mTitleView = findViewById(R.id.title);
+        mTitleView = (LinearLayout) findViewById(R.id.title);
         Song song = PlayService.getSongInPlayer();
         TextView songName = mTitleView.findViewById(R.id.song_name);
         TextView separator = mTitleView.findViewById(R.id.separator);
@@ -77,15 +96,49 @@ public class DetailActivity extends PlayActivity {
         songName.setText(song.getName());
         separator.setText(" - ");
         artistName.setText(song.getArtist());
+
+        mPlayButtonView = findViewById(R.id.play_button);
+        //设置播放按钮图片
+        if(isPlaying()){
+            mPlayButtonView.setImageResource(R.drawable.ic_pause_animatable);
+        }
+        else{
+            mPlayButtonView.setImageResource(R.drawable.ic_play_animatable);
+        }
     }
+
+
 
     @Override
     public void onBackPressed() {
         mCoverView.stop();
     }
 
+
     public void onPlayButtonClick(View view) {
-        pause();
+        if(getSongInPlayer() == null)
+            return;
+
+        AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable)mPlayButtonView.getDrawable();
+
+        //如果当前音乐正在播放
+        if(isPlaying()){
+            playDrawable.registerAnimationCallback(new PlayButtonAnimation(true));
+            pause();
+            mCoverView.pause();
+            playDrawable.start();
+        }
+        else{
+            playDrawable.registerAnimationCallback(new PlayButtonAnimation(false));
+            restart();
+            if(mCoverView.isStarted()) {
+                mCoverView.resume();
+            }
+            else{
+                mCoverView.start();
+            }
+            playDrawable.start();
+        }
     }
 
 
@@ -102,4 +155,28 @@ public class DetailActivity extends PlayActivity {
     }
 
 
+    /*
+    监听Animation的结束，结束时设置新的vector animation
+     */
+    private class PlayButtonAnimation extends Animatable2.AnimationCallback {
+
+        boolean isPlaying;
+
+        public PlayButtonAnimation(boolean bool){
+            isPlaying = bool;
+        }
+
+        @Override
+        public void onAnimationEnd(Drawable drawable) {
+            super.onAnimationEnd(drawable);
+
+            FloatingActionButton playButton = (FloatingActionButton)mPlayButtonView;
+            if(isPlaying){
+                playButton.setImageResource(R.drawable.ic_play_animatable);
+            }
+            else{
+                playButton.setImageResource(R.drawable.ic_pause_animatable);
+            }
+        }
+    }
 }
