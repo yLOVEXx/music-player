@@ -19,12 +19,12 @@
         app:shape="circle" />
 
     <include
-        android:id="@+id/title"
         layout="@layout/song_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         app:layout_marginTopPercent="10%"/>
+
 
     <team.fzo.puppas.mini_player.view.ProgressView
         android:id="@+id/progress"

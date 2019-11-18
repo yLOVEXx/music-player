@@ -23,12 +23,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -41,6 +38,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import team.fzo.puppas.mini_player.view.MarqueeTextView;
 import team.fzo.puppas.mini_player.view.MusicCoverView;
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.model.Song;
@@ -98,6 +96,7 @@ public class MusicListActivity extends PlayActivity {
         RecyclerView recyclerView = findViewById(R.id.tracks);
         assert recyclerView != null;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         recyclerView.setAdapter(new SongAdapter(this, MusicContentUtils.SONG_LIST));
     }
 
@@ -113,15 +112,15 @@ public class MusicListActivity extends PlayActivity {
             /*
             update the information in the title
              */
-            TextView songName = findViewById(R.id.song_name);
-            TextView artistName = findViewById(R.id.artist_name);
-            TextView separator = findViewById(R.id.separator);
-            songName.setText(song.getName());
-            artistName.setText(song.getArtist());
-            separator.setText(" - ");
+            TextView titleInfo = (TextView)mTitleView;
+            String info = song.getName() + " - " + song.getArtist();
+            titleInfo.setText(info);
         }
     }
 
+    /*
+    根据播放状态设置animation
+     */
     @Override
     protected void onRestart() {
         super.onRestart();
@@ -222,12 +221,9 @@ public class MusicListActivity extends PlayActivity {
                 /*
                 update the information in the title
                  */
-                TextView songName = findViewById(R.id.song_name);
-                TextView artistName = findViewById(R.id.artist_name);
-                TextView separator = findViewById(R.id.separator);
-                songName.setText(song.getName());
-                artistName.setText(song.getArtist());
-                separator.setText(" - ");
+                TextView titleInfo = (TextView)mTitleView;
+                String info = song.getName() + " - " + song.getArtist();
+                titleInfo.setText(info);
 
                 mSongIndex = index;
             }

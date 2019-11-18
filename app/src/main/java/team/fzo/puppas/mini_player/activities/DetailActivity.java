@@ -16,14 +16,10 @@
 
 package team.fzo.puppas.mini_player.activities;
 
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.transition.Transition;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -34,13 +30,14 @@ import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.adapter.TransitionAdapter;
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.service.PlayService;
+import team.fzo.puppas.mini_player.view.MarqueeTextView;
 import team.fzo.puppas.mini_player.view.MusicCoverView;
 
 public class DetailActivity extends PlayActivity {
 
     private MusicCoverView mCoverView;
     private Bitmap mCoverImage;      //the image has been resized
-    private LinearLayout mTitleView;
+    private TextView mTitleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,14 +84,10 @@ public class DetailActivity extends PlayActivity {
         });
 
         //set the title
-        mTitleView = (LinearLayout) findViewById(R.id.title);
+        mTitleView = findViewById(R.id.title);
         Song song = PlayService.getSongInPlayer();
-        TextView songName = mTitleView.findViewById(R.id.song_name);
-        TextView separator = mTitleView.findViewById(R.id.separator);
-        TextView artistName = mTitleView.findViewById(R.id.artist_name);
-        songName.setText(song.getName());
-        separator.setText(" - ");
-        artistName.setText(song.getArtist());
+        String info = song.getName() + " - " + song.getArtist();
+        mTitleView.setText(info);
 
         //设置播放按钮图片
         if(isPlaying()){

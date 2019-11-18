@@ -38,8 +38,7 @@
         android:onClick="onPaneClick">
 
         <include
-            android:id="@+id/title"
-            layout="@layout/song_title"/>
+             layout="@layout/song_title"/>
 
         <LinearLayout
             android:layout_width="match_parent"
