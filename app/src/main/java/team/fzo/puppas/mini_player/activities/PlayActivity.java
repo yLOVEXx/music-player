@@ -47,10 +47,10 @@ public abstract class PlayActivity extends AppCompatActivity {
 
     private PlayService mService;
     private boolean mBound = false;
-    public TextView mTimeView;
-    public TextView mDurationView;
-    public ProgressView mProgressView;
-
+    protected TextView mTimeView;
+    protected TextView mDurationView;
+    protected ProgressView mProgressView;
+    protected FloatingActionButton mPlayButtonView;
 
 
     private final Handler mUpdateProgressHandler = new Handler() {
@@ -110,6 +110,7 @@ public abstract class PlayActivity extends AppCompatActivity {
         mTimeView = findViewById(R.id.time);
         mDurationView = findViewById(R.id.duration);
         mProgressView = findViewById(R.id.progress);
+        mPlayButtonView = findViewById(R.id.play_button);
     }
 
     @Override
@@ -130,27 +131,27 @@ public abstract class PlayActivity extends AppCompatActivity {
         mUpdateProgressHandler.removeMessages(0);
     }
 
-    public void play(Song song) {
+    protected void play(Song song) {
         PlayService.play(song);
     }
 
-    public void play(Song song, Context context){
+    protected void play(Song song, Context context){
         PlayService.play(song, context);
     }
 
-    public void pause() {
+    protected void pause() {
         PlayService.pause();
     }
 
-    public void restart(){
+    protected void restart(){
         PlayService.restart();
     }
 
-    public Song getSongInPlayer(){
+    protected Song getSongInPlayer(){
         return PlayService.getSongInPlayer();
     }
 
-    public boolean isPlaying(){
+    protected boolean isPlaying(){
         return PlayService.isPlaying();
     }
 
@@ -169,12 +170,11 @@ public abstract class PlayActivity extends AppCompatActivity {
         public void onAnimationEnd(Drawable drawable) {
             super.onAnimationEnd(drawable);
 
-            FloatingActionButton playButton = (FloatingActionButton)mPlayButtonView;
             if(isPlaying){
-                playButton.setImageResource(R.drawable.ic_play_animatable);
+                mPlayButtonView.setImageResource(R.drawable.ic_play_animatable);
             }
             else{
-                playButton.setImageResource(R.drawable.ic_pause_animatable);
+                mPlayButtonView.setImageResource(R.drawable.ic_pause_animatable);
             }
         }
     }

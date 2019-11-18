@@ -52,10 +52,6 @@ public class MusicListActivity extends PlayActivity {
 
     private View mCoverView;
     private View mTitleView;
-    private View mTimeView;
-    private View mDurationView;
-    private View mProgressView;
-    private View mPlayButtonView;
 
     private IntentFilter intentFilter;
     private SongSelectedReceiver receiver;
@@ -76,17 +72,13 @@ public class MusicListActivity extends PlayActivity {
 
         mCoverView = findViewById(R.id.cover);
         mTitleView = findViewById(R.id.title);
-        mTimeView = findViewById(R.id.time);
-        mDurationView = findViewById(R.id.duration);
-        mProgressView = findViewById(R.id.progress);
-        mPlayButtonView = findViewById(R.id.play_button);
 
         //设置播放按钮图片
         if(isPlaying()){
-            ((FloatingActionButton)mPlayButtonView).setImageResource(R.drawable.ic_pause_animatable);
+            mPlayButtonView.setImageResource(R.drawable.ic_pause_animatable);
         }
         else{
-            ((FloatingActionButton)mPlayButtonView).setImageResource(R.drawable.ic_play_animatable);
+            mPlayButtonView.setImageResource(R.drawable.ic_play_animatable);
         }
         initCover();        //加载歌曲图片与信息
 
@@ -134,10 +126,10 @@ public class MusicListActivity extends PlayActivity {
     protected void onRestart() {
         super.onRestart();
         if(isPlaying()){
-            ((FloatingActionButton)mPlayButtonView).setImageResource(R.drawable.ic_pause_animatable);
+            mPlayButtonView.setImageResource(R.drawable.ic_pause_animatable);
         }
         else{
-            ((FloatingActionButton)mPlayButtonView).setImageResource(R.drawable.ic_play_animatable);
+            mPlayButtonView.setImageResource(R.drawable.ic_play_animatable);
         }
     }
 
@@ -145,8 +137,7 @@ public class MusicListActivity extends PlayActivity {
         if(getSongInPlayer() == null)
             return;
 
-        FloatingActionButton playButton = (FloatingActionButton)view;
-        AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable)playButton.getDrawable();
+        AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable)mPlayButtonView.getDrawable();
 
         //如果当前音乐正在播放
         if(isPlaying()){
@@ -203,38 +194,13 @@ public class MusicListActivity extends PlayActivity {
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                     new Pair<>(mCoverView, ViewCompat.getTransitionName(mCoverView)),
                     new Pair<>(mTitleView, ViewCompat.getTransitionName(mTitleView)),
-                    new Pair<>(mTimeView, ViewCompat.getTransitionName(mTimeView)),
-                    new Pair<>(mDurationView, ViewCompat.getTransitionName(mDurationView)),
-                    new Pair<>(mProgressView, ViewCompat.getTransitionName(mProgressView)),
-                    new Pair<>(mPlayButtonView, ViewCompat.getTransitionName(mPlayButtonView)));
+                    new Pair<>((View)mTimeView, ViewCompat.getTransitionName(mTimeView)),
+                    new Pair<>((View)mDurationView, ViewCompat.getTransitionName(mDurationView)),
+                    new Pair<>((View)mProgressView, ViewCompat.getTransitionName(mProgressView)),
+                    new Pair<>((View)mPlayButtonView, ViewCompat.getTransitionName(mPlayButtonView)));
 
             ActivityCompat.startActivity(this, new Intent(this, DetailActivity.class),
                     options.toBundle());
-        }
-    }
-
-    /*
-    监听Animation的结束，结束时设置新的vector animation
-     */
-    private class PlayButtonAnimation extends Animatable2.AnimationCallback {
-
-        boolean isPlaying;
-
-        public PlayButtonAnimation(boolean bool){
-            isPlaying = bool;
-        }
-
-        @Override
-        public void onAnimationEnd(Drawable drawable) {
-            super.onAnimationEnd(drawable);
-
-            FloatingActionButton playButton = (FloatingActionButton)mPlayButtonView;
-            if(isPlaying){
-                playButton.setImageResource(R.drawable.ic_play_animatable);
-            }
-            else{
-                playButton.setImageResource(R.drawable.ic_pause_animatable);
-            }
         }
     }
 
@@ -268,8 +234,7 @@ public class MusicListActivity extends PlayActivity {
 
             //设置播放按钮动画
             if(!isPlaying) {
-                FloatingActionButton playButton = (FloatingActionButton)mPlayButtonView;
-                AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable) playButton.getDrawable();
+                AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable) mPlayButtonView.getDrawable();
                 playDrawable.registerAnimationCallback(new PlayButtonAnimation(false));
                 playDrawable.start();
             }

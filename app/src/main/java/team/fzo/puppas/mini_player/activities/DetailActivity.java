@@ -41,7 +41,6 @@ public class DetailActivity extends PlayActivity {
     private MusicCoverView mCoverView;
     private Bitmap mCoverImage;      //the image has been resized
     private LinearLayout mTitleView;
-    private FloatingActionButton mPlayButtonView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +96,6 @@ public class DetailActivity extends PlayActivity {
         separator.setText(" - ");
         artistName.setText(song.getArtist());
 
-        mPlayButtonView = findViewById(R.id.play_button);
         //设置播放按钮图片
         if(isPlaying()){
             mPlayButtonView.setImageResource(R.drawable.ic_pause_animatable);
@@ -152,31 +150,5 @@ public class DetailActivity extends PlayActivity {
         Bitmap dstbmp = Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix,
                 true);
         return dstbmp;
-    }
-
-
-    /*
-    监听Animation的结束，结束时设置新的vector animation
-     */
-    private class PlayButtonAnimation extends Animatable2.AnimationCallback {
-
-        boolean isPlaying;
-
-        public PlayButtonAnimation(boolean bool){
-            isPlaying = bool;
-        }
-
-        @Override
-        public void onAnimationEnd(Drawable drawable) {
-            super.onAnimationEnd(drawable);
-
-            FloatingActionButton playButton = (FloatingActionButton)mPlayButtonView;
-            if(isPlaying){
-                playButton.setImageResource(R.drawable.ic_play_animatable);
-            }
-            else{
-                playButton.setImageResource(R.drawable.ic_pause_animatable);
-            }
-        }
     }
 }
