@@ -116,7 +116,9 @@
         app:rsb_thumb_height="@dimen/seekbar_thumb_height"
         app:rsb_thumb_width="@dimen/seekbar_thumb_width"
         app:rsb_indicator_show_mode="showWhenTouch"
-        app:rsb_indicator_text_size="@dimen/indicator_text_size" />
+        app:rsb_indicator_text_size="@dimen/indicator_text_size"
+        app:rsb_indicator_background_color="@color/indicator_background_color"
+        app:rsb_indicator_text_color="@color/indicator_text_color"/>
 
     <LinearLayout
         android:id="@+id/controls"

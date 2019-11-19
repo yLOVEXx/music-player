@@ -10,6 +10,7 @@
     <slide android:slideEdge="bottom">
         <targets>
             <target android:targetId="@id/controls" />
+            <target android:targetId="@id/seekbar" />
         </targets>
     </slide>
 
