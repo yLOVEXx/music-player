@@ -30,6 +30,10 @@ import team.fzo.puppas.mini_player.utils.MusicContentUtils;
 
 import java.io.IOException;
 
+/*
+The PlayService is responsible to play the music and
+synchronize the time counter
+ */
 public class PlayService extends Service {
 
     // Binder given to clients
@@ -39,7 +43,7 @@ public class PlayService extends Service {
 
     private static Song mSongInPlayer;          //当前歌曲
     private static Song mPrevSongInPlayer;      //前一首歌
-    private static Bitmap mCoverImage;
+    private static Bitmap mCoverImage;          //当前歌曲的专辑图片
 
 
     @Override

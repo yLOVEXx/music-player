@@ -43,11 +43,17 @@ public class DetailActivity extends PlayActivity {
     private Bitmap mCoverImage;      //the image has been resized
     private MarqueeTextView mTitleView;
     private RangeSeekBar mSeekBar;
+    //seekbar是否被拖动的状态
     private boolean mIsSeekBarTracking;
+
 
     private final Handler mUpdateSeekBarHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            /*
+            call the getPostion() method to set the position of seekbar
+            if the seekbar is dragging, seekbar will stop set progress
+             */
             final int position = getPosition();
             if(!mIsSeekBarTracking)
                 mSeekBar.setProgress(position);
@@ -138,8 +144,7 @@ public class DetailActivity extends PlayActivity {
 
             @Override
             public void onStopTrackingTouch(RangeSeekBar view, boolean isLeft) {
-                Log.d("aaa", String.valueOf(view.getLeftSeekBar().getProgress()));
-                PlayService.seekTo((int)view.getLeftSeekBar().getProgress());
+                seekTo((int)view.getLeftSeekBar().getProgress());
                 view.setProgress(view.getLeftSeekBar().getProgress());
                 mIsSeekBarTracking = false;
             }
