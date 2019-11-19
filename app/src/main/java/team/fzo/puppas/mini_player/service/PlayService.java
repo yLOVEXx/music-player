@@ -122,6 +122,13 @@ public class PlayService extends Service {
         return mPlayer.isPlaying();
     }
 
+    public static void seekTo(int pos){
+        //resetPlayer(mSongInPlayer.getPath());
+        mPlayer.seekTo(pos * 1000);
+        //mPlayer.start();
+        mCounter.setPosition(pos);
+    }
+
     public static void pause() {
         mPlayer.pause();
 

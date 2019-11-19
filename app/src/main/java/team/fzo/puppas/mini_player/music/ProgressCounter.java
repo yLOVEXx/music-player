@@ -48,6 +48,10 @@ public class ProgressCounter extends Thread {
         return mPosition;
     }
 
+    public void setPosition(int position){
+        mPosition = position;
+    }
+
     //释放线程
     public void release(){
         pause();

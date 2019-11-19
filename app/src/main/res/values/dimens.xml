@@ -7,4 +7,7 @@
     <dimen name="cover_size_maxi">400dp</dimen>
     <dimen name="fab_vertical_margin">-20dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="seekbar_thumb_width">12dp</dimen>
+    <dimen name="seekbar_thumb_height">12dp</dimen>
+    <dimen name="indicator_text_size">30sp</dimen>
 </resources>

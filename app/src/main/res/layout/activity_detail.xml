@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/cover"
         android:layout_centerHorizontal="true"
-        app:layout_widthPercent="25%"/>
+        app:layout_widthPercent="25%" />
 
     <TextView
         android:id="@+id/time"
@@ -99,6 +99,24 @@
             android:src="@drawable/ic_shuffle_white_24dp"/>
 
     </LinearLayout>
+
+    <com.jaygoo.widget.RangeSeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ordering"
+        android:layout_centerHorizontal="true"
+        app:layout_marginTopPercent="10%"
+        app:layout_widthPercent="90%"
+        app:layout_heightPercent="5%"
+        app:rsb_max="100"
+        app:rsb_min="0"
+        app:rsb_mode="single"
+        app:rsb_progress_color="@color/colorAccent"
+        app:rsb_thumb_height="@dimen/seekbar_thumb_height"
+        app:rsb_thumb_width="@dimen/seekbar_thumb_width"
+        app:rsb_indicator_show_mode="showWhenTouch"
+        app:rsb_indicator_text_size="@dimen/indicator_text_size" />
 
     <LinearLayout
         android:id="@+id/controls"

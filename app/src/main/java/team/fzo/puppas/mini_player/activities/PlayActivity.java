@@ -151,6 +151,14 @@ public abstract class PlayActivity extends AppCompatActivity {
         return PlayService.getSongInPlayer();
     }
 
+    protected int getPosition() {
+        return PlayService.getPosition();
+    }
+
+    protected int getDuration(){
+        return PlayService.getDuration();
+    }
+
     protected boolean isPlaying(){
         return PlayService.isPlaying();
     }

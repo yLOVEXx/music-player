@@ -1,7 +1,6 @@
 package team.fzo.puppas.mini_player.view;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
