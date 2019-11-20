@@ -38,12 +38,12 @@ public class PlayService extends Service {
 
     // Binder given to clients
     private final IBinder mBinder = new PlayBinder();
-    private static MediaPlayer mPlayer = new MediaPlayer();
-    private static ProgressCounter mCounter = new ProgressCounter();
+    private static MediaPlayer sPlayer = new MediaPlayer();
+    private static ProgressCounter sCounter = new ProgressCounter();
 
-    private static Song mSongInPlayer;          //当前歌曲
-    private static Song mPrevSongInPlayer;      //前一首歌
-    private static Bitmap mCoverImage;          //当前歌曲的专辑图片
+    private static Song sSongInPlayer;          //当前歌曲
+    private static Song sPrevSongInPlayer;      //前一首歌
+    private static Bitmap sCoverImage;          //当前歌曲的专辑图片
 
 
     @Override
@@ -53,64 +53,64 @@ public class PlayService extends Service {
 
     public static void play(Song song) {
 
-        if(mSongInPlayer == null || mSongInPlayer.getId() != song.getId()){
+        if(sSongInPlayer == null || sSongInPlayer.getId() != song.getId()){
             //为播放器设置新歌且记录旧歌
-            mPrevSongInPlayer = mSongInPlayer;
-            mSongInPlayer = song;
+            sPrevSongInPlayer = sSongInPlayer;
+            sSongInPlayer = song;
 
-            resetPlayer(mSongInPlayer.getPath());
-            mPlayer.start();
+            resetPlayer(sSongInPlayer.getPath());
+            sPlayer.start();
 
-            resetCounter((int)(mSongInPlayer.getDuration() / 1000));
-            mCounter.start();
+            resetCounter((int)(sSongInPlayer.getDuration() / 1000));
+            sCounter.start();
         }
         else{
             if(!isPlaying()){
                 //当前播放的歌曲处于暂停状态，重新启动播放器
-                mPlayer.start();
-                mCounter.restart();
+                sPlayer.start();
+                sCounter.restart();
             }
         }
     }
 
     private static void setCoverImage(Context context){
-          mCoverImage = MusicContentUtils.getArtwork(context,
-                mSongInPlayer.getId(), mSongInPlayer.getAlbumId(), false);
+          sCoverImage = MusicContentUtils.getArtwork(context,
+                sSongInPlayer.getId(), sSongInPlayer.getAlbumId(), false);
     }
 
     public static Bitmap getCoverImage(){
-        return mCoverImage;
+        return sCoverImage;
     }
 
     public static void play(Song song, Context contex) {
 
-        if(mSongInPlayer == null || mSongInPlayer.getId() != song.getId()){
+        if(sSongInPlayer == null || sSongInPlayer.getId() != song.getId()){
             //为播放器设置新歌且记录旧歌
-            mPrevSongInPlayer = mSongInPlayer;
-            mSongInPlayer = song;
+            sPrevSongInPlayer = sSongInPlayer;
+            sSongInPlayer = song;
 
             setCoverImage(contex);
             
-            resetPlayer(mSongInPlayer.getPath());
-            mPlayer.start();
+            resetPlayer(sSongInPlayer.getPath());
+            sPlayer.start();
 
-            resetCounter((int)(mSongInPlayer.getDuration() / 1000));
-            mCounter.start();
+            resetCounter((int)(sSongInPlayer.getDuration() / 1000));
+            sCounter.start();
         }
         else{
             if(!isPlaying()){
                 //当前播放的歌曲处于暂停状态，重新启动播放器
-                mPlayer.start();
-                mCounter.restart();
+                sPlayer.start();
+                sCounter.restart();
             }
         }
     }
 
     private static void resetPlayer(String path){
         try {
-            mPlayer.reset();
-            mPlayer.setDataSource(path);
-            mPlayer.prepare();
+            sPlayer.reset();
+            sPlayer.setDataSource(path);
+            sPlayer.prepare();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -118,53 +118,53 @@ public class PlayService extends Service {
     }
 
     private static void resetCounter(int duration){
-        mCounter.release();
-        mCounter = new ProgressCounter(duration);
+        sCounter.release();
+        sCounter = new ProgressCounter(duration);
     }
 
     public static boolean isPlaying() {
-        return mPlayer.isPlaying();
+        return sPlayer.isPlaying();
     }
 
     public static void seekTo(int pos){
-        //resetPlayer(mSongInPlayer.getPath());
-        mPlayer.seekTo(pos * 1000);
-        //mPlayer.start();
-        mCounter.setPosition(pos);
+        //resetPlayer(sSongInPlayer.getPath());
+        sPlayer.seekTo(pos * 1000);
+        //sPlayer.start();
+        sCounter.setPosition(pos);
     }
 
     public static void pause() {
-        mPlayer.pause();
+        sPlayer.pause();
 
-        if(mCounter != null){
-            mCounter.pause();
+        if(sCounter != null){
+            sCounter.pause();
         }
     }
 
     public static void restart(){
-        if(mSongInPlayer != null){
-            mPlayer.start();
-            mCounter.restart();
+        if(sSongInPlayer != null){
+            sPlayer.start();
+            sCounter.restart();
         }
     }
 
 
     public static int getPosition() {
-        if (mCounter != null) {
-            return mCounter.getPosition();
+        if (sCounter != null) {
+            return sCounter.getPosition();
         }
         return 0;
     }
 
     public static int getDuration() {
-        if(mSongInPlayer == null)
+        if(sSongInPlayer == null)
             return 0;
         else
-            return (int)(mSongInPlayer.getDuration() / 1000);
+            return (int)(sSongInPlayer.getDuration() / 1000);
     }
 
     public static Song getSongInPlayer(){
-        return mSongInPlayer;
+        return sSongInPlayer;
     }
 
     public class PlayBinder extends Binder {
@@ -179,8 +179,8 @@ public class PlayService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPlayer.stop();
-        mPlayer.release();
-        mCounter.release();
+        sPlayer.stop();
+        sPlayer.release();
+        sCounter.release();
     }
 }

@@ -38,7 +38,7 @@ public class MusicContentUtils {
     private static final int SMALL_SIZE = R.dimen.cover_size_mini;
     private static final int BIG_SIZE = R.dimen.cover_size_maxi;
 
-    public static List<Song> SONG_LIST = LitePal.findAll(Song.class);
+    public static List<Song> gSongList = LitePal.findAll(Song.class);
     private static final Uri ALBUM_ART_URI = Uri.parse("content://media/external/audio/albumart");
 
     /*
@@ -80,7 +80,7 @@ public class MusicContentUtils {
                     song.setIsMusic(isMusic);
 
                     song.save();
-                    SONG_LIST.add(song);
+                    gSongList.add(song);
                 }
             }
         }

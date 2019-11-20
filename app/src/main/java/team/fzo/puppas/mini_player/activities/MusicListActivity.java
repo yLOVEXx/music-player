@@ -97,7 +97,7 @@ public class MusicListActivity extends PlayActivity {
         assert recyclerView != null;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        recyclerView.setAdapter(new SongAdapter(this, MusicContentUtils.SONG_LIST));
+        recyclerView.setAdapter(new SongAdapter(this, MusicContentUtils.gSongList));
     }
 
     private void initCover(){
@@ -161,7 +161,7 @@ public class MusicListActivity extends PlayActivity {
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
         else{
-            if(MusicContentUtils.SONG_LIST.isEmpty()) {
+            if(MusicContentUtils.gSongList.isEmpty()) {
                 MusicContentUtils.getContent(this);
             }
         }
@@ -175,7 +175,7 @@ public class MusicListActivity extends PlayActivity {
         switch (requestCode){
             case 1:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if(MusicContentUtils.SONG_LIST.isEmpty())
+                    if(MusicContentUtils.gSongList.isEmpty())
                         MusicContentUtils.getContent(this);
                 }
                 else{
@@ -215,7 +215,7 @@ public class MusicListActivity extends PlayActivity {
                 load album with bitmap
                  */
                 MusicCoverView coverView = findViewById(R.id.cover);
-                Song song = MusicContentUtils.SONG_LIST.get(index);
+                Song song = MusicContentUtils.gSongList.get(index);
                 Bitmap cover = PlayService.getCoverImage();
                 coverView.setImageBitmap(cover);
                 /*
