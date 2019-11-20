@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#C4141414">
     <!-- 你的主界面内容，必须放置在DrawerLayout中的第一个位置-->
     <FrameLayout
         android:layout_width="match_parent"
@@ -63,12 +64,12 @@
             <RelativeLayout
                 android:id="@+id/playlist"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_below="@id/music_image"
+                android:background="#C4141414"
                 android:gravity="center_vertical"
                 android:padding="@dimen/activity_vertical_margin"
                 android:transitionGroup="true"
-                app:layout_constraintBottom_toTopOf="@+id/recycle_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -77,23 +78,30 @@
 
                 <TextView
                     android:id="@+id/music_list_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
                     android:text="我的歌单"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-<!--
-                <TextView
-                    android:id="@+id/counter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/name"
-                    android:text="4"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
--->
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textSize="16sp" />
+
+
+                <!--
+                             <TextView
+                                 android:id="@+id/addAlbum"
+                                 android:layout_width="160dp"
+                                 android:layout_height="40dp"
+                                 android:layout_below="@id/name"
+                                 android:layout_alignParentEnd="true"
+                                 android:layout_marginEnd="4dp"
+                                 android:clickable="true"
+                                 android:drawableLeft="@drawable/add_white"
+                                 android:text="新建歌单"
+                                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+ -->
                 <ImageView
-                    android:id="@+id/options"
-                    android:layout_width="@dimen/design_fab_size_mini"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/addAlbum"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
@@ -102,19 +110,28 @@
 
             </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_view"
-                android:layout_width="408dp"
-                android:layout_height="361dp"
-                android:layout_below="@+id/playlist"
-                android:layout_marginBottom="51dp"
-                app:layoutManager="LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/refresh"
+                android:layout_width="410dp"
+                android:layout_height="481dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/playlist" />
-             tools:listitem="@layout/mainlist_item" />
+                app:layout_constraintTop_toBottomOf="@+id/playlist">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycle_view"
+                    android:layout_width="408dp"
+                    android:layout_height="480dp"
+                    android:layout_below="@+id/playlist"
+                    android:layout_marginBottom="51dp"
+                    android:background="#C4141414"
+                    app:layoutManager="LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/playlist" />
+            </android.support.v4.widget.SwipeRefreshLayout>
 
         </android.support.constraint.ConstraintLayout>
     </FrameLayout>
