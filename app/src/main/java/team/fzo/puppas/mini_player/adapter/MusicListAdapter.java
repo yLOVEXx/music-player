@@ -2,6 +2,7 @@ package team.fzo.puppas.mini_player.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +16,12 @@ import team.fzo.puppas.mini_player.activities.MusicListActivity;
 
 import java.util.List;
 
-public class MusicListAlbumAdapter extends RecyclerView.Adapter<MusicListAlbumAdapter.ViewHolder> {
+public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.ViewHolder> {
     private final List<MusicList> myMusicList;
     private Context mContext;
-   // private final LocalBroadcastManager broadcastManager;
-    public MusicListAlbumAdapter(List<MusicList> myMusicList, Context context){
+    public int musicListId;
+
+    public MusicListAdapter(List<MusicList> myMusicList, Context context){
         this.myMusicList = myMusicList;
         mContext = context;
     }
@@ -28,18 +30,17 @@ public class MusicListAlbumAdapter extends RecyclerView.Adapter<MusicListAlbumAd
         public final View mView;
         public final ImageView musicImage;
         public final TextView musicName;
-        public final TextView musicNumber;
 
 
         public ViewHolder(View view){
             super(view);
             mView = view;
-            musicImage=(ImageView)view.findViewById(R.id.music_image);
-            musicName=(TextView) view.findViewById(R.id.music_name);
-            musicNumber = (TextView)view.findViewById(R.id.music_number);
+            musicImage = view.findViewById(R.id.music_image);
+            musicName = view.findViewById(R.id.music_name);
         }
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view= LayoutInflater.from(parent.getContext())
@@ -51,10 +52,9 @@ public class MusicListAlbumAdapter extends RecyclerView.Adapter<MusicListAlbumAd
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 MusicList music = myMusicList.get(position);
-                //Toast.makeText(v.getContext(),"sdadasdddsad", Toast.LENGTH_SHORT).show();
+                musicListId = music.getMusicListId();
                 Intent intent = new Intent(mContext, MusicListActivity.class);
-                //  ComponentName componentName = new ComponentName("com.sample.andremion.musicplayer.view", "com.sample.andremion.musicplayer.v");
-                // intent.setComponent(componentName);
+                intent.putExtra("musicListId", musicListId);
                 mContext.startActivity(intent);
             }
         });
@@ -64,14 +64,13 @@ public class MusicListAlbumAdapter extends RecyclerView.Adapter<MusicListAlbumAd
     @Override
     public void onBindViewHolder(final ViewHolder holder,final int position){
         MusicList music = myMusicList.get(position);
-        holder.musicImage.setImageResource(music.getImageId());
-        holder.musicName.setText(music.getName());
-        //holder.musicName.setText(music.getNumber());
-
+        holder.musicImage.setImageResource(music.getMusicListAlbumId());
+        holder.musicName.setText(music.getMusicListName());
     }
 
     @Override
     public int getItemCount(){
         return myMusicList.size();
     }
+
 }

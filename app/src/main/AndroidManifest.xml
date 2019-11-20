@@ -12,8 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name="team.fzo.puppas.mini_player.activities.MainActivity">
+        <activity android:name=".activities.ManageMusicListActivity"></activity>
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="team.fzo.puppas.mini_player.activities.MusicListActivity"
+            android:name=".activities.MusicListActivity"
             android:theme="@style/AppTheme.Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,11 +32,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="team.fzo.puppas.mini_player.activities.DetailActivity"
+            android:name=".activities.DetailActivity"
             android:theme="@style/AppTheme.Detail" />
 
         <service
-            android:name="team.fzo.puppas.mini_player.service.PlayService"
+            android:name=".service.PlayService"
             android:enabled="true"
             android:exported="false" />
     </application>

@@ -1,44 +1,73 @@
 package team.fzo.puppas.mini_player.activities;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.donkingliang.banner.CustomBanner;
+import org.litepal.LitePal;
 import team.fzo.puppas.mini_player.R;
-import team.fzo.puppas.mini_player.model.MusicListAlbum;
-import team.fzo.puppas.mini_player.adapter.MusicListAlbumAdapter;
+import team.fzo.puppas.mini_player.adapter.MusicListAdapter;
+import team.fzo.puppas.mini_player.model.MusicList;
+import team.fzo.puppas.mini_player.utils.MusicListUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MainActivity extends PlayActivity {
 
+    public static final int MUSIC_LIST_CATEGORY_NUM = 10;
     private CustomBanner<Integer> mBanner;
-    private Toolbar toolbar;
+    private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
-    private List<MusicListAlbum> music = new ArrayList<>();
+    private List<MusicList> musicLists = new ArrayList<>();
+    private PopupWindow mPopWindow;
+    private MusicListAdapter musicListAdapter;
+    private SwipeRefreshLayout mSwipeRefresh;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //下拉刷新
+        mSwipeRefresh = findViewById(R.id.refresh);
+        mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshMusicList();
+            }
+        });
+
+        ImageView imageView = findViewById(R.id.addAlbum);
+        //设置toolbar
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.navigation_view);
@@ -48,13 +77,7 @@ public class MainActivity extends PlayActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.menu_white);
         }
 
-        mBanner = findViewById(R.id.banner);
-
-        ArrayList<Integer> images = new ArrayList<>();
-        images.add(R.drawable.aaa);
-        setImageToBanner(images);
-
-
+        //实现左滑菜单的点击效果
         mNavigationView.setCheckedItem(R.id.nav_call);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -64,26 +87,37 @@ public class MainActivity extends PlayActivity {
             }
         });
 
+        //初始化轮播图
+        mBanner = findViewById(R.id.banner);
+        ArrayList<Integer> bannerImages = new ArrayList<>();
+        bannerImages.add(R.drawable.banner_pic1);
+        bannerImages.add(R.drawable.banner_pic2);
+        bannerImages.add(R.drawable.banner_pic3);
+        bannerImages.add(R.drawable.banner_pic4);
+        bannerImages.add(R.drawable.banner_pic5);
+        setImageToBanner(bannerImages);
+
+        //初始化和加载RecyclerView
+        getPermissionAndContent();   //写入数据库
         initMusicList();
         RecyclerView recyclerView = findViewById(R.id.recycle_view);
         assert recyclerView != null;
+        musicListAdapter = new MusicListAdapter(musicLists,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new MusicListAlbumAdapter(music,this));
+        recyclerView.setAdapter(musicListAdapter);
+
+        //点击事件实现弹出菜单
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                showPopupWindow();
+            }
+        });
 
     }
 
-    private void initMusicList(){
-        MusicListAlbum myfavorite=new MusicListAlbum("我喜欢的音乐",R.drawable.collect);
-        music.add(myfavorite);
-
-        MusicListAlbum classmusic=new MusicListAlbum("古典音乐",R.drawable.collect);
-        music.add(classmusic);
-
-        MusicListAlbum popmusic=new MusicListAlbum("流行音乐",R.drawable.collect);
-        music.add(popmusic);
-
-    }
-
+    //选择菜单栏
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu,menu);
         return true;
@@ -100,6 +134,7 @@ public class MainActivity extends PlayActivity {
         return true;
     }
 
+    //设置轮播图
     private void setImageToBanner(final ArrayList<Integer> images) {
         mBanner.setPages(new CustomBanner.ViewCreator<Integer>() {
             @Override
@@ -116,6 +151,68 @@ public class MainActivity extends PlayActivity {
         }, images).startTurning(5000);
     }
 
+    //实现底部弹出菜单
+    private void showPopupWindow() {
+        //设置contentView
+        View contentView = LayoutInflater.from(MainActivity.this).inflate(R.layout.popup_list, null);
+        mPopWindow = new PopupWindow(contentView,
+                DrawerLayout.LayoutParams.FILL_PARENT, 405
+                , true);
+        mPopWindow.setContentView(contentView);
+        bgAlpha(0.3f);
+
+        mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //popupwindow消失时使背景不透明
+                bgAlpha(1f);
+            }
+        });
+
+        //设置各个控件的点击响应
+        Button addAlbum = contentView.findViewById(R.id.addalbum);
+        Button deleteAlbum = contentView.findViewById(R.id.deletealbum);
+        Button shareAlbum = contentView.findViewById(R.id.share);
+
+        addAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ManageMusicListActivity.class);
+                mPopWindow.dismiss();
+                startActivityForResult(intent,1);
+            }
+        });
+
+        deleteAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ManageMusicListActivity.class);
+                startActivityForResult(intent,1);
+                mPopWindow.dismiss();
+            }
+        });
+
+        shareAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this,"clicked share",Toast.LENGTH_SHORT).show();
+                mPopWindow.dismiss();
+            }
+        });
+
+        //显示PopupWindow
+        View rootView = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_main, null);
+        mPopWindow.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
+    }
+
+    //设置弹出菜单背景的透明度
+    private void bgAlpha(float bgAlpha) {
+        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+        layoutParams.alpha = bgAlpha; //0.0-1.0
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getWindow().setAttributes(layoutParams);
+    }
+
     /*
     当用户回退时保证Activity不销毁
      */
@@ -127,5 +224,83 @@ public class MainActivity extends PlayActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void getPermissionAndContent(){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
+        else{
+            if(LitePal.findAll(MusicList.class).isEmpty()) {
+                MusicListUtils.getListContent();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode){
+            case 1:
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    if(MusicListUtils.musicLists.isEmpty())
+                        MusicListUtils.getListContent();
+                }
+                else{
+                    Toast.makeText(this, "您拒绝了请求", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            default:
+        }
+    }
+
+    //初始化歌单列表
+    public void initMusicList(){
+        musicLists.clear();
+        List<MusicList> allMusicLists;
+        allMusicLists = LitePal.findAll(MusicList.class);
+        MusicList nowList;
+        for(int i = 0; i<MUSIC_LIST_CATEGORY_NUM; i++){
+            if(allMusicLists.get(i).getSelecterStatus() == true){
+                nowList = new MusicList();
+                nowList.setMusicListAlbumId(allMusicLists.get(i).getMusicListAlbumId());
+                nowList.setMusicListName(allMusicLists.get(i).getMusicListName());
+                musicLists.add(nowList);
+            }
+        }
+        //musicLists = LitePal.where("selectedStatus = ?","1").find(MusicList.class);
+    }
+
+    //设置返回页面时的调用结果
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent){
+        switch (requestCode){
+            case 1:
+                if(resultCode == RESULT_OK){
+                    initMusicList();
+                    musicListAdapter.notifyDataSetChanged();
+                }
+                break;
+                default:
+        }
+    }
+
+    //刷新歌单列表
+    private void refreshMusicList() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                initMusicList();
+                musicListAdapter.notifyDataSetChanged();
+                mSwipeRefresh.setRefreshing(false);
+            }
+        }).start();
+    }
+
 }
 
