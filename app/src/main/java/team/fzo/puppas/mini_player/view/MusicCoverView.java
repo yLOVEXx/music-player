@@ -362,6 +362,7 @@ public class MusicCoverView extends android.support.v7.widget.AppCompatImageView
             mStartRotateAnimator.cancel();
         }
         else{
+            //直接启动EndRotateAnimator
             mEndRotateAnimator.setFloatValues(0, 0);
             mEndRotateAnimator.setDuration(0);
             mEndRotateAnimator.start();

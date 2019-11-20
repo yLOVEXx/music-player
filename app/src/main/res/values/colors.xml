@@ -5,4 +5,6 @@
     <color name="colorAccent">#FD4848</color>
     <color name="colorPane">#33C2CAC9</color>
     <color name="colorIconLauncherBackground">#FFFFFF</color>
+    <color name="indicator_background_color">#2fffffff</color>
+    <color name="indicator_text_color">#9fffffff</color>
 </resources>

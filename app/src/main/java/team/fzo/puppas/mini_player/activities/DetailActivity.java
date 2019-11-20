@@ -16,31 +16,51 @@
 
 package team.fzo.puppas.mini_player.activities;
 
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.os.Handler;
+import android.os.Message;
+import android.text.format.DateUtils;
 import android.transition.Transition;
+import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import com.jaygoo.widget.OnRangeChangedListener;
+import com.jaygoo.widget.RangeSeekBar;
 
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.adapter.TransitionAdapter;
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.service.PlayService;
 import team.fzo.puppas.mini_player.view.MusicCoverView;
+import team.fzo.puppas.mini_player.view.MarqueeTextView;
 
 public class DetailActivity extends PlayActivity {
 
     private MusicCoverView mCoverView;
     private Bitmap mCoverImage;      //the image has been resized
-    private LinearLayout mTitleView;
+    private MarqueeTextView mTitleView;
+    private RangeSeekBar mSeekBar;
+    //seekbar是否被拖动的状态
+    private boolean mIsSeekBarTracking;
+
+
+    private final Handler mUpdateSeekBarHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            /*
+            call the getPostion() method to set the position of seekbar
+            if the seekbar is dragging, seekbar will stop set progress
+             */
+            final int position = getPosition();
+            if(!mIsSeekBarTracking)
+                mSeekBar.setProgress(position);
+            sendEmptyMessageDelayed(0, DateUtils.SECOND_IN_MILLIS);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,14 +107,10 @@ public class DetailActivity extends PlayActivity {
         });
 
         //set the title
-        mTitleView = (LinearLayout) findViewById(R.id.title);
+        mTitleView = findViewById(R.id.title);
         Song song = PlayService.getSongInPlayer();
-        TextView songName = mTitleView.findViewById(R.id.song_name);
-        TextView separator = mTitleView.findViewById(R.id.separator);
-        TextView artistName = mTitleView.findViewById(R.id.artist_name);
-        songName.setText(song.getName());
-        separator.setText(" - ");
-        artistName.setText(song.getArtist());
+        String info = song.getName() + " - " + song.getArtist();
+        mTitleView.setText(info);
 
         //设置播放按钮图片
         if(isPlaying()){
@@ -103,8 +119,37 @@ public class DetailActivity extends PlayActivity {
         else{
             mPlayButtonView.setImageResource(R.drawable.ic_play_animatable);
         }
+
+        initSeekBar();
     }
 
+    //设置seekbar的参数与监听事件
+    void initSeekBar(){
+        mSeekBar = findViewById(R.id.seekbar);
+        mSeekBar.setRange(0, getDuration());
+        mSeekBar.setProgress(getPosition());
+        mIsSeekBarTracking = false;
+        mUpdateSeekBarHandler.sendEmptyMessage(0);
+
+        mSeekBar.setOnRangeChangedListener(new OnRangeChangedListener() {
+            @Override
+            public void onRangeChanged(RangeSeekBar view, float leftValue, float rightValue, boolean isFromUser) {
+                view.setIndicatorText(DateUtils.formatElapsedTime((int)leftValue));
+            }
+
+            @Override
+            public void onStartTrackingTouch(RangeSeekBar view, boolean isLeft) {
+                mIsSeekBarTracking = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(RangeSeekBar view, boolean isLeft) {
+                seekTo((int)view.getLeftSeekBar().getProgress());
+                view.setProgress(view.getLeftSeekBar().getProgress());
+                mIsSeekBarTracking = false;
+            }
+        });
+    }
 
 
     @Override

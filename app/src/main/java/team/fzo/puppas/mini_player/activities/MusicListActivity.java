@@ -23,12 +23,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Animatable2;
 import android.graphics.drawable.AnimatedVectorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -38,9 +35,10 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
+
+import team.fzo.puppas.mini_player.view.MarqueeTextView;
 import team.fzo.puppas.mini_player.view.MusicCoverView;
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.model.Song;
@@ -98,7 +96,8 @@ public class MusicListActivity extends PlayActivity {
         RecyclerView recyclerView = findViewById(R.id.tracks);
         assert recyclerView != null;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SongAdapter(this, MusicContentUtils.SONG_LIST));
+
+        recyclerView.setAdapter(new SongAdapter(this, MusicContentUtils.gSongList));
     }
 
     private void initCover(){
@@ -113,15 +112,15 @@ public class MusicListActivity extends PlayActivity {
             /*
             update the information in the title
              */
-            TextView songName = findViewById(R.id.song_name);
-            TextView artistName = findViewById(R.id.artist_name);
-            TextView separator = findViewById(R.id.separator);
-            songName.setText(song.getName());
-            artistName.setText(song.getArtist());
-            separator.setText(" - ");
+            MarqueeTextView titleInfo = (MarqueeTextView)mTitleView;
+            String info = song.getName() + " - " + song.getArtist();
+            titleInfo.setText(info);
         }
     }
 
+    /*
+    根据播放状态设置animation
+     */
     @Override
     protected void onRestart() {
         super.onRestart();
@@ -162,7 +161,7 @@ public class MusicListActivity extends PlayActivity {
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
         else{
-            if(MusicContentUtils.SONG_LIST.isEmpty()) {
+            if(MusicContentUtils.gSongList.isEmpty()) {
                 MusicContentUtils.getContent(this);
             }
         }
@@ -176,7 +175,7 @@ public class MusicListActivity extends PlayActivity {
         switch (requestCode){
             case 1:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if(MusicContentUtils.SONG_LIST.isEmpty())
+                    if(MusicContentUtils.gSongList.isEmpty())
                         MusicContentUtils.getContent(this);
                 }
                 else{
@@ -216,18 +215,15 @@ public class MusicListActivity extends PlayActivity {
                 load album with bitmap
                  */
                 MusicCoverView coverView = findViewById(R.id.cover);
-                Song song = MusicContentUtils.SONG_LIST.get(index);
+                Song song = MusicContentUtils.gSongList.get(index);
                 Bitmap cover = PlayService.getCoverImage();
                 coverView.setImageBitmap(cover);
                 /*
                 update the information in the title
                  */
-                TextView songName = findViewById(R.id.song_name);
-                TextView artistName = findViewById(R.id.artist_name);
-                TextView separator = findViewById(R.id.separator);
-                songName.setText(song.getName());
-                artistName.setText(song.getArtist());
-                separator.setText(" - ");
+                MarqueeTextView titleInfo = (MarqueeTextView)mTitleView;
+                String info = song.getName() + " - " + song.getArtist();
+                titleInfo.setText(info);
 
                 mSongIndex = index;
             }

@@ -4,6 +4,10 @@ import android.util.Log;
 
 import static android.content.ContentValues.TAG;
 
+
+/*
+对歌曲的播放进度的计时器
+ */
 public class ProgressCounter extends Thread {
     private int mDuration;            //歌曲秒数
     private boolean mPaused;
@@ -29,7 +33,7 @@ public class ProgressCounter extends Thread {
                 if (!mPaused) {
                     mPosition++;
                 }
-                sleep(1000);
+                sleep(1000);    //sleep 1s
             }
         } catch (InterruptedException e) {
             Log.d(TAG, "Player unbounded");
@@ -46,6 +50,10 @@ public class ProgressCounter extends Thread {
 
     public int getPosition() {
         return mPosition;
+    }
+
+    public void setPosition(int position){
+        mPosition = position;
     }
 
     //释放线程

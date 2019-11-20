@@ -139,6 +139,10 @@ public abstract class PlayActivity extends AppCompatActivity {
         PlayService.play(song, context);
     }
 
+    protected void seekTo(int pos){
+        PlayService.seekTo(pos);
+    }
+
     protected void pause() {
         PlayService.pause();
     }
@@ -149,6 +153,14 @@ public abstract class PlayActivity extends AppCompatActivity {
 
     protected Song getSongInPlayer(){
         return PlayService.getSongInPlayer();
+    }
+
+    protected int getPosition() {
+        return PlayService.getPosition();
+    }
+
+    protected int getDuration(){
+        return PlayService.getDuration();
     }
 
     protected boolean isPlaying(){
