@@ -10,16 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import team.fzo.puppas.mini_player.R;
-import team.fzo.puppas.mini_player.model.MusicListAlbum;
+import team.fzo.puppas.mini_player.model.MusicList;
 import team.fzo.puppas.mini_player.activities.MusicListActivity;
 
 import java.util.List;
 
 public class MusicListAlbumAdapter extends RecyclerView.Adapter<MusicListAlbumAdapter.ViewHolder> {
-    private final List<MusicListAlbum> myMusicList;
+    private final List<MusicList> myMusicList;
     private Context mContext;
    // private final LocalBroadcastManager broadcastManager;
-    public MusicListAlbumAdapter(List<MusicListAlbum> myMusicList, Context context){
+    public MusicListAlbumAdapter(List<MusicList> myMusicList, Context context){
         this.myMusicList = myMusicList;
         mContext = context;
     }
@@ -50,7 +50,7 @@ public class MusicListAlbumAdapter extends RecyclerView.Adapter<MusicListAlbumAd
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                MusicListAlbum music = myMusicList.get(position);
+                MusicList music = myMusicList.get(position);
                 //Toast.makeText(v.getContext(),"sdadasdddsad", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, MusicListActivity.class);
                 //  ComponentName componentName = new ComponentName("com.sample.andremion.musicplayer.view", "com.sample.andremion.musicplayer.v");
@@ -63,7 +63,7 @@ public class MusicListAlbumAdapter extends RecyclerView.Adapter<MusicListAlbumAd
 
     @Override
     public void onBindViewHolder(final ViewHolder holder,final int position){
-        MusicListAlbum music = myMusicList.get(position);
+        MusicList music = myMusicList.get(position);
         holder.musicImage.setImageResource(music.getImageId());
         holder.musicName.setText(music.getName());
         //holder.musicName.setText(music.getNumber());

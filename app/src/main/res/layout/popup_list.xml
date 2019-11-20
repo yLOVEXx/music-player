@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="#5C070606"
+    android:orientation="vertical"
+    android:paddingBottom="2dp">
+
+
+    <TextView
+        android:id="@+id/text1"
+        style="@android:style/Widget.TextView.PopupMenu"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="left|center_vertical"
+        android:text="   歌单管理（让你的内心平静）"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.PopupMenu.Header"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/addalbum"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="#19979292"
+        android:text="新建歌单"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/line2"
+        style="@android:style/Widget.TextView.PopupMenu"
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
+
+    <Button
+        android:id="@+id/deletealbum"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="#19979292"
+        android:text="删除歌单"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/line"
+        style="@android:style/Widget.TextView.PopupMenu"
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
+
+    <Button
+        android:id="@+id/share"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="#19979292"
+        android:text="分享歌单"
+        android:textSize="16sp" />
+
+</LinearLayout>
