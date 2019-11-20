@@ -19,7 +19,7 @@ import java.util.List;
 public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.ViewHolder> {
     private final List<MusicList> myMusicList;
     private Context mContext;
-    public int musicListId;
+    private int musicListId;
 
     public MusicListAdapter(List<MusicList> myMusicList, Context context){
         this.myMusicList = myMusicList;
@@ -27,16 +27,16 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        public final View mView;
-        public final ImageView musicImage;
-        public final TextView musicName;
+        private final View mView;
+        private final ImageView mMusicImage;
+        private final TextView mMusicName;
 
 
         public ViewHolder(View view){
             super(view);
             mView = view;
-            musicImage = view.findViewById(R.id.music_image);
-            musicName = view.findViewById(R.id.music_name);
+            mMusicImage = view.findViewById(R.id.music_image);
+            mMusicName = view.findViewById(R.id.music_name);
         }
     }
 
@@ -64,8 +64,8 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder holder,final int position){
         MusicList music = myMusicList.get(position);
-        holder.musicImage.setImageResource(music.getMusicListAlbumId());
-        holder.musicName.setText(music.getMusicListName());
+        holder.mMusicImage.setImageResource(music.getMusicListAlbumId());
+        holder.mMusicName.setText(music.getMusicListName());
     }
 
     @Override
