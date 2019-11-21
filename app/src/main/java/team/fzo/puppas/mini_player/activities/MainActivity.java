@@ -49,13 +49,16 @@ public class MainActivity extends PlayActivity {
     private PopupWindow mPopWindow;
     private MusicListAdapter musicListAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
+    /*
+    in order to ensure that the address of mSelectedMusicLists can't
+    be changed, we are not able to assign the value to it
+     */
     private List<MusicList> mSelectedMusicLists;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //下拉刷新
         mSwipeRefresh = findViewById(R.id.refresh);
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary);
@@ -264,6 +267,5 @@ public class MainActivity extends PlayActivity {
             }
         }).start();
     }
-
 }
 
