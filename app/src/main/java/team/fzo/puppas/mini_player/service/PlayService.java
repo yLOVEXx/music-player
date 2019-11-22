@@ -16,6 +16,7 @@
 
 package team.fzo.puppas.mini_player.service;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -55,7 +56,6 @@ public class PlayService extends Service {
     private static int sPlayMode = LIST_REPEAT;                //播放模式
     private static int sSongListId;             //当前歌曲所在歌单id
     private static Bitmap sCoverImage;          //当前歌曲的专辑图片
-
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -225,6 +225,7 @@ public class PlayService extends Service {
     public static void setSongListId(int id){
         sSongListId = id;
     }
+
 
     public class PlayBinder extends Binder {
 

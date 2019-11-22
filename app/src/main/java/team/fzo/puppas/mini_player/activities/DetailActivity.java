@@ -16,12 +16,17 @@
 
 package team.fzo.puppas.mini_player.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateUtils;
 import android.transition.Transition;
 import android.util.Log;
@@ -35,18 +40,21 @@ import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.adapter.TransitionAdapter;
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.service.PlayService;
+import team.fzo.puppas.mini_player.utils.MusicContentUtils;
 import team.fzo.puppas.mini_player.view.MusicCoverView;
 import team.fzo.puppas.mini_player.view.MarqueeTextView;
 
 public class DetailActivity extends PlayActivity {
+    private static final int UPDATE_SEEKBAR_MESSAGE = 0;
 
-    private MusicCoverView mCoverView;
     private Bitmap mCoverImage;      //the image has been resized
-    private MarqueeTextView mTitleView;
     private RangeSeekBar mSeekBar;
     //seekbar是否被拖动的状态
     private boolean mIsSeekBarTracking;
 
+    private IntentFilter mIntentFilter;
+    private SongFinishedReceiver mSongFinishedReceiver;
+    private LocalBroadcastManager mBroadcastManager;
 
     private final Handler mUpdateSeekBarHandler = new Handler() {
         @Override
@@ -58,7 +66,7 @@ public class DetailActivity extends PlayActivity {
             final int position = getPosition();
             if(!mIsSeekBarTracking)
                 mSeekBar.setProgress(position);
-            sendEmptyMessageDelayed(0, DateUtils.SECOND_IN_MILLIS);
+            sendEmptyMessageDelayed(UPDATE_SEEKBAR_MESSAGE, DateUtils.SECOND_IN_MILLIS);
         }
     };
 
@@ -71,7 +79,6 @@ public class DetailActivity extends PlayActivity {
         mCoverImage = PlayService.getCoverImage();
         mCoverImage = imageScale(mCoverImage, 900, 900);
 
-        mCoverView = findViewById(R.id.cover);
         mCoverView.setImageBitmap(mCoverImage);
         //将trackline的透明度设为1
         mCoverView.setTrackColor(0x01ffffff);
@@ -108,7 +115,6 @@ public class DetailActivity extends PlayActivity {
         });
 
         //set the title
-        mTitleView = findViewById(R.id.title);
         Song song = getSongInPlayer();
         String info = song.getName() + " - " + song.getArtist();
         mTitleView.setText(info);
@@ -122,6 +128,13 @@ public class DetailActivity extends PlayActivity {
         }
 
         initSeekBar();
+
+        //设置接收歌曲结束的广播
+        mBroadcastManager = LocalBroadcastManager.getInstance(this);
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction("musicPlayer.broadcast.SONG_FINISHED");
+        mSongFinishedReceiver = new SongFinishedReceiver();
+        mBroadcastManager.registerReceiver(mSongFinishedReceiver, mIntentFilter);
     }
 
     //设置seekbar的参数与监听事件
@@ -130,7 +143,7 @@ public class DetailActivity extends PlayActivity {
         mSeekBar.setRange(0, getDuration());
         mSeekBar.setProgress(getPosition());
         mIsSeekBarTracking = false;
-        mUpdateSeekBarHandler.sendEmptyMessage(0);
+        mUpdateSeekBarHandler.sendEmptyMessage(UPDATE_SEEKBAR_MESSAGE);
 
         mSeekBar.setOnRangeChangedListener(new OnRangeChangedListener() {
             @Override
@@ -196,16 +209,36 @@ public class DetailActivity extends PlayActivity {
     }
 
     public void onRewindClick(View view){
-        seekTo(getPosition() - 3);
+        if(getPosition() - 3  >= 0)
+            seekTo(getPosition() - 3);
+        else
+            seekTo(0);
         mSeekBar.setProgress(getPosition());
     }
 
     public void onForwardClick(View view){
-        seekTo(getPosition() + 3);
+        if(getPosition() + 3 <= getDuration())
+            seekTo(getPosition() + 3);
+        else
+            seekTo(getDuration());
+
         mSeekBar.setProgress(getPosition());
     }
 
     public void onNextClick(View view){
+        AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable)mPlayButtonView.getDrawable();
+
+        if(!isPlaying()){
+            playDrawable.registerAnimationCallback(new PlayButtonAnimation(false));
+            if(mCoverView.isStarted()) {
+                mCoverView.resume();
+            }
+            else{
+                mCoverView.start();
+            }
+            playDrawable.start();
+        }
+
         int nextSongPos = getNextSongPos();
         play(this, nextSongPos);
 
@@ -221,6 +254,18 @@ public class DetailActivity extends PlayActivity {
     }
 
     public void onPrevClick(View view){
+        AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable)mPlayButtonView.getDrawable();
+        if(!isPlaying()){
+            playDrawable.registerAnimationCallback(new PlayButtonAnimation(false));
+            if(mCoverView.isStarted()) {
+                mCoverView.resume();
+            }
+            else{
+                mCoverView.start();
+            }
+            playDrawable.start();
+        }
+
         int prevSongPos = getPrevSongPos();
         play(this, prevSongPos);
 
@@ -234,6 +279,26 @@ public class DetailActivity extends PlayActivity {
 
         mSeekBar.setRange(0, getDuration());
     }
+
+    private class SongFinishedReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int nextSongPos = intent.getIntExtra("nextSongPos",0);
+
+            MusicCoverView coverView = mCoverView;
+            Song song = MusicContentUtils.gSongList.get(nextSongPos);
+            mCoverImage = PlayService.getCoverImage();
+            mCoverImage = imageScale(mCoverImage, 900, 900);
+            coverView.setImageBitmap(mCoverImage);
+
+            MarqueeTextView titleInfo = mTitleView;
+            String info = song.getName() + " - " + song.getArtist();
+            titleInfo.setText(info);
+
+            mSeekBar.setRange(0, getDuration());
+        }
+    }
+
 
     private static Bitmap imageScale(Bitmap bitmap, int dst_w, int dst_h) {
         int src_w = bitmap.getWidth();

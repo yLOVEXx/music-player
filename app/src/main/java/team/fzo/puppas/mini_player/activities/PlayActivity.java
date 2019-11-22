@@ -16,6 +16,7 @@
 
 package team.fzo.puppas.mini_player.activities;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +37,8 @@ import android.widget.TextView;
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.service.PlayService;
+import team.fzo.puppas.mini_player.view.MarqueeTextView;
+import team.fzo.puppas.mini_player.view.MusicCoverView;
 import team.fzo.puppas.mini_player.view.ProgressView;
 
 
@@ -51,6 +54,8 @@ public abstract class PlayActivity extends AppCompatActivity {
     protected TextView mDurationView;
     protected ProgressView mProgressView;
     protected FloatingActionButton mPlayButtonView;
+    protected MusicCoverView mCoverView;
+    protected MarqueeTextView mTitleView;
 
 
     private final Handler mUpdateProgressHandler = new Handler() {
@@ -111,6 +116,8 @@ public abstract class PlayActivity extends AppCompatActivity {
         mDurationView = findViewById(R.id.duration);
         mProgressView = findViewById(R.id.progress);
         mPlayButtonView = findViewById(R.id.play_button);
+        mCoverView = findViewById(R.id.cover);
+        mTitleView = findViewById(R.id.title);
     }
 
     @Override
