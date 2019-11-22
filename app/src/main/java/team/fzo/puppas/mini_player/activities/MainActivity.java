@@ -165,7 +165,7 @@ public class MainActivity extends PlayActivity {
         //设置contentView
         View contentView = LayoutInflater.from(MainActivity.this).inflate(R.layout.popup_list, null);
         mPopWindow = new PopupWindow(contentView,
-                DrawerLayout.LayoutParams.FILL_PARENT, 405
+                DrawerLayout.LayoutParams.FILL_PARENT, 425
                 , true);
         mPopWindow.setContentView(contentView);
         bgAlpha(0.3f);

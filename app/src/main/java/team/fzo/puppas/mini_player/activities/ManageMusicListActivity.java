@@ -16,7 +16,7 @@ import team.fzo.puppas.mini_player.utils.MusicListUtils;
 
 public class ManageMusicListActivity extends PlayActivity {
 
-    private int[] mCheckedArray = new int[MusicListUtils.MUSIC_LIST_CATEGORY_NUM];
+    private int[] mCheckedArray = new int[MusicListUtils.MUSIC_LIST_CATEGORY_NUM-2];
     private List<MusicList> mMusicLists;
     private Button mFinishBtn;
 
@@ -29,7 +29,7 @@ public class ManageMusicListActivity extends PlayActivity {
         mMusicLists = LitePal.findAll(MusicList.class);
 
         for(int i = 0; i < mCheckedArray.length; i++){
-            mCheckedArray[i] = mMusicLists.get(i).getSelectedStatus();
+            mCheckedArray[i] = mMusicLists.get(i+2).getSelectedStatus();
 
         }
 
@@ -38,13 +38,14 @@ public class ManageMusicListActivity extends PlayActivity {
                         findViewById(R.id.checkBox3),findViewById(R.id.checkBox4),
                         findViewById(R.id.checkBox5),findViewById(R.id.checkBox6),
                         findViewById(R.id.checkBox7),findViewById(R.id.checkBox8),
-                        findViewById(R.id.checkBox9),findViewById(R.id.checkBox10)
+                        findViewById(R.id.checkBox9)
         };
+                        //findViewById(R.id.checkBox10),findViewById(R.id.checkBox11)
 
         for( int i = 0; i < checkBoxes.length; i++){
-            checkBoxes[i].setText(mMusicLists.get(i).getMusicListName());
+            checkBoxes[i].setText(mMusicLists.get(i+2).getMusicListName());
 
-            checkBoxes[i].setId(mMusicLists.get(i).getMusicListId());
+            checkBoxes[i].setId(mMusicLists.get(i+2).getMusicListId());
             if(mCheckedArray[i] == 1)
                 checkBoxes[i].setChecked(true);
             else
@@ -84,8 +85,8 @@ public class ManageMusicListActivity extends PlayActivity {
     //改变选中项目的状态
     public void setSelectedStatus(int[] checkedArray){
         for(int i = 0; i < checkedArray.length; i++){
-            mMusicLists.get(i).setSelectedStatus(checkedArray[i]);
-            mMusicLists.get(i).save();
+            mMusicLists.get(i+2).setSelectedStatus(checkedArray[i]);
+            mMusicLists.get(i+2).save();
         }
     }
 
