@@ -92,7 +92,7 @@ public class DetailActivity extends PlayActivity {
                 调用 finishAfterTransition
                 Reverses the Activity Scene entry Transition and triggers the calling Activity to
                 reverse its exit Transition.
-                * */
+                 */
                 supportFinishAfterTransition();
             }
         });
@@ -192,6 +192,37 @@ public class DetailActivity extends PlayActivity {
     public void onForwardClick(View view){
         seekTo(getPosition() + 3);
         mSeekBar.setProgress(getPosition());
+    }
+
+
+    public void onNextClick(View view){
+        int nextSongPos = getNextSongPos();
+        play(this, nextSongPos);
+
+        Song song = PlayService.getSongInPlayer();
+        String info = song.getName() + " - " + song.getArtist();
+        mTitleView.setText(info);
+
+        mCoverImage = PlayService.getCoverImage();
+        mCoverImage = imageScale(mCoverImage, 900, 900);
+        mCoverView.setImageBitmap(mCoverImage);
+
+        mSeekBar.setRange(0, getDuration());
+    }
+
+    public void onPrevClick(View view){
+        int prevSongPos = getPrevSongPos();
+        play(this, prevSongPos);
+
+        Song song = PlayService.getSongInPlayer();
+        String info = song.getName() + " - " + song.getArtist();
+        mTitleView.setText(info);
+
+        mCoverImage = PlayService.getCoverImage();
+        mCoverImage = imageScale(mCoverImage, 900, 900);
+        mCoverView.setImageBitmap(mCoverImage);
+
+        mSeekBar.setRange(0, getDuration());
     }
 
     private static Bitmap imageScale(Bitmap bitmap, int dst_w, int dst_h) {

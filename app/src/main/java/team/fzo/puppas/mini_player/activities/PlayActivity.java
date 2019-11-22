@@ -131,12 +131,12 @@ public abstract class PlayActivity extends AppCompatActivity {
         mUpdateProgressHandler.removeMessages(0);
     }
 
-    protected void play(Song song) {
-        PlayService.play(song);
+    protected void play(int pos) {
+        PlayService.play(pos);
     }
 
-    protected void play(Song song, Context context){
-        PlayService.play(song, context);
+    protected void play(Context context, int pos){
+        PlayService.play(context, pos);
     }
 
     protected void seekTo(int pos){
@@ -153,6 +153,18 @@ public abstract class PlayActivity extends AppCompatActivity {
 
     protected Song getSongInPlayer(){
         return PlayService.getSongInPlayer();
+    }
+
+    protected int getNextSongPos(){
+        return PlayService.getNextSongPos();
+    }
+
+    protected int getPrevSongPos(){
+        return PlayService.getPrevSongPos();
+    }
+
+    protected int getSongPos(){
+        return PlayService.getSongPos();
     }
 
     protected int getPosition() {

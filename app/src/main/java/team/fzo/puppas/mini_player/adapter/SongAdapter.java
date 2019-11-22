@@ -76,7 +76,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 animation when click the song item
                  */
                 boolean isPlaying = PlayService.isPlaying();
-                PlayService.play(holder.song, mContext);
+                PlayService.play(mContext, position);
 
                 Intent intent = new Intent("musicPlayer.broadcast.SONG_SELECTED");
                 intent.putExtra("songIndex", holder.getAdapterPosition());

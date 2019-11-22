@@ -27,6 +27,17 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.model.Song;
+import team.fzo.puppas.mini_player.model.song_model.SongInACG;
+import team.fzo.puppas.mini_player.model.song_model.SongInChinese;
+import team.fzo.puppas.mini_player.model.song_model.SongInClassical;
+import team.fzo.puppas.mini_player.model.song_model.SongInCure;
+import team.fzo.puppas.mini_player.model.song_model.SongInJazz;
+import team.fzo.puppas.mini_player.model.song_model.SongInLight;
+import team.fzo.puppas.mini_player.model.song_model.SongInPop;
+import team.fzo.puppas.mini_player.model.song_model.SongInRap;
+import team.fzo.puppas.mini_player.model.song_model.SongInStudy;
+import team.fzo.puppas.mini_player.service.PlayService;
+
 import org.litepal.LitePal;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
@@ -38,7 +49,18 @@ public class MusicContentUtils {
     private static final int SMALL_SIZE = R.dimen.cover_size_mini;
     private static final int BIG_SIZE = R.dimen.cover_size_maxi;
 
-    public static List<Song> gSongList = LitePal.findAll(Song.class);
+    /*
+    存储model的class对象，用于查找数据库
+    */
+    private static final Class[] SONG_LIST_CLASS = {
+            Song.class, SongInStudy.class, SongInCure.class,
+            SongInACG.class, SongInChinese.class, SongInClassical.class,
+            SongInPop.class, SongInLight.class, SongInJazz.class,
+            SongInRap.class
+    };
+
+    private static int sSongListId = PlayService.getSongListId();
+    public static List<Song> gSongList = LitePal.findAll(SONG_LIST_CLASS[sSongListId]);
     private static final Uri ALBUM_ART_URI = Uri.parse("content://media/external/audio/albumart");
 
     /*

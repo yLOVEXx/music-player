@@ -109,8 +109,6 @@
         app:layout_marginTopPercent="10%"
         app:layout_widthPercent="90%"
         app:layout_heightPercent="5%"
-        app:rsb_max="100"
-        app:rsb_min="0"
         app:rsb_mode="single"
         app:rsb_progress_color="@color/colorAccent"
         app:rsb_thumb_height="@dimen/seekbar_thumb_height"
@@ -134,7 +132,8 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_skip_previous_white_24dp"/>
+            android:src="@drawable/ic_skip_previous_white_24dp"
+            android:onClick="onPrevClick"/>
 
         <ImageView
             android:id="@+id/rewind"
@@ -157,7 +156,8 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_skip_next_white_24dp"/>
+            android:src="@drawable/ic_skip_next_white_24dp"
+            android:onClick="onNextClick"/>
 
     </LinearLayout>
 
