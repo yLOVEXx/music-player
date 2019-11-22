@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#C4141414">
+    android:layout_height="match_parent">
     <!-- 你的主界面内容，必须放置在DrawerLayout中的第一个位置-->
     <FrameLayout
         android:layout_width="match_parent"
@@ -37,18 +36,18 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="#130C0C"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:layout_constraintBottom_toTopOf="@+id/banner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            </android.support.v7.widget.Toolbar>
 
             <com.donkingliang.banner.CustomBanner
                 android:id="@+id/banner"
-                android:layout_width="413dp"
-                android:layout_height="190dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 app:indicatorGravity="CENTER"
                 app:indicatorInterval="5dp"
                 app:indicatorSelectRes="@drawable/shape_point_select"
@@ -66,7 +65,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_below="@id/music_image"
-                android:background="#C4141414"
                 android:gravity="center_vertical"
                 android:padding="@dimen/activity_vertical_margin"
                 android:transitionGroup="true"
@@ -85,19 +83,6 @@
                     android:textSize="16sp" />
 
 
-                <!--
-                             <TextView
-                                 android:id="@+id/addAlbum"
-                                 android:layout_width="160dp"
-                                 android:layout_height="40dp"
-                                 android:layout_below="@id/name"
-                                 android:layout_alignParentEnd="true"
-                                 android:layout_marginEnd="4dp"
-                                 android:clickable="true"
-                                 android:drawableLeft="@drawable/add_white"
-                                 android:text="新建歌单"
-                                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
- -->
                 <ImageView
                     android:id="@+id/addAlbum"
                     android:layout_width="40dp"
@@ -126,7 +111,6 @@
                     android:layout_height="480dp"
                     android:layout_below="@+id/playlist"
                     android:layout_marginBottom="51dp"
-                    android:background="#C4141414"
                     app:layoutManager="LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -143,7 +127,9 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu"></android.support.design.widget.NavigationView>
+        app:menu="@menu/nav_menu">
+
+    </android.support.design.widget.NavigationView>
 
 
 </android.support.v4.widget.DrawerLayout>

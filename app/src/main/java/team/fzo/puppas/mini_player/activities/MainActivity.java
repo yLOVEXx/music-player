@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,7 +30,9 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.donkingliang.banner.CustomBanner;
+
 import org.litepal.LitePal;
+
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.adapter.MusicListAdapter;
 import team.fzo.puppas.mini_player.model.MusicList;
@@ -39,21 +42,23 @@ import java.util.List;
 
 public class MainActivity extends PlayActivity {
 
-    public static final int MUSIC_LIST_CATEGORY_NUM = 10;
     private CustomBanner<Integer> mBanner;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
-    private List<MusicList> musicLists = new ArrayList<>();
     private PopupWindow mPopWindow;
     private MusicListAdapter musicListAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
+    /*
+    in order to ensure that the address of mSelectedMusicLists can't
+    be changed, we are not able to assign the value to it
+     */
+    private List<MusicList> mSelectedMusicLists;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         //下拉刷新
         mSwipeRefresh = findViewById(R.id.refresh);
         mSwipeRefresh.setColorSchemeResources(R.color.colorPrimary);
@@ -71,8 +76,8 @@ public class MainActivity extends PlayActivity {
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mNavigationView = findViewById(R.id.navigation_view);
-        ActionBar actionBar=getSupportActionBar();
-        if(actionBar !=null){
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.menu_white);
         }
@@ -98,11 +103,15 @@ public class MainActivity extends PlayActivity {
         setImageToBanner(bannerImages);
 
         //初始化和加载RecyclerView
-        getPermissionAndContent();   //写入数据库
-        initMusicList();
+       // getPermissionAndContent();   //写入数据库
+        if(LitePal.findAll(MusicList.class).isEmpty())
+            MusicListUtils.getListContent();
+
+        mSelectedMusicLists = LitePal.where("selectedStatus = ?","1").find(MusicList.class);
+
         RecyclerView recyclerView = findViewById(R.id.recycle_view);
         assert recyclerView != null;
-        musicListAdapter = new MusicListAdapter(musicLists,this);
+        musicListAdapter = new MusicListAdapter(mSelectedMusicLists,this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(musicListAdapter);
 
@@ -225,55 +234,11 @@ public class MainActivity extends PlayActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    private void getPermissionAndContent(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
-                PackageManager.PERMISSION_GRANTED){
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-        }
-        else{
-            if(LitePal.findAll(MusicList.class).isEmpty()) {
-                MusicListUtils.getListContent();
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode){
-            case 1:
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if(MusicListUtils.musicLists.isEmpty())
-                        MusicListUtils.getListContent();
-                }
-                else{
-                    Toast.makeText(this, "您拒绝了请求", Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            default:
-        }
-    }
-
     //初始化歌单列表
     public void initMusicList(){
-        musicLists.clear();
-        List<MusicList> allMusicLists;
-        allMusicLists = LitePal.findAll(MusicList.class);
-        MusicList nowList;
-        for(int i = 0; i<MUSIC_LIST_CATEGORY_NUM; i++){
-            if(allMusicLists.get(i).getSelecterStatus() == true){
-                nowList = new MusicList();
-                nowList.setMusicListAlbumId(allMusicLists.get(i).getMusicListAlbumId());
-                nowList.setMusicListName(allMusicLists.get(i).getMusicListName());
-                musicLists.add(nowList);
-            }
-        }
-        //musicLists = LitePal.where("selectedStatus = ?","1").find(MusicList.class);
+        mSelectedMusicLists.clear();
+        mSelectedMusicLists.addAll(
+                LitePal.where("selectedStatus = ?","1").find(MusicList.class));
     }
 
     //设置返回页面时的调用结果
@@ -286,7 +251,8 @@ public class MainActivity extends PlayActivity {
                     musicListAdapter.notifyDataSetChanged();
                 }
                 break;
-                default:
+
+            default:
         }
     }
 
@@ -301,6 +267,5 @@ public class MainActivity extends PlayActivity {
             }
         }).start();
     }
-
 }
 

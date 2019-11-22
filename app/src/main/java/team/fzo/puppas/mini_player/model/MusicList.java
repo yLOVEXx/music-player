@@ -10,7 +10,7 @@ public class MusicList extends LitePalSupport {
 
     private int musicListAlbumId;      //歌单图片id
 
-    private boolean selectedStatus;         //判断是否添加到歌单
+    private int selectedStatus;         //判断是否添加到歌单
 
     @Column(defaultValue = "unkonwn")
     private String musicListName;       //歌单名字
@@ -26,12 +26,12 @@ public class MusicList extends LitePalSupport {
         return musicListAlbumId;
     }
 
-    public void setMusicListAlbumId(int musiclistalbumId){
-        this.musicListAlbumId =musiclistalbumId;
+    public void setMusicListAlbumId(int musicListAlbumId){
+        this.musicListAlbumId = musicListAlbumId;
     }
 
-    public void setMusicListName(String musiclistname){
-        this.musicListName =musiclistname;
+    public void setMusicListName(String musicListName){
+        this.musicListName = musicListName;
     }
 
     public int getMusicListId() {
@@ -42,12 +42,12 @@ public class MusicList extends LitePalSupport {
         this.musicListId = musicListId;
     }
 
-    public boolean getSelecterStatus() {
+    public int getSelectedStatus() {
         return selectedStatus;
     }
 
-    public void setSelecterStatus(boolean selecterStatus) {
-        selectedStatus = selecterStatus;
+    public void setSelectedStatus(int selectedStatus) {
+        this.selectedStatus = selectedStatus;
     }
 
 }
