@@ -151,6 +151,10 @@ public abstract class PlayActivity extends AppCompatActivity {
         PlayService.restart();
     }
 
+    protected void setPlayMode(int mode){
+        PlayService.setPlayMode(mode);
+    }
+
     protected Song getSongInPlayer(){
         return PlayService.getSongInPlayer();
     }

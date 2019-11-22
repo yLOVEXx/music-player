@@ -127,6 +127,9 @@ public class MusicListActivity extends PlayActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
+
+        initCover();
+
         if(isPlaying()){
             mPlayButtonView.setImageResource(R.drawable.ic_pause_animatable);
         }

@@ -36,8 +36,8 @@ The PlayService is responsible to play the music and
 synchronize the time counter
  */
 public class PlayService extends Service {
-    private static final int LIST_REPEAT = 0;       //列表循环
-    private static final int LIST_SHUFFLE = 1;      //随机播放
+    public static final int LIST_REPEAT = 0;       //列表循环
+    public static final int LIST_SHUFFLE = 1;      //随机播放
     private static final int NO_POSITION = -1;
 
     // Binder given to clients
@@ -45,8 +45,11 @@ public class PlayService extends Service {
     private static MediaPlayer sPlayer = new MediaPlayer();
     private static ProgressCounter sCounter = new ProgressCounter();
 
-    private static int sSongPos = NO_POSITION;                //当前歌曲在adapter中的position
+    //当前歌曲在adapter中的position
+    private static int sSongPos = NO_POSITION;
+    //前一首歌曲的position
     private static int sPrevSongPos = NO_POSITION;
+    //下一首歌曲的position
     private static int sNextSongPos = NO_POSITION;
 
     private static int sPlayMode = LIST_REPEAT;                //播放模式

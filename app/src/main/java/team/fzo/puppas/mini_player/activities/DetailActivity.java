@@ -26,6 +26,7 @@ import android.text.format.DateUtils;
 import android.transition.Transition;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.jaygoo.widget.OnRangeChangedListener;
 import com.jaygoo.widget.RangeSeekBar;
@@ -108,7 +109,7 @@ public class DetailActivity extends PlayActivity {
 
         //set the title
         mTitleView = findViewById(R.id.title);
-        Song song = PlayService.getSongInPlayer();
+        Song song = getSongInPlayer();
         String info = song.getName() + " - " + song.getArtist();
         mTitleView.setText(info);
 
@@ -184,6 +185,16 @@ public class DetailActivity extends PlayActivity {
         }
     }
 
+    public void onRepeatClick(View view){
+        setPlayMode(PlayService.LIST_REPEAT);
+        Toast.makeText(this, "列表循环", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onShuffleClick(View view){
+        setPlayMode(PlayService.LIST_SHUFFLE);
+        Toast.makeText(this, "随机播放", Toast.LENGTH_SHORT).show();
+    }
+
     public void onRewindClick(View view){
         seekTo(getPosition() - 3);
         mSeekBar.setProgress(getPosition());
@@ -194,12 +205,11 @@ public class DetailActivity extends PlayActivity {
         mSeekBar.setProgress(getPosition());
     }
 
-
     public void onNextClick(View view){
         int nextSongPos = getNextSongPos();
         play(this, nextSongPos);
 
-        Song song = PlayService.getSongInPlayer();
+        Song song = getSongInPlayer();
         String info = song.getName() + " - " + song.getArtist();
         mTitleView.setText(info);
 
@@ -214,7 +224,7 @@ public class DetailActivity extends PlayActivity {
         int prevSongPos = getPrevSongPos();
         play(this, prevSongPos);
 
-        Song song = PlayService.getSongInPlayer();
+        Song song = getSongInPlayer();
         String info = song.getName() + " - " + song.getArtist();
         mTitleView.setText(info);
 
