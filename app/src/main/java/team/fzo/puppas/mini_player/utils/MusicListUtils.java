@@ -14,7 +14,8 @@ public class MusicListUtils {
     public static final int MUSIC_LIST_CATEGORY_NUM = 10;
     private static int[] sInitStatus = new int[MUSIC_LIST_CATEGORY_NUM];
 
-    private static String [] sMusicListName = new String[]{"我喜欢的音乐","学习专用音乐","治愈系音乐","ACG",
+    private static String [] sMusicListName = new String[]{
+            "我喜欢的音乐","学习专用音乐","治愈系音乐","ACG",
             "华语音乐","古典音乐","流行音乐",
             "轻音乐","爵士音乐","说唱"};
 

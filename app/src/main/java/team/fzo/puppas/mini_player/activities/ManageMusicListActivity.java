@@ -67,6 +67,7 @@ public class ManageMusicListActivity extends PlayActivity {
         });
     }
 
+
     private class CheckedChangeListener implements OnCheckedChangeListener{
         private int i;
         public CheckedChangeListener(int i ){

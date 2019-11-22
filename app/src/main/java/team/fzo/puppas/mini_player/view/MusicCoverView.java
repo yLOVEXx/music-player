@@ -124,6 +124,7 @@ public class MusicCoverView extends android.support.v7.widget.AppCompatImageView
                 float target = current > HALF_ANGLE ? FULL_ANGLE : 0; // Choose the shortest distance to 0 rotation
                 float diff = target > 0 ? FULL_ANGLE - current : current;
 
+                //调用mEndRotateAnimator并设置4倍速
                 mEndRotateAnimator.setFloatValues(current, target);
                 mEndRotateAnimator.setDuration((int) (DURATION_PER_DEGREES * diff / 4));
                 mEndRotateAnimator.start();
