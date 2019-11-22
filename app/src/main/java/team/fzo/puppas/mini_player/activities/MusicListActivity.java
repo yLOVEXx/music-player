@@ -38,6 +38,8 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import org.litepal.LitePal;
+
 import team.fzo.puppas.mini_player.view.MarqueeTextView;
 import team.fzo.puppas.mini_player.view.MusicCoverView;
 import team.fzo.puppas.mini_player.R;
@@ -60,8 +62,6 @@ public class MusicListActivity extends PlayActivity {
     检查songIndex的值来避免不必要的图像加载
      */
     private int mSongIndex;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +89,10 @@ public class MusicListActivity extends PlayActivity {
 
         mSongIndex = -1;
 
+        //读取由MainActivity传递的歌单id
+        Intent intent = getIntent();
+        PlayService.setSongListId(intent.getIntExtra("musicListId", 0));
+
         //获取读取sd卡的权限
         getPermissionAndContent();
 
@@ -96,7 +100,6 @@ public class MusicListActivity extends PlayActivity {
         RecyclerView recyclerView = findViewById(R.id.tracks);
         assert recyclerView != null;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         recyclerView.setAdapter(new SongAdapter(this, MusicContentUtils.gSongList));
     }
 
@@ -161,7 +164,7 @@ public class MusicListActivity extends PlayActivity {
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         }
         else{
-            if(MusicContentUtils.gSongList.isEmpty()) {
+            if(LitePal.findAll(Song.class).isEmpty()) {
                 MusicContentUtils.getContent(this);
             }
         }
@@ -175,7 +178,7 @@ public class MusicListActivity extends PlayActivity {
         switch (requestCode){
             case 1:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if(MusicContentUtils.gSongList.isEmpty())
+                    if(LitePal.findAll(Song.class).isEmpty())
                         MusicContentUtils.getContent(this);
                 }
                 else{

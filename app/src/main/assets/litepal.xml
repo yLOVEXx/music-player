@@ -19,7 +19,7 @@
 			For example:
     	<version value="1" />
     -->
-    <version value="6" />
+    <version value="7" />
 
     <!--
     	Define your models in the list with mapping tag, LitePal will
@@ -34,6 +34,15 @@
     <list>
         <mapping class="team.fzo.puppas.mini_player.model.Song" />
         <mapping class="team.fzo.puppas.mini_player.model.MusicList" />
+        <mapping class="team.fzo.puppas.mini_player.model.song_model.SongInStudy"/>
+        <mapping class="team.fzo.puppas.mini_player.model.song_model.SongInCure"/>
+        <mapping class="team.fzo.puppas.mini_player.model.song_model.SongInACG" />
+        <mapping class="team.fzo.puppas.mini_player.model.song_model.SongInChinese" />
+        <mapping class="team.fzo.puppas.mini_player.model.song_model.SongInClassical" />
+        <mapping class="team.fzo.puppas.mini_player.model.song_model.SongInPop" />
+        <mapping class="team.fzo.puppas.mini_player.model.song_model.SongInLight" />
+        <mapping class="team.fzo.puppas.mini_player.model.song_model.SongInJazz" />
+        <mapping class="team.fzo.puppas.mini_player.model.song_model.SongInRap" />
     </list>
 
 
