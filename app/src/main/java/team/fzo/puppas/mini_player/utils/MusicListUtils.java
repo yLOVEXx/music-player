@@ -10,7 +10,7 @@ import team.fzo.puppas.mini_player.model.MusicList;
 public class MusicListUtils {
 
     private static boolean[] initStatus = new boolean[MainActivity.MUSIC_LIST_CATEGORY_NUM];
-    public static List<MusicList> musicLists = new ArrayList<>(MainActivity.MUSIC_LIST_CATEGORY_NUM);
+    public static List<MusicList> gmusicLists = new ArrayList<>(MainActivity.MUSIC_LIST_CATEGORY_NUM);
     private static String [] musicListName = new String[]{"我喜欢的音乐","学习专用音乐","治愈系音乐","ACG",
             "华语音乐","古典音乐","流行音乐",
             "轻音乐","爵士音乐","说唱"};
@@ -36,7 +36,7 @@ public class MusicListUtils {
             list.setSelecterStatus(initStatus[i]);
             list.setMusicListId(i);
             list.save();
-            musicLists.add(list);
+            gmusicLists.add(list);
         }
     }
 }

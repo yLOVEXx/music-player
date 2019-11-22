@@ -247,7 +247,7 @@ public class MainActivity extends PlayActivity {
         switch (requestCode){
             case 1:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if(MusicListUtils.musicLists.isEmpty())
+                    if(MusicListUtils.gmusicLists.isEmpty())
                         MusicListUtils.getListContent();
                 }
                 else{
@@ -273,7 +273,7 @@ public class MainActivity extends PlayActivity {
                 musicLists.add(nowList);
             }
         }
-        //musicLists = LitePal.where("selectedStatus = ?","1").find(MusicList.class);
+        //gmusicLists = LitePal.where("selectedStatus = ?","1").find(MusicList.class);
     }
 
     //设置返回页面时的调用结果
