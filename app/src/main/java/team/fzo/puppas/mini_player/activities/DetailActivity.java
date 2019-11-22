@@ -184,6 +184,15 @@ public class DetailActivity extends PlayActivity {
         }
     }
 
+    public void onRewindClick(View view){
+        seekTo(getPosition() - 3);
+        mSeekBar.setProgress(getPosition());
+    }
+
+    public void onForwardClick(View view){
+        seekTo(getPosition() + 3);
+        mSeekBar.setProgress(getPosition());
+    }
 
     private static Bitmap imageScale(Bitmap bitmap, int dst_w, int dst_h) {
         int src_w = bitmap.getWidth();
