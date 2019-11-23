@@ -54,7 +54,7 @@ public class PlayService extends Service {
     private static int sNextSongPos = NO_POSITION;
 
     private static int sPlayMode = LIST_REPEAT;                //播放模式
-    private static int sSongListId;             //当前歌曲所在歌单id
+    private static int sSongListId = -1;             //当前歌曲所在歌单id
     private static Bitmap sCoverImage;          //当前歌曲的专辑图片
 
     @Override

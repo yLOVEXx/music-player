@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import team.fzo.puppas.mini_player.R;
+import team.fzo.puppas.mini_player.activities.MusicListActivity;
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.utils.MusicContentUtils;
 import team.fzo.puppas.mini_player.service.PlayService;
@@ -71,6 +73,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //保持播放歌单与访问歌单的一致
+                if(MusicListActivity.getCurrentListId() != PlayService.getSongListId()){
+
+                    PlayService.setSongListId(MusicListActivity.getCurrentListId());
+                    MusicContentUtils.getContentFromDb();
+                }
+
                 /*
                 send broadcast to activity for loading the album cover and starting the play button
                 animation when click the song item

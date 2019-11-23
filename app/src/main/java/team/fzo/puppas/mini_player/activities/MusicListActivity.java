@@ -34,7 +34,6 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,6 +70,8 @@ public class MusicListActivity extends PlayActivity {
     检查songIndex的值来避免不必要的图像加载
      */
     private int mSongIndex;
+    //当前加载歌单页面的id
+    private static int sCurrentListId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,7 @@ public class MusicListActivity extends PlayActivity {
 
         //读取由MainActivity传递的歌单id
         Intent intent = getIntent();
-        PlayService.setSongListId(intent.getIntExtra("musicListId", 0));
+        sCurrentListId = intent.getIntExtra("musicListId", 0);
 
         mCoverView = findViewById(R.id.cover);
         mTitleView = findViewById(R.id.title);
@@ -102,10 +103,11 @@ public class MusicListActivity extends PlayActivity {
         getPermissionAndContent();
 
         // Set the recycler adapter
+        List<Song> currentList = LitePal.findAll(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]);
         RecyclerView recyclerView = findViewById(R.id.tracks);
         assert recyclerView != null;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SongAdapter(this, MusicContentUtils.gSongList));
+        recyclerView.setAdapter(new SongAdapter(this, currentList));
     }
 
 
@@ -113,8 +115,7 @@ public class MusicListActivity extends PlayActivity {
         mMusicListName = findViewById(R.id.music_list_name);
         mCounter = findViewById(R.id.counter);
 
-        int songListId = PlayService.getSongListId();
-        MusicList list = LitePal.where("musicListId = ?", String.valueOf(songListId)).
+        MusicList list = LitePal.where("musicListId = ?", String.valueOf(sCurrentListId)).
                 find(MusicList.class).get(0);
         mMusicListName.setText(list.getMusicListName());
     }
@@ -202,7 +203,7 @@ public class MusicListActivity extends PlayActivity {
         }
         else{
             if(LitePal.findAll(Song.class).isEmpty()) {
-                MusicContentUtils.getContent(this);
+                MusicContentUtils.getContentFromStorage(this);
             }
         }
     }
@@ -216,7 +217,7 @@ public class MusicListActivity extends PlayActivity {
             case 1:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     if(LitePal.findAll(Song.class).isEmpty())
-                        MusicContentUtils.getContent(this);
+                        MusicContentUtils.getContentFromStorage(this);
                 }
                 else{
                     Toast.makeText(this, "您拒绝了请求", Toast.LENGTH_SHORT).show();
@@ -293,6 +294,14 @@ public class MusicListActivity extends PlayActivity {
         }
     }
 
+
+    public static void setCurrentListId(int id){
+        sCurrentListId = id;
+    }
+
+    public static int getCurrentListId(){
+        return sCurrentListId;
+    }
 
     @Override
     protected void onDestroy() {
