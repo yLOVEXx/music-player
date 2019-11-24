@@ -216,8 +216,15 @@ public class MusicListActivity extends PlayActivity {
         switch (requestCode){
             case 1:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if(LitePal.findAll(Song.class).isEmpty())
+                    if(LitePal.findAll(Song.class).isEmpty()) {
                         MusicContentUtils.getContentFromStorage(this);
+
+                        List<Song> currentList = LitePal.findAll(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]);
+                        RecyclerView recyclerView = findViewById(R.id.tracks);
+                        assert recyclerView != null;
+                        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                        recyclerView.setAdapter(new SongAdapter(this, currentList));
+                    }
                 }
                 else{
                     Toast.makeText(this, "您拒绝了请求", Toast.LENGTH_SHORT).show();
