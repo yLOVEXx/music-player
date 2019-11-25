@@ -16,6 +16,7 @@
 
 package team.fzo.puppas.mini_player.service;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.music.ProgressCounter;
@@ -36,8 +38,8 @@ The PlayService is responsible to play the music and
 synchronize the time counter
  */
 public class PlayService extends Service {
-    private static final int LIST_REPEAT = 0;       //列表循环
-    private static final int LIST_SHUFFLE = 1;      //随机播放
+    public static final int LIST_REPEAT = 0;       //列表循环
+    public static final int LIST_SHUFFLE = 1;      //随机播放
     private static final int NO_POSITION = -1;
 
     // Binder given to clients
@@ -45,14 +47,16 @@ public class PlayService extends Service {
     private static MediaPlayer sPlayer = new MediaPlayer();
     private static ProgressCounter sCounter = new ProgressCounter();
 
-    private static int sSongPos = NO_POSITION;                //当前歌曲在adapter中的position
+    //当前歌曲在adapter中的position
+    private static int sSongPos = NO_POSITION;
+    //前一首歌曲的position
     private static int sPrevSongPos = NO_POSITION;
+    //下一首歌曲的position
     private static int sNextSongPos = NO_POSITION;
 
     private static int sPlayMode = LIST_REPEAT;                //播放模式
-    private static int sSongListId;             //当前歌曲所在歌单id
+    private static int sSongListId = -1;             //当前歌曲所在歌单id
     private static Bitmap sCoverImage;          //当前歌曲的专辑图片
-
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -130,6 +134,10 @@ public class PlayService extends Service {
                 //当前播放的歌曲处于暂停状态，重新启动播放器
                 sPlayer.start();
                 sCounter.restart();
+            }
+
+            if(sPlayMode == LIST_SHUFFLE){
+                sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
             }
         }
     }
@@ -222,6 +230,7 @@ public class PlayService extends Service {
     public static void setSongListId(int id){
         sSongListId = id;
     }
+
 
     public class PlayBinder extends Binder {
 
