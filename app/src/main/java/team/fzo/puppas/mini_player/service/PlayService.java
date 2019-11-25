@@ -24,6 +24,7 @@ import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
+import android.util.Log;
 
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.music.ProgressCounter;
@@ -133,6 +134,10 @@ public class PlayService extends Service {
                 //当前播放的歌曲处于暂停状态，重新启动播放器
                 sPlayer.start();
                 sCounter.restart();
+            }
+
+            if(sPlayMode == LIST_SHUFFLE){
+                sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
             }
         }
     }

@@ -314,6 +314,7 @@ public class MusicListActivity extends PlayActivity {
     protected void onDestroy() {
         super.onDestroy();
         mBroadcastManager.unregisterReceiver(mSongSelectedReceiver);
+        mBroadcastManager.unregisterReceiver(mSongFinishedReceiver);
     }
 
 }

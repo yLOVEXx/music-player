@@ -311,4 +311,10 @@ public class DetailActivity extends PlayActivity {
                 true);
         return dstbmp;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBroadcastManager.unregisterReceiver(mSongFinishedReceiver);
+    }
 }
