@@ -52,7 +52,6 @@ public class DetailActivity extends PlayActivity {
     //seekbar是否被拖动的状态
     private boolean mIsSeekBarTracking;
 
-    private IntentFilter mIntentFilter;
     private SongFinishedReceiver mSongFinishedReceiver;
     private LocalBroadcastManager mBroadcastManager;
 
@@ -138,10 +137,10 @@ public class DetailActivity extends PlayActivity {
 
         //设置接收歌曲结束的广播
         mBroadcastManager = LocalBroadcastManager.getInstance(this);
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction("musicPlayer.broadcast.SONG_FINISHED");
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("musicPlayer.broadcast.SONG_FINISHED");
         mSongFinishedReceiver = new SongFinishedReceiver();
-        mBroadcastManager.registerReceiver(mSongFinishedReceiver, mIntentFilter);
+        mBroadcastManager.registerReceiver(mSongFinishedReceiver, intentFilter);
     }
 
     //设置seekbar的参数与监听事件

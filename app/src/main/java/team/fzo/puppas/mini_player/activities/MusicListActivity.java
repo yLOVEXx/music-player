@@ -60,7 +60,6 @@ public class MusicListActivity extends PlayActivity {
     private TextView mCounter;
 
 
-    private IntentFilter mIntentFilter;
     private SongSelectedReceiver mSongSelectedReceiver;
     private SongFinishedReceiver mSongFinishedReceiver;
     private LocalBroadcastManager mBroadcastManager;
@@ -143,16 +142,16 @@ public class MusicListActivity extends PlayActivity {
 
         //当接受到 SONG_SELECTED 时设置专辑图片与信息与按钮动画
         mBroadcastManager = LocalBroadcastManager.getInstance(this);
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction("musicPlayer.broadcast.SONG_SELECTED");
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("musicPlayer.broadcast.SONG_SELECTED");
         mSongSelectedReceiver = new SongSelectedReceiver();
-        mBroadcastManager.registerReceiver(mSongSelectedReceiver, mIntentFilter);
+        mBroadcastManager.registerReceiver(mSongSelectedReceiver, intentFilter);
 
         //receive the broadcast from ProgressCounter
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction("musicPlayer.broadcast.SONG_FINISHED");
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("musicPlayer.broadcast.SONG_FINISHED");
         mSongFinishedReceiver = new SongFinishedReceiver();
-        mBroadcastManager.registerReceiver(mSongFinishedReceiver, mIntentFilter);
+        mBroadcastManager.registerReceiver(mSongFinishedReceiver, intentFilter);
     }
 
 
@@ -252,6 +251,9 @@ public class MusicListActivity extends PlayActivity {
         }
     }
 
+    static void f(){
+
+    }
 
     class SongSelectedReceiver extends BroadcastReceiver{
         @Override

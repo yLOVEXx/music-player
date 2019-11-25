@@ -5,8 +5,10 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -42,6 +45,7 @@ import org.litepal.LitePal;
 
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.adapter.MusicListAdapter;
+import team.fzo.puppas.mini_player.broadcast_receiver.NotificationClickReceiver;
 import team.fzo.puppas.mini_player.model.MusicList;
 import team.fzo.puppas.mini_player.utils.MusicListUtils;
 import java.util.ArrayList;
@@ -63,7 +67,8 @@ public class MainActivity extends PlayActivity {
     be changed, we are not able to assign the value to it
      */
     private List<MusicList> mSelectedMusicLists;
-    NotificationManager mNotificationManager;
+    private NotificationManager mNotificationManager;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -136,6 +141,8 @@ public class MainActivity extends PlayActivity {
 
         sendPlayerNotification();
     }
+
+
 
     //选择菜单栏
     public boolean onCreateOptionsMenu(Menu menu){
@@ -297,8 +304,8 @@ public class MainActivity extends PlayActivity {
                 .setOngoing(true);
 
         // 设置通知的点击行为：这里启动一个 Activity
-        Intent intent = new Intent(this, DetailActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+        Intent intent = new Intent(this, NotificationClickReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 
@@ -316,6 +323,7 @@ public class MainActivity extends PlayActivity {
         assert mNotificationManager != null;
         mNotificationManager.notify(PLAYER_NOTIFICATION_ID, builder.build());
     }
+
 
     @Override
     protected void onDestroy() {
