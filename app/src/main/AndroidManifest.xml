@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name="org.litepal.LitePalApplication"
+        android:name="team.fzo.puppas.mini_player.MyApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -35,11 +35,18 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <action android:name="musicPlayer.broadcast.SONG_SELECTED" />
+                <action android:name="musicPlayer.broadcast.SONG_PLAY_FINISHED" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.DetailActivity"
-            android:theme="@style/AppTheme.Detail" />
+            android:theme="@style/AppTheme.Detail" >
+
+            <intent-filter>
+                <action android:name="musicPlayer.broadcast.SONG_FINISHED" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".service.PlayService"

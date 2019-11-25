@@ -35,11 +35,15 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import org.litepal.LitePal;
 
+import java.util.List;
+
+import team.fzo.puppas.mini_player.model.MusicList;
 import team.fzo.puppas.mini_player.view.MarqueeTextView;
 import team.fzo.puppas.mini_player.view.MusicCoverView;
 import team.fzo.puppas.mini_player.R;
@@ -52,24 +56,35 @@ public class MusicListActivity extends PlayActivity {
 
     private View mCoverView;
     private View mTitleView;
+    private TextView mMusicListName;
+    private TextView mCounter;
 
-    private IntentFilter intentFilter;
-    private SongSelectedReceiver receiver;
-    private LocalBroadcastManager broadcastManager;
+
+    private IntentFilter mIntentFilter;
+    private SongSelectedReceiver mSongSelectedReceiver;
+    private SongFinishedReceiver mSongFinishedReceiver;
+    private LocalBroadcastManager mBroadcastManager;
 
     /*
     songIndex用来保存当前Activity加载的歌曲，通过
     检查songIndex的值来避免不必要的图像加载
      */
     private int mSongIndex;
+    //当前加载歌单页面的id
+    private static int sCurrentListId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_list);
 
+        //读取由MainActivity传递的歌单id
+        Intent intent = getIntent();
+        sCurrentListId = intent.getIntExtra("musicListId", 0);
+
         mCoverView = findViewById(R.id.cover);
         mTitleView = findViewById(R.id.title);
+        initSongListInfo();
 
         //设置播放按钮图片
         if(isPlaying()){
@@ -80,27 +95,29 @@ public class MusicListActivity extends PlayActivity {
         }
         initCover();        //加载歌曲图片与信息
 
-        //当接受到 SONG_SELECTED 时设置专辑图片与信息与按钮动画
-        broadcastManager = LocalBroadcastManager.getInstance(this);
-        intentFilter = new IntentFilter();
-        intentFilter.addAction("musicPlayer.broadcast.SONG_SELECTED");
-        receiver = new SongSelectedReceiver();
-        broadcastManager.registerReceiver(receiver, intentFilter);
+        initBroadcastManager();
 
         mSongIndex = -1;
-
-        //读取由MainActivity传递的歌单id
-        Intent intent = getIntent();
-        PlayService.setSongListId(intent.getIntExtra("musicListId", 0));
 
         //获取读取sd卡的权限
         getPermissionAndContent();
 
         // Set the recycler adapter
+        List<Song> currentList = LitePal.findAll(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]);
         RecyclerView recyclerView = findViewById(R.id.tracks);
         assert recyclerView != null;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SongAdapter(this, MusicContentUtils.gSongList));
+        recyclerView.setAdapter(new SongAdapter(this, currentList));
+    }
+
+
+    private void initSongListInfo(){
+        mMusicListName = findViewById(R.id.music_list_name);
+        mCounter = findViewById(R.id.counter);
+
+        MusicList list = LitePal.where("musicListId = ?", String.valueOf(sCurrentListId)).
+                find(MusicList.class).get(0);
+        mMusicListName.setText(list.getMusicListName());
     }
 
     private void initCover(){
@@ -121,12 +138,33 @@ public class MusicListActivity extends PlayActivity {
         }
     }
 
+
+    private void initBroadcastManager(){
+
+        //当接受到 SONG_SELECTED 时设置专辑图片与信息与按钮动画
+        mBroadcastManager = LocalBroadcastManager.getInstance(this);
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction("musicPlayer.broadcast.SONG_SELECTED");
+        mSongSelectedReceiver = new SongSelectedReceiver();
+        mBroadcastManager.registerReceiver(mSongSelectedReceiver, mIntentFilter);
+
+        //receive the broadcast from ProgressCounter
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction("musicPlayer.broadcast.SONG_FINISHED");
+        mSongFinishedReceiver = new SongFinishedReceiver();
+        mBroadcastManager.registerReceiver(mSongFinishedReceiver, mIntentFilter);
+    }
+
+
     /*
     根据播放状态设置animation
      */
     @Override
     protected void onRestart() {
         super.onRestart();
+
+        initCover();
+
         if(isPlaying()){
             mPlayButtonView.setImageResource(R.drawable.ic_pause_animatable);
         }
@@ -165,7 +203,7 @@ public class MusicListActivity extends PlayActivity {
         }
         else{
             if(LitePal.findAll(Song.class).isEmpty()) {
-                MusicContentUtils.getContent(this);
+                MusicContentUtils.getContentFromStorage(this);
             }
         }
     }
@@ -178,8 +216,15 @@ public class MusicListActivity extends PlayActivity {
         switch (requestCode){
             case 1:
                 if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if(LitePal.findAll(Song.class).isEmpty())
-                        MusicContentUtils.getContent(this);
+                    if(LitePal.findAll(Song.class).isEmpty()) {
+                        MusicContentUtils.getContentFromStorage(this);
+
+                        List<Song> currentList = LitePal.findAll(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]);
+                        RecyclerView recyclerView = findViewById(R.id.tracks);
+                        assert recyclerView != null;
+                        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                        recyclerView.setAdapter(new SongAdapter(this, currentList));
+                    }
                 }
                 else{
                     Toast.makeText(this, "您拒绝了请求", Toast.LENGTH_SHORT).show();
@@ -217,7 +262,7 @@ public class MusicListActivity extends PlayActivity {
                 /*
                 load album with bitmap
                  */
-                MusicCoverView coverView = findViewById(R.id.cover);
+                MusicCoverView coverView = (MusicCoverView)(mCoverView);
                 Song song = MusicContentUtils.gSongList.get(index);
                 Bitmap cover = PlayService.getCoverImage();
                 coverView.setImageBitmap(cover);
@@ -240,10 +285,36 @@ public class MusicListActivity extends PlayActivity {
         }
     }
 
+    private class SongFinishedReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int nextSongPos = intent.getIntExtra("nextSongPos",0);
+
+            MusicCoverView coverView = (MusicCoverView)mCoverView;
+            Song song = MusicContentUtils.gSongList.get(nextSongPos);
+            Bitmap coverImage = PlayService.getCoverImage();
+            coverView.setImageBitmap(coverImage);
+
+            MarqueeTextView titleInfo = (MarqueeTextView)mTitleView;
+            String info = song.getName() + " - " + song.getArtist();
+            titleInfo.setText(info);
+        }
+    }
+
+
+    public static void setCurrentListId(int id){
+        sCurrentListId = id;
+    }
+
+    public static int getCurrentListId(){
+        return sCurrentListId;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        broadcastManager.unregisterReceiver(receiver);
+        mBroadcastManager.unregisterReceiver(mSongSelectedReceiver);
+        mBroadcastManager.unregisterReceiver(mSongFinishedReceiver);
     }
 
 }

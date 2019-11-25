@@ -52,21 +52,25 @@ public class MusicContentUtils {
     /*
     存储model的class对象，用于查找数据库
     */
-    private static final Class[] SONG_LIST_CLASS = {
+    public static final Class[] SONG_LIST_CLASS = {
             Song.class, SongInStudy.class, SongInCure.class,
             SongInACG.class, SongInChinese.class, SongInClassical.class,
             SongInPop.class, SongInLight.class, SongInJazz.class,
             SongInRap.class
     };
 
-    private static int sSongListId = PlayService.getSongListId();
-    public static List<Song> gSongList = LitePal.findAll(SONG_LIST_CLASS[sSongListId]);
+    public static List<Song> gSongList;
     private static final Uri ALBUM_ART_URI = Uri.parse("content://media/external/audio/albumart");
+
+    public static void getContentFromDb(){
+        int songListId = PlayService.getSongListId();
+        gSongList = LitePal.findAll(SONG_LIST_CLASS[songListId]);
+    }
 
     /*
      从手机存储中获取歌曲内容并保存在sqlite中
      */
-    public static void getContent(Context context){
+    public static void getContentFromStorage(Context context){
         Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 null, null, null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
 
@@ -102,10 +106,11 @@ public class MusicContentUtils {
                     song.setIsMusic(isMusic);
 
                     song.save();
-                    gSongList.add(song);
                 }
             }
         }
+
+        assert cursor != null;
         cursor.close();
     }
 
