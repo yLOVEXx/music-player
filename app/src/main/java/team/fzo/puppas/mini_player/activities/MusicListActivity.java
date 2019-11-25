@@ -246,8 +246,9 @@ public class MusicListActivity extends PlayActivity {
                     new Pair<>((View)mProgressView, ViewCompat.getTransitionName(mProgressView)),
                     new Pair<>((View)mPlayButtonView, ViewCompat.getTransitionName(mPlayButtonView)));
 
-            ActivityCompat.startActivity(this, new Intent(this, DetailActivity.class),
-                    options.toBundle());
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra("sender_id", 0);
+            ActivityCompat.startActivity(this, intent, options.toBundle());
         }
     }
 

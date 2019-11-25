@@ -50,7 +50,10 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 
 import com.andremion.music.MusicCoverViewTransition;
+
+import team.fzo.puppas.mini_player.MyApplication;
 import team.fzo.puppas.mini_player.R;
+import team.fzo.puppas.mini_player.activities.DetailActivity;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -125,9 +128,15 @@ public class MusicCoverView extends android.support.v7.widget.AppCompatImageView
                 float diff = target > 0 ? FULL_ANGLE - current : current;
 
                 //调用mEndRotateAnimator并设置4倍速
-                mEndRotateAnimator.setFloatValues(current, target);
+                if(DetailActivity.sender_id == 0) {
+                    mEndRotateAnimator.setFloatValues(current, target);
+                }
+                else{
+                    mEndRotateAnimator.setFloatValues(current, current);
+                }
                 mEndRotateAnimator.setDuration((int) (DURATION_PER_DEGREES * diff / 4));
                 mEndRotateAnimator.start();
+
             }
         });
 
@@ -136,7 +145,8 @@ public class MusicCoverView extends android.support.v7.widget.AppCompatImageView
         mEndRotateAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                setRotation(0);
+                if(DetailActivity.sender_id == 0)
+                    setRotation(0);
                 // isRunning method return true if it's called form here.
                 // So we need call from post method to get the right returning.
                 post(new Runnable() {

@@ -70,6 +70,7 @@ public class DetailActivity extends PlayActivity {
         }
     };
 
+    public static int sender_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,7 @@ public class DetailActivity extends PlayActivity {
         //将trackline的透明度设为1
         mCoverView.setTrackColor(0x01ffffff);
 
+        sender_id = getIntent().getIntExtra("sender_id", -1);
         mCoverView.setCallbacks(new MusicCoverView.Callbacks() {
             @Override
             public void onMorphEnd(MusicCoverView coverView) {
@@ -105,15 +107,20 @@ public class DetailActivity extends PlayActivity {
             }
         });
 
-        getWindow().getSharedElementEnterTransition().addListener(new TransitionAdapter() {
-            @Override
-            public void onTransitionEnd(Transition transition) {
-                if(isPlaying()) {
-                    mCoverView.start();
+        if(sender_id == 0) {
+            getWindow().getSharedElementEnterTransition().addListener(new TransitionAdapter() {
+                @Override
+                public void onTransitionEnd(Transition transition) {
+                    if (isPlaying()) {
+                        mCoverView.start();
+                    }
                 }
-            }
-        });
-
+            });
+        }
+        else{
+            if(isPlaying())
+                mCoverView.start();
+        }
         //set the title
         Song song = getSongInPlayer();
         String info = song.getName() + " - " + song.getArtist();

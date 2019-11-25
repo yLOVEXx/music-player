@@ -24,6 +24,7 @@ import android.graphics.RectF;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -76,6 +77,7 @@ public class ProgressView extends View {
 
         mProgress = 0;
         mMax = 0;
+        mMorph = 1;
     }
 
     public int getProgress() {
