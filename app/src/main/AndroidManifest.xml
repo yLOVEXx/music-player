@@ -24,14 +24,18 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="musicPlayer.broadcast.NOTIFICATION_NEXT_CLICKED" />
+                <action android:name="musicPlayer.broadcast.NOTIFICATION_PLAY_BUTTON_CLICKED" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.MusicListActivity"
             android:theme="@style/AppTheme.Main">
             <intent-filter>
                 <action android:name="musicPlayer.broadcast.SONG_SELECTED" />
-                <action android:name="musicPlayer.broadcast.SONG_PLAY_FINISHED" />
+                <action android:name="musicPlayer.broadcast.SONG_FINISHED" />
+                <action android:name="musicPlayer.broadcast.PLAY_BUTTON_CLICKED" />
             </intent-filter>
         </activity>
 
