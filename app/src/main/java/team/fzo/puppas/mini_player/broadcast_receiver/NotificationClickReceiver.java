@@ -21,6 +21,8 @@ import team.fzo.puppas.mini_player.service.PlayService;
 public class NotificationClickReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        if(PlayService.getSongInPlayer() == null)
+            return;
 
         Activity currentActivity = MyActivityManager.getInstance().getCurrentActivity();
         String currentActivityName = "activities.MusicListActivity";

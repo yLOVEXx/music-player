@@ -26,6 +26,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -34,6 +35,7 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +64,7 @@ public class MusicListActivity extends PlayActivity {
 
     private SongSelectedReceiver mSongSelectedReceiver;
     private SongFinishedReceiver mSongFinishedReceiver;
+    private PlayButtonClickedReceiver mPlayButtonClickedReceiver;
     private LocalBroadcastManager mBroadcastManager;
 
     /*
@@ -95,7 +98,6 @@ public class MusicListActivity extends PlayActivity {
         initCover();        //加载歌曲图片与信息
 
         initBroadcastManager();
-
         mSongIndex = -1;
 
         //获取读取sd卡的权限
@@ -152,6 +154,11 @@ public class MusicListActivity extends PlayActivity {
         intentFilter.addAction("musicPlayer.broadcast.SONG_FINISHED");
         mSongFinishedReceiver = new SongFinishedReceiver();
         mBroadcastManager.registerReceiver(mSongFinishedReceiver, intentFilter);
+
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("musicPlayer.broadcast.PLAY_BUTTON_CLICKED");
+        mPlayButtonClickedReceiver = new PlayButtonClickedReceiver();
+        mBroadcastManager.registerReceiver(mPlayButtonClickedReceiver, intentFilter);
     }
 
 
@@ -251,9 +258,6 @@ public class MusicListActivity extends PlayActivity {
         }
     }
 
-    static void f(){
-
-    }
 
     class SongSelectedReceiver extends BroadcastReceiver{
         @Override
@@ -292,6 +296,7 @@ public class MusicListActivity extends PlayActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             int nextSongPos = intent.getIntExtra("nextSongPos",0);
+            Log.d("aaa", String.valueOf(nextSongPos));
 
             MusicCoverView coverView = (MusicCoverView)mCoverView;
             Song song = MusicContentUtils.gSongList.get(nextSongPos);
@@ -304,6 +309,18 @@ public class MusicListActivity extends PlayActivity {
         }
     }
 
+    private class PlayButtonClickedReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //如果当前音乐正在播放
+            if(isPlaying()){
+                mPlayButtonView.setImageResource(R.drawable.ic_pause_animatable);
+            }
+            else{
+                mPlayButtonView.setImageResource(R.drawable.ic_play_animatable);
+            }
+        }
+    }
 
     public static void setCurrentListId(int id){
         sCurrentListId = id;
