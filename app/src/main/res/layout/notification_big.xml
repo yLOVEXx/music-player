@@ -6,6 +6,7 @@
     android:orientation="horizontal">
 
     <ImageView
+        android:id="@+id/cover"
         android:layout_width="110dp"
         android:layout_height="match_parent"
         android:src="@drawable/album_default" />
@@ -16,23 +17,21 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_song_name"
+            android:id="@+id/song_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:text="歌名"
             android:textSize="15sp"/>
 
         <TextView
-            android:id="@+id/tv_song_singer"
+            android:id="@+id/singer_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:text="歌手名"
             android:textSize="12sp"/>
 
         <LinearLayout
@@ -45,6 +44,7 @@
 
 
             <ImageButton
+                android:id="@+id/previous"
                 android:layout_marginEnd="10dp"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
@@ -53,14 +53,16 @@
                 android:src="@drawable/ic_skip_previous_white_24dp"/>
 
             <ImageButton
+                android:id="@+id/play_button"
                 android:layout_marginEnd="10dp"
                 android:layout_width="38dp"
                 android:layout_height="38dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_pause_vector"/>
+                android:src="@drawable/ic_play_vector"/>
 
             <ImageButton
+                android:id="@+id/next"
                 android:layout_marginEnd="10dp"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
