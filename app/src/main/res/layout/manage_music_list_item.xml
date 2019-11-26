@@ -3,28 +3,29 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="127dp"
-    android:layout_height="185dp"
-    android:background="#FFFFFF"
+    android:layout_width="130dp"
+    android:layout_height="175dp"
+    app:cardBackgroundColor="#2C776969"
     app:cardCornerRadius="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FD000000"
+        android:background="#2C352E2E"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/music_list_image"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="135dp"
             android:scaleType="centerCrop"
             tools:src="@drawable/collect" />
 
         <CheckBox
             android:id="@+id/checkBox"
             android:layout_width="match_parent"
-            android:layout_height="35dp" />
+            android:layout_height="35dp"
+            android:textSize="16sp" />
 
     </LinearLayout>
 

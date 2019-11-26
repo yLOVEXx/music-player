@@ -97,7 +97,7 @@ public class MainActivity extends PlayActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.menu_white);
         }
 
-        //实现左滑菜单的点击效果
+        //实现左滑菜单的点击效果e
         mNavigationView.setCheckedItem(R.id.nav_call);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

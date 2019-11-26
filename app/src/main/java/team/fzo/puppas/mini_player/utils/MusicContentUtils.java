@@ -35,6 +35,7 @@ import team.fzo.puppas.mini_player.model.song_model.SongInJazz;
 import team.fzo.puppas.mini_player.model.song_model.SongInLight;
 import team.fzo.puppas.mini_player.model.song_model.SongInPop;
 import team.fzo.puppas.mini_player.model.song_model.SongInRap;
+import team.fzo.puppas.mini_player.model.song_model.SongInRecent;
 import team.fzo.puppas.mini_player.model.song_model.SongInStudy;
 import team.fzo.puppas.mini_player.service.PlayService;
 
@@ -53,7 +54,7 @@ public class MusicContentUtils {
     存储model的class对象，用于查找数据库
     */
     public static final Class[] SONG_LIST_CLASS = {
-            Song.class, SongInStudy.class, SongInCure.class,
+            Song.class, SongInRecent.class,SongInStudy.class, SongInCure.class,
             SongInACG.class, SongInChinese.class, SongInClassical.class,
             SongInPop.class, SongInLight.class, SongInJazz.class,
             SongInRap.class

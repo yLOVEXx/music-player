@@ -2,6 +2,7 @@ package team.fzo.puppas.mini_player.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -15,16 +16,15 @@ import team.fzo.puppas.mini_player.model.MusicList;
 public class ManageMusicListActivity extends PlayActivity {
 
     private List<MusicList> mMusicLists;
-    private Button mFinishBtn;
     private ManageMusicListAdapter mManageMusicListAdapter;
     private List<MusicList> mAllMusicLists;
-
+    private FloatingActionButton mFloatingActionButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_music_list);
-        mFinishBtn = findViewById(R.id.finish);
+        mFloatingActionButton = findViewById(R.id.floatingActionButton);
         mMusicLists = LitePal.findAll(MusicList.class);
 
         mAllMusicLists = LitePal.findAll(MusicList.class);
@@ -39,7 +39,7 @@ public class ManageMusicListActivity extends PlayActivity {
         recyclerView.setAdapter(mManageMusicListAdapter);
 
         //设置点击事件
-        mFinishBtn.setOnClickListener(new View.OnClickListener() {
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setSelectedStatus(mManageMusicListAdapter.mCheckedArray);
@@ -48,6 +48,7 @@ public class ManageMusicListActivity extends PlayActivity {
                 finish();
             }
         });
+
     }
 
     //改变选中项目的状态
