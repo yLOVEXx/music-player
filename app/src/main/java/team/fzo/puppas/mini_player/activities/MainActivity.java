@@ -107,7 +107,7 @@ public class MainActivity extends PlayActivity {
         }
 
         //实现左滑菜单的点击效果e
-        mNavigationView.setCheckedItem(R.id.nav_call);
+        mNavigationView.setCheckedItem(R.id.nav_1);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
