@@ -1,14 +1,23 @@
 package team.fzo.puppas.mini_player.activities;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -27,6 +36,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.donkingliang.banner.CustomBanner;
@@ -35,12 +45,15 @@ import org.litepal.LitePal;
 
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.adapter.MusicListAdapter;
+import team.fzo.puppas.mini_player.broadcast_receiver.NotificationClickReceiver;
 import team.fzo.puppas.mini_player.model.MusicList;
 import team.fzo.puppas.mini_player.utils.MusicListUtils;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends PlayActivity {
+
+    static final int PLAYER_NOTIFICATION_ID = 1;
 
     private CustomBanner<Integer> mBanner;
     private Toolbar mToolbar;
@@ -54,6 +67,8 @@ public class MainActivity extends PlayActivity {
     be changed, we are not able to assign the value to it
      */
     private List<MusicList> mSelectedMusicLists;
+    private NotificationManager mNotificationManager;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,7 +139,10 @@ public class MainActivity extends PlayActivity {
             }
         });
 
+        sendPlayerNotification();
     }
+
+
 
     //选择菜单栏
     public boolean onCreateOptionsMenu(Menu menu){
@@ -266,6 +284,51 @@ public class MainActivity extends PlayActivity {
                 mSwipeRefresh.setRefreshing(false);
             }
         }).start();
+    }
+
+
+    //发送播放器视图通知
+    public void sendPlayerNotification() {
+        // 获取系统 通知管理 服务
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        RemoteViews normalViews = new RemoteViews(getPackageName(), R.layout.notification_normal);
+        RemoteViews bigViews = new RemoteViews(getPackageName(), R.layout.notification_big);
+
+        // 构建 Notification
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setCustomContentView(normalViews)
+                .setCustomBigContentView(bigViews)
+                .setPriority(Notification.PRIORITY_MAX)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setOngoing(true);
+
+        // 设置通知的点击行为：这里启动一个 Activity
+        Intent intent = new Intent(this, NotificationClickReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(pendingIntent);
+
+        // 兼容  API 26，Android 8.0
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            // 第三个参数表示通知的重要程度，默认则只在通知栏闪烁一下
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    "playerNotification", "playerNotificationChannel", NotificationManager.IMPORTANCE_DEFAULT);
+            // 注册通道，注册后除非卸载再安装否则不改变
+            assert mNotificationManager != null;
+            mNotificationManager.createNotificationChannel(notificationChannel);
+            builder.setChannelId("playerNotification");
+        }
+        // 发出通知
+        assert mNotificationManager != null;
+        mNotificationManager.notify(PLAYER_NOTIFICATION_ID, builder.build());
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mNotificationManager.cancel(PLAYER_NOTIFICATION_ID);
     }
 }
 
