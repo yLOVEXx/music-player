@@ -1,6 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#130C0C"
@@ -17,63 +16,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="管理歌单"></android.support.v7.widget.Toolbar>
+        app:title="管理歌单">
+    </android.support.v7.widget.Toolbar>
 
-    <CheckBox
-        android:id="@+id/checkBox1"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/manage_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="547dp"
+        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
 
-    <CheckBox
-        android:id="@+id/checkBox2"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox3"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox4"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox5"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox6"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox7"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox8"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox9"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-    <!--
-    <CheckBox
-        android:id="@+id/checkBox10"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox11"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-     -->
     <Button
         android:id="@+id/finish"
         android:layout_width="match_parent"
