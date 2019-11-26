@@ -52,7 +52,6 @@ public class DetailActivity extends PlayActivity {
     //seekbar是否被拖动的状态
     private boolean mIsSeekBarTracking;
 
-    private IntentFilter mIntentFilter;
     private SongFinishedReceiver mSongFinishedReceiver;
     private LocalBroadcastManager mBroadcastManager;
 
@@ -70,6 +69,7 @@ public class DetailActivity extends PlayActivity {
         }
     };
 
+    public static int sender_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +83,7 @@ public class DetailActivity extends PlayActivity {
         //将trackline的透明度设为1
         mCoverView.setTrackColor(0x01ffffff);
 
+        sender_id = getIntent().getIntExtra("sender_id", -1);
         mCoverView.setCallbacks(new MusicCoverView.Callbacks() {
             @Override
             public void onMorphEnd(MusicCoverView coverView) {
@@ -105,15 +106,20 @@ public class DetailActivity extends PlayActivity {
             }
         });
 
-        getWindow().getSharedElementEnterTransition().addListener(new TransitionAdapter() {
-            @Override
-            public void onTransitionEnd(Transition transition) {
-                if(isPlaying()) {
-                    mCoverView.start();
+        if(sender_id == 0) {
+            getWindow().getSharedElementEnterTransition().addListener(new TransitionAdapter() {
+                @Override
+                public void onTransitionEnd(Transition transition) {
+                    if (isPlaying()) {
+                        mCoverView.start();
+                    }
                 }
-            }
-        });
-
+            });
+        }
+        else{
+            if(isPlaying())
+                mCoverView.start();
+        }
         //set the title
         Song song = getSongInPlayer();
         String info = song.getName() + " - " + song.getArtist();
@@ -131,10 +137,10 @@ public class DetailActivity extends PlayActivity {
 
         //设置接收歌曲结束的广播
         mBroadcastManager = LocalBroadcastManager.getInstance(this);
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction("musicPlayer.broadcast.SONG_FINISHED");
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("musicPlayer.broadcast.SONG_FINISHED");
         mSongFinishedReceiver = new SongFinishedReceiver();
-        mBroadcastManager.registerReceiver(mSongFinishedReceiver, mIntentFilter);
+        mBroadcastManager.registerReceiver(mSongFinishedReceiver, intentFilter);
     }
 
     //设置seekbar的参数与监听事件

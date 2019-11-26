@@ -23,6 +23,7 @@ import android.content.res.TypedArray;
 import android.transition.Transition;
 import android.transition.TransitionValues;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Property;
 import android.view.ViewGroup;
 
