@@ -31,7 +31,8 @@
 
         <activity
             android:name=".activities.MusicListActivity"
-            android:theme="@style/AppTheme.Main">
+            android:theme="@style/AppTheme.Main"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="musicPlayer.broadcast.SONG_SELECTED" />
                 <action android:name="musicPlayer.broadcast.SONG_FINISHED" />

@@ -94,12 +94,12 @@ public class PlayerNotificationUtils {
      */
     public static void setRemoteViews(Song song, boolean isPlaying){
         if(isPlaying){
-            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.ic_pause_vector);
-            sBigViews.setImageViewResource(R.id.play_button, R.drawable.ic_pause_vector);
+            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.notification_pause);
+            sBigViews.setImageViewResource(R.id.play_button, R.drawable.notification_pause);
         }
         else{
-            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.ic_play_vector);
-            sBigViews.setImageViewResource(R.id.play_button, R.drawable.ic_play_vector);
+            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.notification_play);
+            sBigViews.setImageViewResource(R.id.play_button, R.drawable.notification_play);
         }
 
 
@@ -115,12 +115,12 @@ public class PlayerNotificationUtils {
 
     public static void setRemoteViews(boolean isPlaying){
         if(isPlaying){
-            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.ic_pause_vector);
-            sBigViews.setImageViewResource(R.id.play_button, R.drawable.ic_pause_vector);
+            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.notification_pause);
+            sBigViews.setImageViewResource(R.id.play_button, R.drawable.notification_pause);
         }
         else{
-            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.ic_play_vector);
-            sBigViews.setImageViewResource(R.id.play_button, R.drawable.ic_play_vector);
+            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.notification_play);
+            sBigViews.setImageViewResource(R.id.play_button, R.drawable.notification_play);
         }
     }
 
