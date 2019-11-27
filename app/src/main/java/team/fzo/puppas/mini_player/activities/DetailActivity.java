@@ -53,6 +53,7 @@ public class DetailActivity extends PlayActivity {
     private boolean mIsSeekBarTracking;
 
     private SongFinishedReceiver mSongFinishedReceiver;
+    private PlayButtonClickedReceiver mPlayButtonClickedReceiver;
     private LocalBroadcastManager mBroadcastManager;
 
     private final Handler mUpdateSeekBarHandler = new Handler() {
@@ -141,6 +142,11 @@ public class DetailActivity extends PlayActivity {
         intentFilter.addAction("musicPlayer.broadcast.SONG_FINISHED");
         mSongFinishedReceiver = new SongFinishedReceiver();
         mBroadcastManager.registerReceiver(mSongFinishedReceiver, intentFilter);
+
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("musicPlayer.broadcast.PLAY_BUTTON_CLICKED");
+        mPlayButtonClickedReceiver = new PlayButtonClickedReceiver();
+        mBroadcastManager.registerReceiver(mPlayButtonClickedReceiver, intentFilter);
     }
 
     //设置seekbar的参数与监听事件
@@ -302,6 +308,33 @@ public class DetailActivity extends PlayActivity {
             titleInfo.setText(info);
 
             mSeekBar.setRange(0, getDuration());
+        }
+    }
+
+    private class PlayButtonClickedReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(getSongInPlayer() == null)
+                return;
+
+            AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable)mPlayButtonView.getDrawable();
+
+            //如果当前音乐正在播放
+            if(isPlaying()){
+                playDrawable.registerAnimationCallback(new PlayButtonAnimation(false));
+                if(mCoverView.isStarted()) {
+                    mCoverView.resume();
+                }
+                else{
+                    mCoverView.start();
+                }
+                playDrawable.start();
+            }
+            else{
+                playDrawable.registerAnimationCallback(new PlayButtonAnimation(true));
+                mCoverView.pause();
+                playDrawable.start();
+            }
         }
     }
 
