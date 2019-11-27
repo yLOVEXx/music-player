@@ -321,6 +321,7 @@ public class MusicListActivity extends PlayActivity {
         }
     }
 
+
     public static void setCurrentListId(int id){
         sCurrentListId = id;
     }

@@ -46,6 +46,7 @@
 
             <intent-filter>
                 <action android:name="musicPlayer.broadcast.SONG_FINISHED" />
+                <action android:name="musicPlayer.broadcast.PLAY_BUTTON_CLICKED" />
             </intent-filter>
         </activity>
 
