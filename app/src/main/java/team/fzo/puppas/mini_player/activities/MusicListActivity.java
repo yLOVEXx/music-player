@@ -296,7 +296,6 @@ public class MusicListActivity extends PlayActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             int nextSongPos = intent.getIntExtra("nextSongPos",0);
-            Log.d("aaa", String.valueOf(nextSongPos));
 
             MusicCoverView coverView = (MusicCoverView)mCoverView;
             Song song = MusicContentUtils.gSongList.get(nextSongPos);
