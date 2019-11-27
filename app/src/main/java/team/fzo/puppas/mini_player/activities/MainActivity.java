@@ -52,6 +52,8 @@ import team.fzo.puppas.mini_player.model.MusicList;
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.service.PlayService;
 import team.fzo.puppas.mini_player.utils.MusicListUtils;
+import team.fzo.puppas.mini_player.utils.PlayerNotificationUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,9 +73,6 @@ public class MainActivity extends PlayActivity {
     be changed, we are not able to assign the value to it
      */
     private List<MusicList> mSelectedMusicLists;
-    private NotificationManager mNotificationManager;
-    private RemoteViews mNormalViews;
-    private RemoteViews mBigViews;
     private NotificationNextClickReceiver mNotificationNextClickReceiver;
     private NotificationPlayButtonClickReceiver mNotificationPlayButtonClickReceiver;
     private LocalBroadcastManager mBroadcastManager;
@@ -151,8 +150,7 @@ public class MainActivity extends PlayActivity {
         mBroadcastManager = LocalBroadcastManager.getInstance(this);
 
         initReceiver();
-        initRemoteViews();
-        sendPlayerNotification();
+        PlayerNotificationUtils.initNotification();
     }
 
 
@@ -314,63 +312,6 @@ public class MainActivity extends PlayActivity {
     }
 
 
-    //发送播放器视图通知
-    private void sendPlayerNotification() {
-        // 获取系统 通知管理 服务
-        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // 构建 Notification
-        Notification.Builder builder = new Notification.Builder(this);
-        builder.setCustomContentView(mNormalViews)
-                .setCustomBigContentView(mBigViews)
-                .setPriority(Notification.PRIORITY_MAX)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setOngoing(true);
-
-        // 设置通知的点击行为：这里发送广播
-        Intent intent = new Intent(this, NotificationClickReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(pendingIntent);
-
-
-        // 兼容  API 26，Android 8.0
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            // 第三个参数表示通知的重要程度，默认则只在通知栏闪烁一下
-            NotificationChannel notificationChannel = new NotificationChannel(
-                    "playerNotification", "playerNotificationChannel", NotificationManager.IMPORTANCE_DEFAULT);
-            // 注册通道，注册后除非卸载再安装否则不改变
-            assert mNotificationManager != null;
-            mNotificationManager.createNotificationChannel(notificationChannel);
-            builder.setChannelId("playerNotification");
-        }
-        // 发出通知
-        assert mNotificationManager != null;
-        mNotificationManager.notify(PLAYER_NOTIFICATION_ID, builder.build());
-    }
-
-
-    //初始化RemoteViews, 并且设置pendingIntent
-    private void initRemoteViews(){
-        mNormalViews = new RemoteViews(getPackageName(), R.layout.notification_normal);
-        mBigViews = new RemoteViews(getPackageName(), R.layout.notification_big);
-
-        //设置next button 点击事件
-        Intent intent = new Intent("musicPlayer.broadcast.NOTIFICATION_NEXT_CLICKED");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        mNormalViews.setOnClickPendingIntent(R.id.next, pendingIntent);
-        mBigViews.setOnClickPendingIntent(R.id.next, pendingIntent);
-
-        //设置play button 点击事件
-        intent = new Intent("musicPlayer.broadcast.NOTIFICATION_PLAY_BUTTON_CLICKED");
-        pendingIntent = PendingIntent.getBroadcast(this, 2,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        mNormalViews.setOnClickPendingIntent(R.id.play_button, pendingIntent);
-        mBigViews.setOnClickPendingIntent(R.id.play_button, pendingIntent);
-    }
 
     private class NotificationNextClickReceiver extends BroadcastReceiver {
         @Override
@@ -378,25 +319,8 @@ public class MainActivity extends PlayActivity {
             if(getSongInPlayer() == null)
                 return;
 
-            if(!isPlaying()){
-                mNormalViews.setImageViewResource(R.id.play_button, R.drawable.ic_pause_vector);
-                mBigViews.setImageViewResource(R.id.play_button, R.drawable.ic_pause_vector);
-            }
-
             int nextSongPos = getNextSongPos();
             play(context, nextSongPos);
-
-            Song song = getSongInPlayer();
-            mNormalViews.setTextViewText(R.id.song_name, song.getName());
-            mNormalViews.setTextViewText(R.id.singer_name, song.getArtist());
-            mBigViews.setTextViewText(R.id.song_name, song.getName());
-            mBigViews.setTextViewText(R.id.singer_name, song.getArtist());
-
-            Bitmap coverImage = PlayService.getCoverImage();
-            mNormalViews.setImageViewBitmap(R.id.cover, coverImage);
-            mBigViews.setImageViewBitmap(R.id.cover, coverImage);
-
-            sendPlayerNotification();
 
             //send the local broadcast to other activities
             Intent myIntent = new Intent("musicPlayer.broadcast.SONG_FINISHED");
@@ -414,16 +338,10 @@ public class MainActivity extends PlayActivity {
             //如果当前音乐正在播放
             if(isPlaying()){
                 pause();
-                mNormalViews.setImageViewResource(R.id.play_button, R.drawable.ic_play_vector);
-                mBigViews.setImageViewResource(R.id.play_button, R.drawable.ic_play_vector);
             }
             else{
                 restart();
-                mNormalViews.setImageViewResource(R.id.play_button, R.drawable.ic_pause_vector);
-                mBigViews.setImageViewResource(R.id.play_button, R.drawable.ic_pause_vector);
             }
-
-            sendPlayerNotification();
 
             Intent myIntent = new Intent("musicPlayer.broadcast.PLAY_BUTTON_CLICKED");
             mBroadcastManager.sendBroadcast(myIntent);
@@ -434,7 +352,7 @@ public class MainActivity extends PlayActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mNotificationManager.cancel(PLAYER_NOTIFICATION_ID);
+        PlayerNotificationUtils.clearNotification();
     }
 }
 

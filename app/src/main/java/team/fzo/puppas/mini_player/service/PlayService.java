@@ -25,10 +25,13 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.RemoteViews;
 
+import team.fzo.puppas.mini_player.MyApplication;
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.music.ProgressCounter;
 import team.fzo.puppas.mini_player.utils.MusicContentUtils;
+import team.fzo.puppas.mini_player.utils.PlayerNotificationUtils;
 
 import java.io.IOException;
 import java.util.Random;
@@ -64,7 +67,6 @@ public class PlayService extends Service {
     }
 
     public static void play(int pos) {
-
         if(sSongPos == NO_POSITION || sSongPos != pos){
             //为播放器设置新歌且记录旧歌
             sPrevSongPos = sSongPos;
@@ -84,14 +86,23 @@ public class PlayService extends Service {
 
             resetCounter((int)(songInPlayer.getDuration() / 1000));
             sCounter.start();
+
+            PlayerNotificationUtils.setRemoteViews(songInPlayer, true);
         }
         else{
             if(!isPlaying()){
                 //当前播放的歌曲处于暂停状态，重新启动播放器
                 sPlayer.start();
                 sCounter.restart();
+                PlayerNotificationUtils.setRemoteViews(true);
+            }
+
+            if(sPlayMode == LIST_SHUFFLE){
+                sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
             }
         }
+
+        PlayerNotificationUtils.sendPlayerNotification();
     }
 
     private static void setCoverImage(Context context){
@@ -128,18 +139,24 @@ public class PlayService extends Service {
 
             resetCounter((int)(songInPlayer.getDuration() / 1000));
             sCounter.start();
+
+            PlayerNotificationUtils.setRemoteViews(songInPlayer, true);
         }
         else{
             if(!isPlaying()){
                 //当前播放的歌曲处于暂停状态，重新启动播放器
                 sPlayer.start();
                 sCounter.restart();
+
+                PlayerNotificationUtils.setRemoteViews(true);
             }
 
             if(sPlayMode == LIST_SHUFFLE){
                 sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
             }
         }
+
+        PlayerNotificationUtils.sendPlayerNotification();
     }
 
     private static void resetPlayer(String path){
@@ -169,16 +186,20 @@ public class PlayService extends Service {
 
     public static void pause() {
         sPlayer.pause();
-
         if(sCounter != null){
             sCounter.pause();
         }
+
+        PlayerNotificationUtils.setRemoteViews(false);
+        PlayerNotificationUtils.sendPlayerNotification();
     }
 
     public static void restart(){
         if(sSongPos != NO_POSITION){
             sPlayer.start();
             sCounter.restart();
+            PlayerNotificationUtils.setRemoteViews(true);
+            PlayerNotificationUtils.sendPlayerNotification();
         }
     }
 
