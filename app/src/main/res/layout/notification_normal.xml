@@ -7,13 +7,12 @@
 
     <ImageView
         android:id="@+id/cover"
-        android:layout_width="64dp"
-        android:layout_height="match_parent"
-        android:src="@drawable/album_default"/>
+        android:layout_width="@dimen/notification_normal_cover_width"
+        android:layout_height="@dimen/notification_normal_cover_height" />
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="64dp"
+        android:layout_height="@dimen/notification_normal_cover_height"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_weight="1"
@@ -24,23 +23,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textSize="18sp"/>
+            android:textSize="15sp"
+            android:textAppearance="@style/TextAppearance.Compat.Notification.Title"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/singer_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:textSize="12sp"
+            android:textAppearance="@style/TextAppearance.Compat.Notification"
+            android:singleLine="true"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="64dp"
-        android:gravity="center_vertical">
+        android:layout_height="@dimen/notification_normal_cover_height"
+        android:gravity="center_vertical"
+        android:layout_marginEnd="15dp">
         <ImageButton
             android:id="@+id/previous"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="@dimen/notification_normal_button_size"
+            android:layout_height="@dimen/notification_normal_button_size"
             android:background="@null"
             android:scaleType="fitCenter"
             android:src="@drawable/notification_previous"/>
@@ -48,8 +53,8 @@
         <ImageButton
             android:id="@+id/play_button"
             android:layout_marginStart="10dp"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="@dimen/notification_normal_button_size"
+            android:layout_height="@dimen/notification_normal_button_size"
             android:background="@null"
             android:scaleType="fitCenter"
             android:src="@drawable/notification_play"/>
@@ -57,8 +62,8 @@
         <ImageButton
             android:id="@+id/next"
             android:layout_marginStart="10dp"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="@dimen/notification_normal_button_size"
+            android:layout_height="@dimen/notification_normal_button_size"
             android:background="@null"
             android:scaleType="fitCenter"
             android:src="@drawable/notification_next"/>
