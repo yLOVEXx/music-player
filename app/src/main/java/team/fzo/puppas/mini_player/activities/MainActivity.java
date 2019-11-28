@@ -105,8 +105,8 @@ public class MainActivity extends PlayActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.menu_white);
         }
 
-        //实现左滑菜单的点击效果
-        mNavigationView.setCheckedItem(R.id.nav_call);
+        //实现左滑菜单的点击效果e
+        mNavigationView.setCheckedItem(R.id.nav_1);
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -208,7 +208,7 @@ public class MainActivity extends PlayActivity {
         //设置contentView
         View contentView = LayoutInflater.from(MainActivity.this).inflate(R.layout.popup_list, null);
         mPopWindow = new PopupWindow(contentView,
-                DrawerLayout.LayoutParams.FILL_PARENT, 405
+                DrawerLayout.LayoutParams.FILL_PARENT, 425
                 , true);
         mPopWindow.setContentView(contentView);
         bgAlpha(0.3f);

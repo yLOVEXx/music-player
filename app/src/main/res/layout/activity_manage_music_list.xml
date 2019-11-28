@@ -1,81 +1,53 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<team.fzo.puppas.mini_player.view.InsetsPercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#130C0C"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="226dp"
+        android:scaleType="centerCrop"
+        app:layout_heightPercent="29%"
+        app:srcCompat="@drawable/manage_music_list_pic1" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#130C0C"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintBottom_toTopOf="@+id/banner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="管理歌单"></android.support.v7.widget.Toolbar>
+        app:title="推荐歌单">
+    </android.support.v7.widget.Toolbar>
 
-    <CheckBox
-        android:id="@+id/checkBox1"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox2"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox3"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox4"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox5"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox6"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox7"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox8"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox9"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <CheckBox
-        android:id="@+id/checkBox10"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
-    <Button
-        android:id="@+id/finish"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="完成"
-        android:textSize="18sp" />
+        android:layout_below="@+id/toolbar">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/manage_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="20dp"
+            android:clickable="true"
+            android:scrollbarSize="4dp"
+            android:src="@drawable/ok"
+            app:elevation="6dp" />
+    </android.support.design.widget.CoordinatorLayout>
 
 
-</LinearLayout>
+</team.fzo.puppas.mini_player.view.InsetsPercentRelativeLayout>
