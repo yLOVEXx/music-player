@@ -9,7 +9,7 @@ public class MusicListUtils {
     private static int[] sInitStatus = new int[MUSIC_LIST_CATEGORY_NUM];
 
     private static String [] sMusicListName = new String[]{
-            "我喜欢的音乐","最近播放","学习专用音乐","治愈系音乐","ACG",
+            "我喜欢的音乐","历史播放","学习专用音乐","治愈系音乐","ACG",
             "华语音乐","古典音乐","流行音乐",
             "轻音乐","爵士音乐","说唱"};
 
