@@ -8,7 +8,8 @@
     <ImageView
         android:id="@+id/cover"
         android:layout_width="@dimen/notification_big_cover_width"
-        android:layout_height="@dimen/notification_big_cover_height" />
+        android:layout_height="@dimen/notification_big_cover_height"
+        android:scaleType="fitCenter"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +25,7 @@
             android:layout_marginEnd="10dp"
             android:maxLines="2"
             android:textAppearance="@style/TextAppearance.Compat.Notification.Title"
-            android:textSize="15sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/singer_name"
@@ -35,45 +36,48 @@
             android:layout_marginEnd="10dp"
             android:maxLines="1"
             android:textAppearance="@style/TextAppearance.Compat.Notification"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_marginStart="40dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp">
 
-            <ImageButton
-                android:id="@+id/previous"
-                android:layout_width="@dimen/notification_big_button_size"
-                android:layout_height="@dimen/notification_big_button_size"
-                android:layout_marginEnd="25dp"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/notification_previous" />
+                <ImageButton
+                    android:id="@+id/previous"
+                    android:layout_width="@dimen/notification_big_button_size"
+                    android:layout_height="@dimen/notification_big_button_size"
+                    android:layout_marginEnd="25dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/notification_previous" />
 
-            <ImageButton
-                android:id="@+id/play_button"
-                android:layout_width="@dimen/notification_big_button_size"
-                android:layout_height="@dimen/notification_big_button_size"
-                android:layout_marginEnd="25dp"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/notification_play" />
+                <ImageButton
+                    android:id="@+id/play_button"
+                    android:layout_width="@dimen/notification_big_button_size"
+                    android:layout_height="@dimen/notification_big_button_size"
+                    android:layout_marginEnd="25dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/notification_play" />
 
-            <ImageButton
-                android:id="@+id/next"
-                android:layout_width="@dimen/notification_big_button_size"
-                android:layout_height="@dimen/notification_big_button_size"
-                android:layout_marginEnd="25dp"
-                android:background="@null"
-                android:scaleType="fitCenter"
-                android:src="@drawable/notification_next" />
-
-        </LinearLayout>
+                <ImageButton
+                    android:id="@+id/next"
+                    android:layout_width="@dimen/notification_big_button_size"
+                    android:layout_height="@dimen/notification_big_button_size"
+                    android:layout_marginEnd="25dp"
+                    android:background="@null"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/notification_next" />
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
