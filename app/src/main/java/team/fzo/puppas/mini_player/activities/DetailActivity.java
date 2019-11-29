@@ -310,6 +310,14 @@ public class DetailActivity extends PlayActivity {
             titleInfo.setText(info);
 
             mSeekBar.setRange(0, getDuration());
+            mPlayButtonView.setImageResource(R.drawable.ic_pause_animatable);
+
+            if(mCoverView.isStarted()) {
+                mCoverView.resume();
+            }
+            else{
+                mCoverView.start();
+            }
         }
     }
 

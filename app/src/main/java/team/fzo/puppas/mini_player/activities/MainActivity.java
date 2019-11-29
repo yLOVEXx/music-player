@@ -59,8 +59,6 @@ import java.util.List;
 
 public class MainActivity extends PlayActivity {
 
-    static final int PLAYER_NOTIFICATION_ID = 1;
-
     private CustomBanner<Integer> mBanner;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;

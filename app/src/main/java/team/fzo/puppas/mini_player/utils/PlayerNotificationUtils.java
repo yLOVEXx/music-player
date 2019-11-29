@@ -80,7 +80,8 @@ public class PlayerNotificationUtils {
 
     public static void sendPlayerNotification(){
         sBuilder.setCustomContentView(sNormalViews)
-                .setCustomBigContentView(sBigViews);
+                .setCustomBigContentView(sBigViews)
+                .setPriority(Notification.PRIORITY_MAX);
 
         // 发出通知
         assert sNotificationManager != null;
