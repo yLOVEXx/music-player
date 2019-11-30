@@ -58,7 +58,7 @@
                     android:layout_marginEnd="25dp"
                     android:background="@null"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/notification_previous" />
+                    android:src="@drawable/ic_notification_previous" />
 
                 <ImageButton
                     android:id="@+id/play_button"
@@ -67,7 +67,7 @@
                     android:layout_marginEnd="25dp"
                     android:background="@null"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/notification_play" />
+                    android:src="@drawable/ic_notification_play" />
 
                 <ImageButton
                     android:id="@+id/next"
@@ -76,7 +76,7 @@
                     android:layout_marginEnd="25dp"
                     android:background="@null"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/notification_next" />
+                    android:src="@drawable/ic_notification_next" />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

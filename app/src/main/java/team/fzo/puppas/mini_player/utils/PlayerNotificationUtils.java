@@ -14,7 +14,6 @@ import team.fzo.puppas.mini_player.MyApplication;
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.broadcast_receiver.NotificationClickReceiver;
 import team.fzo.puppas.mini_player.model.Song;
-import team.fzo.puppas.mini_player.service.PlayService;
 
 public class PlayerNotificationUtils {
     private static final int PLAYER_NOTIFICATION_ID = 1;
@@ -95,12 +94,12 @@ public class PlayerNotificationUtils {
      */
     public static void setRemoteViews(Song song, boolean isPlaying){
         if(isPlaying){
-            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.notification_pause);
-            sBigViews.setImageViewResource(R.id.play_button, R.drawable.notification_pause);
+            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.ic_notification_pause);
+            sBigViews.setImageViewResource(R.id.play_button, R.drawable.ic_notification_pause);
         }
         else{
-            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.notification_play);
-            sBigViews.setImageViewResource(R.id.play_button, R.drawable.notification_play);
+            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.ic_notification_play);
+            sBigViews.setImageViewResource(R.id.play_button, R.drawable.ic_notification_play);
         }
 
 
@@ -118,12 +117,12 @@ public class PlayerNotificationUtils {
 
     public static void setRemoteViews(boolean isPlaying){
         if(isPlaying){
-            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.notification_pause);
-            sBigViews.setImageViewResource(R.id.play_button, R.drawable.notification_pause);
+            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.ic_notification_pause);
+            sBigViews.setImageViewResource(R.id.play_button, R.drawable.ic_notification_pause);
         }
         else{
-            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.notification_play);
-            sBigViews.setImageViewResource(R.id.play_button, R.drawable.notification_play);
+            sNormalViews.setImageViewResource(R.id.play_button, R.drawable.ic_notification_play);
+            sBigViews.setImageViewResource(R.id.play_button, R.drawable.ic_notification_play);
         }
     }
 

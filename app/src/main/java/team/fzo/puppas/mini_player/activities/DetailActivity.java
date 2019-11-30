@@ -355,5 +355,6 @@ public class DetailActivity extends PlayActivity {
     protected void onDestroy() {
         super.onDestroy();
         mBroadcastManager.unregisterReceiver(mSongFinishedReceiver);
+        mBroadcastManager.unregisterReceiver(mPlayButtonClickedReceiver);
     }
 }

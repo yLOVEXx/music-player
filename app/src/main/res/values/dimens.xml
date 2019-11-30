@@ -16,4 +16,8 @@
     <dimen name="notification_big_cover_width">128dp</dimen>
     <dimen name="notification_big_cover_height">128dp</dimen>
     <dimen name="notification_big_button_size">22dp</dimen>
+    <dimen name="song_detail_dialog_item_height">50dp</dimen>
+    <dimen name="song_detail_dialog_icon_size">30dp</dimen>
+    <dimen name="song_detail_dialog_item_padding">10dp</dimen>
+    <dimen name="song_detail_dialog_item_inner_margin">15dp</dimen>
 </resources>
