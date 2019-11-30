@@ -54,10 +54,8 @@
         <service
             android:name=".service.PlayService"
             android:enabled="true"
-            android:exported="false">
-
-            <intent-filter android:priority="1000">
-            </intent-filter>
+            android:exported="false"
+            android:priority="1000">
         </service>
 
 
