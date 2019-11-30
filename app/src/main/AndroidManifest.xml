@@ -54,7 +54,11 @@
         <service
             android:name=".service.PlayService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false">
+
+            <intent-filter android:priority="1000">
+            </intent-filter>
+        </service>
 
 
         <receiver android:name=".broadcast_receiver.NotificationClickReceiver"
