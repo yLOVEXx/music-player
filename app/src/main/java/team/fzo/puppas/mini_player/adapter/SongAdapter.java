@@ -87,7 +87,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 }
 
                 /*
-                send broadcast to activity for loading the album cover and starting the play button
+                send broadcast to activity for loading the album ic_launcher and starting the play button
                 animation when click the song item
                  */
                 boolean isPlaying = PlayService.isPlaying();
