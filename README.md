@@ -1,58 +1,29 @@
-<img alt="Icon" src="app/src/main/res/mipmap-xxhdpi/ic_launcher.png?raw=true" align="left" hspace="1" vspace="1">
+用到的开源库:
 
-<a alt='Buy Me a Coffee at ko-fi.com' href='https://ko-fi.com/T6T05M4O' target='_blank' align='right'><img align='right' height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=0' border='0' /></a>
-<a alt='Try it on Google Play' href='https://play.google.com/store/apps/details?id=com.sample.andremion.musicplayer' target='_blank' align='right'><img align='right' height='36' style='border:0px;height:36px;' src='https://developer.android.com/images/brand/en_generic_rgb_wo_60.png' border='0' /></a>
+1.LitePal
+LitePal是一个开源的Android数据库框架，帮助开发人员可非常轻松地使用SQLite数据库。用户无需编写SQL语句即可完成大多数数据库操作，包括创建或升级表，crud操作，聚合函数等。
 
-# Music Player: From UI Proposal to Code
+Github地址: https://github.com/LitePalFramework/LitePal
 
-> This is a prototype made for the [article](https://medium.com/@andremion/music-player-3a85864d6df7#.iklz50r6n). This is not a real music player and don't expect it is.
+2.Glide
+Glide是一个快速高效的Android图片加载库，注重于平滑的滚动。Glide提供了易用的API，高性能、可扩展的图片解码管道（decode pipeline），以及自动的资源池技术。
 
-Some developers have difficult to code when the UI proposal is a bit “sophisticated” or “complex”. Many of them strip a lot of significant portion of the UI or even the Motion when they are coding, and the result ends up quite different of the original proposal.
+Github地址: https://github.com/bumptech/glide
 
-This article talks about how would be to code an UI proposal, skipping some basic Android details and focusing on transition and animation approach...
 
-Read more at [here](https://medium.com/@andremion/music-player-3a85864d6df7#.iklz50r6n)
+3.RangeSeeekBar
+一个由国人开源的SeekBar,支持非常丰富的样式设置，可以简单方便的实现多种需要的效果。
 
-#### Special thanks to [michaelizer](https://github.com/michaelizer) for the awesome logo.
+Github地址: https://github.com/Jay-Goo/RangeSeekBar
 
-</br>
 
-[![License Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=true)](http://www.apache.org/licenses/LICENSE-2.0)
-![minSdkVersion 21](https://img.shields.io/badge/minSdkVersion-21-red.svg?style=true)
-![compileSdkVersion 27](https://img.shields.io/badge/compileSdkVersion-27-yellow.svg?style=true)
+4.CustomBanner
+Android轮播图控件，支持任何View的轮播，而不仅仅是图片(ImageView)。完全自定义的轮播指示器和轮播图样式，使用非常简单。
 
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Music--Player-green.svg?style=true)](https://android-arsenal.com/details/3/3855)
-[![MaterialUp Music-Player](https://img.shields.io/badge/MaterialUp-Music--Player-blue.svg?style=true)](https://www.uplabs.com/posts/music-player-open-source-apps)
-[![Android Sweets #27](https://img.shields.io/badge/Android%20Sweets-%2327-ff69b4.svg?style=true)](https://androidsweets.ongoodbits.com/2016/07/14/issue-27)
-[![Awesome Android #22](https://img.shields.io/badge/Awesome%20Android-%2322-green.svg?style=true)](https://android.libhunt.com/newsletter/22)
+Github地址: https://github.com/donkingliang/CustomBanner
 
-[Transition](https://dribbble.com/shots/1850527-Music-Player-Transition) by [Anish Chandran](https://dribbble.com/anish_chandran) | Code by [André Mion](https://github.com/andremion)
---- | ---
-![Transition by Anish Chandran](https://raw.githubusercontent.com/andremion/Music-Player/master/art/music_player_concept_cropped.gif) | ![Code by André Mion](https://raw.githubusercontent.com/andremion/Music-Player/master/art/music_player_code.gif)
+5．Music-Cover-View
+一个继承自ImageView的动画组件， 能够实现矩形与圆形间的相互转换，并且实现了旋转的功能。
 
-## Libraries and tools used in the project
+Github地址: https://github.com/andremion/Music-Cover-View
 
-* [Design Support Library](http://developer.android.com/intl/pt-br/tools/support-library/features.html#design)
-The Design package provides APIs to support adding material design components and patterns to your apps.
-* [MusicCoverView](https://github.com/andremion/Music-Cover-View)
-A Subclass of ImageView that 'morphs' into a circle shape and can rotates. Useful to be used as album cover in Music apps.
-* [RecyclerView](http://developer.android.com/intl/pt-br/reference/android/support/v7/widget/RecyclerView.html)
-A flexible view for providing a limited window into a large data set.
-* [PercentRelativeLayout](https://developer.android.com/reference/android/support/percent/PercentRelativeLayout.html)
-Subclass of RelativeLayout that supports percentage based dimensions and margins.
-
-## License
-
-    Copyright 2016 André Mion
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
