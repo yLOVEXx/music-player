@@ -1,24 +1,12 @@
 package team.fzo.puppas.mini_player.activities;
 
-import android.Manifest;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.AnimatedVectorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -27,7 +15,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -38,7 +25,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.donkingliang.banner.CustomBanner;
@@ -47,10 +33,7 @@ import org.litepal.LitePal;
 
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.adapter.MusicListAdapter;
-import team.fzo.puppas.mini_player.broadcast_receiver.NotificationClickReceiver;
 import team.fzo.puppas.mini_player.model.MusicList;
-import team.fzo.puppas.mini_player.model.Song;
-import team.fzo.puppas.mini_player.service.PlayService;
 import team.fzo.puppas.mini_player.utils.MusicListUtils;
 import team.fzo.puppas.mini_player.utils.PlayerNotificationUtils;
 
@@ -58,8 +41,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends PlayActivity {
-
-    static final int PLAYER_NOTIFICATION_ID = 1;
 
     private CustomBanner<Integer> mBanner;
     private Toolbar mToolbar;
@@ -102,7 +83,7 @@ public class MainActivity extends PlayActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.menu_white);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
         }
 
         //实现左滑菜单的点击效果e

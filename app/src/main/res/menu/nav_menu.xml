@@ -4,23 +4,23 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_1"
-            android:icon="@drawable/mall"
+            android:icon="@drawable/ic_mall"
             android:title="商城" />
         <item
             android:id="@+id/nav_2"
-            android:icon="@drawable/theme_black"
+            android:icon="@drawable/ic_theme_black"
             android:title="主题" />
         <item
         android:id="@+id/nav_3"
-        android:icon="@drawable/moon"
+        android:icon="@drawable/ic_moon"
             android:title="夜间模式" />
         <item
         android:id="@+id/nav_4"
-        android:icon="@drawable/clock"
+        android:icon="@drawable/ic_clock"
             android:title="定时关闭"/>
         <item
         android:id="@+id/nav_5"
-        android:icon="@drawable/close"
+        android:icon="@drawable/ic_close"
             android:title="退出" />
 
     </group>

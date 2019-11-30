@@ -305,6 +305,8 @@ public class MusicListActivity extends PlayActivity {
             MarqueeTextView titleInfo = (MarqueeTextView)mTitleView;
             String info = song.getName() + " - " + song.getArtist();
             titleInfo.setText(info);
+
+            mPlayButtonView.setImageResource(R.drawable.ic_pause_animatable);
         }
     }
 

@@ -16,6 +16,8 @@
 
 package team.fzo.puppas.mini_player.adapter;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,8 +28,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import team.fzo.puppas.mini_player.MyActivityManager;
+import team.fzo.puppas.mini_player.MyApplication;
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.activities.MusicListActivity;
 import team.fzo.puppas.mini_player.model.Song;
@@ -94,6 +99,31 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 broadcastManager.sendBroadcast(intent);
             }
         });
+
+
+        holder.mOptionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Activity currentActivity = MyActivityManager.getInstance().getCurrentActivity();
+                View  dialogView = currentActivity.getLayoutInflater().inflate(
+                        R.layout.song_detail_info,null);
+
+                ImageView coverView = dialogView.findViewById(R.id.cover);
+                TextView songNameView = dialogView.findViewById(R.id.song_name);
+                TextView singerNameView = dialogView.findViewById(R.id.singer_name);
+                Bitmap coverImage = MusicContentUtils.getArtwork(mContext,
+                        holder.song.getId(), holder.song.getAlbumId(), true);
+
+                coverView.setImageBitmap(coverImage);
+                songNameView.setText(holder.song.getName());
+                singerNameView.setText(holder.song.getArtist());
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setView(dialogView);
+                builder.create();
+                builder.show();
+            }
+        });
     }
 
     @Override
@@ -107,6 +137,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         public final TextView mTitleView;
         public final TextView mArtistView;
         public final TextView mDurationView;
+        public final ImageView mOptionView;
         public Song song;
 
         public ViewHolder(View view) {
@@ -116,6 +147,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
             mTitleView = view.findViewById(R.id.title);
             mArtistView = view.findViewById(R.id.artist);
             mDurationView = view.findViewById(R.id.duration);
+            mOptionView = view.findViewById(R.id.song_detail_option);
         }
     }
 }
