@@ -13,10 +13,10 @@ public class MusicListUtils {
             "华语音乐","古典音乐","流行音乐",
             "轻音乐","爵士音乐","说唱"};
 
-    private static int [] sMusicListAlbumId = new int[]{R.drawable.collect,R.drawable.recent_music,
-            R.drawable.study_music, R.drawable.cure_music,R.drawable.acg_music,
-            R.drawable.chinese_music, R.drawable.classic_music,R.drawable.pop_music,
-            R.drawable.light_music, R.drawable.jazz_music,R.drawable.rap_music};
+    private static int [] sMusicListAlbumId = new int[]{R.drawable.album_collect,R.drawable.album_recent_music,
+            R.drawable.album_study_music, R.drawable.album_cure_music,R.drawable.album_acg_music,
+            R.drawable.album_chinese_music, R.drawable.album_classic_music,R.drawable.album_pop_music,
+            R.drawable.album_light_music, R.drawable.album_jazz_music,R.drawable.album_rap_music};
 
 
     //加载所有歌单到数据库
