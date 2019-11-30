@@ -14,7 +14,7 @@ public class MusicListUtils {
             "轻音乐","爵士音乐","说唱"};
 
     private static int [] sMusicListAlbumId = new int[]{R.drawable.album_collect,R.drawable.album_recent_music,
-            R.drawable.album_study_music, R.drawable.album_cure_music,R.drawable.acg_music,
+            R.drawable.album_study_music, R.drawable.album_cure_music,R.drawable.album_acg_music,
             R.drawable.album_chinese_music, R.drawable.album_classic_music,R.drawable.album_pop_music,
             R.drawable.album_light_music, R.drawable.album_jazz_music,R.drawable.album_rap_music};
 
