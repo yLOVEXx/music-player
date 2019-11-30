@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="135dp"
             android:scaleType="centerCrop"
-            tools:src="@drawable/collect" />
+            tools:src="@drawable/album_collect" />
 
         <CheckBox
             android:id="@+id/checkBox"
