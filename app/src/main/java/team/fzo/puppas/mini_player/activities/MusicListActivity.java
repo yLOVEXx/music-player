@@ -64,6 +64,7 @@ public class MusicListActivity extends PlayActivity {
 
     private SongSelectedReceiver mSongSelectedReceiver;
     private SongFinishedReceiver mSongFinishedReceiver;
+    private PrevButtonClickedReceiver mPrevButtonClickedReceiver;
     private PlayButtonClickedReceiver mPlayButtonClickedReceiver;
     private LocalBroadcastManager mBroadcastManager;
 
@@ -167,6 +168,11 @@ public class MusicListActivity extends PlayActivity {
         intentFilter.addAction("musicPlayer.broadcast.PLAY_BUTTON_CLICKED");
         mPlayButtonClickedReceiver = new PlayButtonClickedReceiver();
         mBroadcastManager.registerReceiver(mPlayButtonClickedReceiver, intentFilter);
+
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("musicPlayer.broadcast.PREV_BUTTON_CLICKED");
+        mPrevButtonClickedReceiver = new PrevButtonClickedReceiver();
+        mBroadcastManager.registerReceiver(mPrevButtonClickedReceiver, intentFilter);
     }
 
 
@@ -341,6 +347,35 @@ public class MusicListActivity extends PlayActivity {
         }
     }
 
+    private class PrevButtonClickedReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int prevSongPos = intent.getIntExtra("prevSongPos",0);
+
+            MusicCoverView coverView = (MusicCoverView)mCoverView;
+            Song song = MusicContentUtils.gSongList.get(prevSongPos);
+            Bitmap coverImage = PlayService.getCoverImage();
+            coverView.setImageBitmap(coverImage);
+
+            MarqueeTextView titleInfo = (MarqueeTextView)mTitleView;
+            String info = song.getName() + " - " + song.getArtist();
+            titleInfo.setText(info);
+
+            mPlayButtonView.setImageResource(R.drawable.ic_pause_animatable);
+
+            //update the recycler view
+            mCurrentList.clear();
+            mCurrentList.addAll(LitePal.order("id desc").find(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]));
+            RecyclerView recyclerView = findViewById(R.id.tracks);
+            assert recyclerView != null;
+            recyclerView.setLayoutManager(new LinearLayoutManager(MyApplication.getContext()));
+            recyclerView.setAdapter(new SongAdapter(MyApplication.getContext(), mCurrentList));
+
+            //update the song number
+            mCounter.setText(mCurrentList.size() + "首");
+        }
+    }
+
     private class PlayButtonClickedReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -368,6 +403,8 @@ public class MusicListActivity extends PlayActivity {
         super.onDestroy();
         mBroadcastManager.unregisterReceiver(mSongSelectedReceiver);
         mBroadcastManager.unregisterReceiver(mSongFinishedReceiver);
+        mBroadcastManager.unregisterReceiver(mPrevButtonClickedReceiver);
+        mBroadcastManager.unregisterReceiver(mPlayButtonClickedReceiver);
     }
 
 }

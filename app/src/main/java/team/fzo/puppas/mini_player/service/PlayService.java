@@ -32,6 +32,8 @@ import team.fzo.puppas.mini_player.utils.MusicContentUtils;
 import team.fzo.puppas.mini_player.utils.PlayerNotificationUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /*
@@ -52,6 +54,8 @@ public class PlayService extends Service {
     private static int sSongPos = NO_POSITION;
     //下一首歌曲的position
     private static int sNextSongPos = NO_POSITION;
+    //record the history information for go backing
+    private static List<Integer> sHistoryRecord = new ArrayList<>();
 
     private static int sPlayMode = LIST_REPEAT;                //播放模式
     private static int sSongListId = -1;             //当前歌曲所在歌单id
@@ -62,11 +66,26 @@ public class PlayService extends Service {
         return mBinder;
     }
 
+    private static void setCoverImage(Context context){
+        Song songInPlayer = MusicContentUtils.gSongList.get(sSongPos);
+
+        sCoverImage = MusicContentUtils.getArtwork(context,
+                songInPlayer.getSongId(), songInPlayer.getAlbumId(), false);
+    }
+
+    public static Bitmap getCoverImage(){
+        return sCoverImage;
+    }
+
     public static void play(int pos) {
         if(sSongPos == NO_POSITION || sSongPos != pos){
             //save to the recent playlist
             if(sSongListId != 1)
                 MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
+
+            //record the play sequence
+            if(sSongPos != NO_POSITION)
+                sHistoryRecord.add(sSongPos);
             //为播放器设置新歌且记录旧歌
             sSongPos = pos;
 
@@ -103,23 +122,16 @@ public class PlayService extends Service {
         PlayerNotificationUtils.sendPlayerNotification();
     }
 
-    private static void setCoverImage(Context context){
-        Song songInPlayer = MusicContentUtils.gSongList.get(sSongPos);
-
-        sCoverImage = MusicContentUtils.getArtwork(context,
-                songInPlayer.getSongId(), songInPlayer.getAlbumId(), false);
-    }
-
-    public static Bitmap getCoverImage(){
-        return sCoverImage;
-    }
-
     public static void play(Context context, int pos) {
 
         if(sSongPos == NO_POSITION || sSongPos != pos){
             //save to the recent playlist
             if(sSongListId != 1)
                 MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
+
+            //record the play sequence
+            if(sSongPos != NO_POSITION)
+                sHistoryRecord.add(sSongPos);
             //为播放器设置新歌且记录旧歌
             sSongPos = pos;
 
@@ -159,7 +171,53 @@ public class PlayService extends Service {
         PlayerNotificationUtils.sendPlayerNotification();
     }
 
+    public static void play(Context context, int pos, boolean isBack){
+        if(sSongPos == NO_POSITION || sSongPos != pos){
+            //save to the recent playlist
+            if(sSongListId != 1)
+                MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
 
+            //record the play sequence
+            if(sSongPos != NO_POSITION && !isBack)
+                sHistoryRecord.add(sSongPos);
+            //为播放器设置新歌且记录旧歌
+            sSongPos = pos;
+
+            //calculate the next song will be played
+            if(sPlayMode == LIST_REPEAT){
+                sNextSongPos = sSongPos == MusicContentUtils.gSongList.size() - 1 ? 0 : sSongPos + 1;
+            }
+            else if(sPlayMode == LIST_SHUFFLE){
+                sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+            }
+
+            setCoverImage(context);
+
+            Song songInPlayer = MusicContentUtils.gSongList.get(sSongPos);
+            resetPlayer(songInPlayer.getPath());
+            sPlayer.start();
+
+            resetCounter((int)(songInPlayer.getDuration() / 1000));
+            sCounter.start();
+
+            PlayerNotificationUtils.setRemoteViews(songInPlayer, true);
+        }
+        else{
+            if(!isPlaying()){
+                //当前播放的歌曲处于暂停状态，重新启动播放器
+                sPlayer.start();
+                sCounter.restart();
+
+                PlayerNotificationUtils.setRemoteViews(true);
+            }
+
+            if(sPlayMode == LIST_SHUFFLE){
+                sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+            }
+        }
+
+        PlayerNotificationUtils.sendPlayerNotification();
+    }
 
     private static void resetPlayer(String path){
         try {
@@ -251,6 +309,25 @@ public class PlayService extends Service {
         sSongListId = id;
     }
 
+    //可能产生删除记录最后一项的副作用
+    public static int getPrevSongPos(){
+        int pos = -1;
+        if(sHistoryRecord.isEmpty()){
+            //当历史记录遍历完时，根据播放模式计算新的位置
+            if(sPlayMode == LIST_REPEAT){
+                pos = sSongPos == 0 ?  MusicContentUtils.gSongList.size() - 1: sSongPos - 1;
+            }
+            else if(sPlayMode == LIST_SHUFFLE){
+                pos = new Random().nextInt(MusicContentUtils.gSongList.size());
+            }
+        }
+        else {
+            pos = sHistoryRecord.get(sHistoryRecord.size() - 1);
+            sHistoryRecord.remove(sHistoryRecord.size() - 1);
+        }
+
+        return pos;
+    }
 
     public class PlayBinder extends Binder {
 

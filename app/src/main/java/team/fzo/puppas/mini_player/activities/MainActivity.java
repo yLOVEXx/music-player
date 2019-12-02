@@ -56,6 +56,7 @@ public class MainActivity extends PlayActivity {
     private List<MusicList> mSelectedMusicLists;
     private NotificationNextClickReceiver mNotificationNextClickReceiver;
     private NotificationPlayButtonClickReceiver mNotificationPlayButtonClickReceiver;
+    private NotificationPrevClickReceiver mNotificationPrevClickReceiver;
     private LocalBroadcastManager mBroadcastManager;
 
 
@@ -147,6 +148,12 @@ public class MainActivity extends PlayActivity {
         intentFilter.addAction("musicPlayer.broadcast.NOTIFICATION_PLAY_BUTTON_CLICKED");
         mNotificationPlayButtonClickReceiver = new NotificationPlayButtonClickReceiver();
         registerReceiver(mNotificationPlayButtonClickReceiver, intentFilter);
+
+        // set NotificationPrevButtonClickReceiver
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("musicPlayer.broadcast.NOTIFICATION_PREV_CLICKED");
+        mNotificationPrevClickReceiver = new NotificationPrevClickReceiver();
+        registerReceiver(mNotificationPrevClickReceiver, intentFilter);
     }
 
 
@@ -306,6 +313,22 @@ public class MainActivity extends PlayActivity {
             //send the local broadcast to other activities
             Intent myIntent = new Intent("musicPlayer.broadcast.SONG_FINISHED");
             myIntent.putExtra("nextSongPos", nextSongPos);
+            mBroadcastManager.sendBroadcast(myIntent);
+        }
+    }
+
+    private class NotificationPrevClickReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(getSongInPlayer() == null)
+                return;
+
+            int prevSongPos = getPrevSongPos();
+            play(context, prevSongPos, true);
+
+            //send the local broadcast to other activities
+            Intent myIntent = new Intent("musicPlayer.broadcast.PREV_BUTTON_CLICKED");
+            myIntent.putExtra("prevSongPos", prevSongPos);
             mBroadcastManager.sendBroadcast(myIntent);
         }
     }

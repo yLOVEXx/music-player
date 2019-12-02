@@ -47,6 +47,14 @@ public class PlayerNotificationUtils {
         sNormalViews.setOnClickPendingIntent(R.id.play_button, pendingIntent);
         sBigViews.setOnClickPendingIntent(R.id.play_button, pendingIntent);
 
+        //设置 previous button点击事件
+        intent = new Intent("musicPlayer.broadcast.NOTIFICATION_PREV_CLICKED");
+        pendingIntent = PendingIntent.getBroadcast(context, 3,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        sNormalViews.setOnClickPendingIntent(R.id.previous, pendingIntent);
+        sBigViews.setOnClickPendingIntent(R.id.previous, pendingIntent);
+
         // 获取系统 通知管理 服务
         sNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
