@@ -280,7 +280,7 @@ public class DetailActivity extends PlayActivity {
             playDrawable.start();
         }
 
-        int prevSongPos = getPrevSongPos();
+        int prevSongPos = 0;
         play(this, prevSongPos);
 
         Song song = getSongInPlayer();

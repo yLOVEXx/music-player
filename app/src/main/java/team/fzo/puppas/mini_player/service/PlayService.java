@@ -16,7 +16,6 @@
 
 package team.fzo.puppas.mini_player.service;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -25,9 +24,8 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.RemoteViews;
 
-import team.fzo.puppas.mini_player.MyApplication;
+import team.fzo.puppas.mini_player.activities.MusicListActivity;
 import team.fzo.puppas.mini_player.model.Song;
 import team.fzo.puppas.mini_player.music.ProgressCounter;
 import team.fzo.puppas.mini_player.utils.MusicContentUtils;
@@ -52,8 +50,6 @@ public class PlayService extends Service {
 
     //当前歌曲在adapter中的position
     private static int sSongPos = NO_POSITION;
-    //前一首歌曲的position
-    private static int sPrevSongPos = NO_POSITION;
     //下一首歌曲的position
     private static int sNextSongPos = NO_POSITION;
 
@@ -68,8 +64,10 @@ public class PlayService extends Service {
 
     public static void play(int pos) {
         if(sSongPos == NO_POSITION || sSongPos != pos){
+            //save to the recent playlist
+            if(sSongListId != 1)
+                MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
             //为播放器设置新歌且记录旧歌
-            sPrevSongPos = sSongPos;
             sSongPos = pos;
 
             //calculate the next song will be played
@@ -109,7 +107,7 @@ public class PlayService extends Service {
         Song songInPlayer = MusicContentUtils.gSongList.get(sSongPos);
 
         sCoverImage = MusicContentUtils.getArtwork(context,
-                songInPlayer.getId(), songInPlayer.getAlbumId(), false);
+                songInPlayer.getSongId(), songInPlayer.getAlbumId(), false);
     }
 
     public static Bitmap getCoverImage(){
@@ -119,8 +117,10 @@ public class PlayService extends Service {
     public static void play(Context context, int pos) {
 
         if(sSongPos == NO_POSITION || sSongPos != pos){
+            //save to the recent playlist
+            if(sSongListId != 1)
+                MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
             //为播放器设置新歌且记录旧歌
-            sPrevSongPos = sSongPos;
             sSongPos = pos;
 
             //calculate the next song will be played
@@ -158,6 +158,8 @@ public class PlayService extends Service {
 
         PlayerNotificationUtils.sendPlayerNotification();
     }
+
+
 
     private static void resetPlayer(String path){
         try {
@@ -219,9 +221,6 @@ public class PlayService extends Service {
         return sNextSongPos;
     }
 
-    public static int getPrevSongPos(){
-        return sPrevSongPos;
-    }
 
     public static int getPosition() {
         if (sCounter != null) {

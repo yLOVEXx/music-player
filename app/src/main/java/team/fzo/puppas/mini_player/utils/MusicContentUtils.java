@@ -66,7 +66,7 @@ public class MusicContentUtils {
 
     public static void getContentFromDb(){
         int songListId = PlayService.getSongListId();
-        gSongList = LitePal.findAll(SONG_LIST_CLASS[songListId]);
+        gSongList = LitePal.order("id desc").find(SONG_LIST_CLASS[songListId]);
     }
 
     /*
@@ -93,7 +93,7 @@ public class MusicContentUtils {
                 albumId = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID));
                 isMusic = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.IS_MUSIC));
 
-                if(LitePal.find(Song.class, song.getId()) != null){
+                if(LitePal.find(Song.class, song.getSongId()) != null){
                     continue;
                 }
 
@@ -103,7 +103,7 @@ public class MusicContentUtils {
                     song.setPath(path);
                     song.setDuration(duration);
                     song.setSize(size);
-                    song.setId(id);
+                    song.setSongId(id);
                     song.setAlbumId(albumId);
                     song.setIsMusic(isMusic);
 
@@ -277,4 +277,113 @@ public class MusicContentUtils {
                 true);
         return dstbmp;
     }
+
+    public static void storeInPlaylist(Song song, int songModelIndex){
+        if(song == null)
+            return;
+
+        switch (songModelIndex){
+            case 1:
+                //历史播放最大数量为100
+                if(LitePal.count(SongInRecent.class) >= 100){
+                    LitePal.delete(SongInRecent.class, 99);
+                }
+
+                List<SongInRecent> res = LitePal.where("songId = ?", String.valueOf(song.getSongId()))
+                        .find(SongInRecent.class);
+                if(!res.isEmpty()){
+                    LitePal.deleteAll(SongInRecent.class, "songId = ?", String.valueOf(song.getSongId()));
+                }
+
+                SongInRecent songInRecent = new SongInRecent(song);
+                songInRecent.save();
+                break;
+
+            case 2:
+                if(!LitePal.where("songId = ?", String.valueOf(song.getSongId()))
+                        .find(SongInStudy.class).isEmpty())
+                    break;
+
+                SongInStudy songInStudy = new SongInStudy(song);
+                songInStudy.save();
+                break;
+
+
+            case 3:
+                if(!LitePal.where("songId = ?", String.valueOf(song.getSongId()))
+                        .find(SongInCure.class).isEmpty())
+                    break;
+
+                SongInCure songInCure = new SongInCure(song);
+                songInCure.save();
+                break;
+
+            case 4:
+                if(!LitePal.where("songId = ?", String.valueOf(song.getSongId()))
+                        .find(SongInACG.class).isEmpty())
+                    break;
+
+                SongInACG songInACG = new SongInACG(song);
+                songInACG.save();
+                break;
+
+            case 5:
+                if(!LitePal.where("songId = ?", String.valueOf(song.getSongId()))
+                        .find(SongInChinese.class).isEmpty())
+                    break;
+
+                SongInChinese songInChinese = new SongInChinese(song);
+                songInChinese.save();
+                break;
+
+            case 6:
+                if(!LitePal.where("songId = ?", String.valueOf(song.getSongId()))
+                        .find(SongInClassical.class).isEmpty())
+                    break;
+
+                SongInClassical songInClassical = new SongInClassical(song);
+                songInClassical.save();
+                break;
+
+            case 7:
+                if(!LitePal.where("songId = ?", String.valueOf(song.getSongId()))
+                        .find(SongInPop.class).isEmpty())
+                    break;
+
+                SongInPop songInPop = new SongInPop(song);
+                songInPop.save();
+                break;
+
+            case 8:
+                if(!LitePal.where("songId = ?", String.valueOf(song.getSongId()))
+                        .find(SongInLight.class).isEmpty())
+                    break;
+
+                SongInLight songInLight = new SongInLight(song);
+                songInLight.save();
+                break;
+
+            case 9:
+                if(!LitePal.where("songId = ?", String.valueOf(song.getSongId()))
+                        .find(SongInJazz.class).isEmpty())
+                    break;
+
+                SongInJazz songInJazz = new SongInJazz(song);
+                songInJazz.save();
+                break;
+
+            case 10:
+                if(!LitePal.where("songId = ?", String.valueOf(song.getSongId()))
+                        .find(SongInRap.class).isEmpty())
+                    break;
+
+                SongInRap songInRap = new SongInRap(song);
+                songInRap.save();
+                break;
+
+            default:
+                break;
+        }
+    }
+
 }

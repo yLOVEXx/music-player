@@ -5,31 +5,45 @@ import org.litepal.crud.LitePalSupport;
 
 public class Song extends LitePalSupport {
     @Column(unique = true, nullable = false)
-    private long id;           //歌曲id
+    protected long songId;           //歌曲id
 
-    private long albumId;      //专辑id
-    private long size;         //歌曲大小
-
-    @Column(defaultValue = "unkonwn")
-    private String name;
+    protected long albumId;      //专辑id
+    protected long size;         //歌曲大小
 
     @Column(defaultValue = "unkonwn")
-    private String artist;
+    protected String name;
 
-    private long duration;
+    @Column(defaultValue = "unkonwn")
+    protected String artist;
+
+    protected long duration;
 
     @Column(nullable = false)
-    private String path;
+    protected String path;
 
-    private int isMusic;
+    protected int isMusic;
 
+    public Song(){
 
-    public long getId() {
-        return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public Song(Song song){
+        this.songId = song.getSongId();
+        this.albumId = song.getAlbumId();
+        this.size = song.getSize();
+        this.name = song.getName();
+        this.artist = song.getArtist();
+        this.duration = song.getDuration();
+        this.path = song.getPath();
+        this.isMusic = song.getIsMusic();
+    }
+
+    public long getSongId() {
+        return songId;
+    }
+
+    public void setSongId(long songId) {
+        this.songId = songId;
     }
 
     public long getAlbumId() {
