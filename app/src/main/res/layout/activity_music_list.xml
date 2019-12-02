@@ -103,7 +103,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/music_list_name"
-            android:text="102 songs"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
 
         <ImageView
