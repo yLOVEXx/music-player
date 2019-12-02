@@ -26,7 +26,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -35,7 +34,6 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +43,9 @@ import org.litepal.LitePal;
 
 import java.util.List;
 
+import team.fzo.puppas.mini_player.MyApplication;
 import team.fzo.puppas.mini_player.model.MusicList;
+import team.fzo.puppas.mini_player.model.song_model.SongInRecent;
 import team.fzo.puppas.mini_player.view.MarqueeTextView;
 import team.fzo.puppas.mini_player.view.MusicCoverView;
 import team.fzo.puppas.mini_player.R;
@@ -74,6 +74,7 @@ public class MusicListActivity extends PlayActivity {
     private int mSongIndex;
     //当前加载歌单页面的id
     private static int sCurrentListId;
+    private List<Song> mCurrentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,14 +104,15 @@ public class MusicListActivity extends PlayActivity {
         getPermissionAndContent();
 
         // Set the recycler adapter
-        List<Song> currentList = LitePal.findAll(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]);
+        mCurrentList = LitePal.order("id desc").find(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]);
+
         RecyclerView recyclerView = findViewById(R.id.tracks);
         assert recyclerView != null;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new SongAdapter(this, currentList));
+        recyclerView.setAdapter(new SongAdapter(this, mCurrentList));
 
         //设置歌单信息
-        initSongListInfo(currentList.size());
+        initSongListInfo(mCurrentList.size());
     }
 
 
@@ -183,6 +185,17 @@ public class MusicListActivity extends PlayActivity {
         else{
             mPlayButtonView.setImageResource(R.drawable.ic_play_animatable);
         }
+
+        //update the recycler view
+        mCurrentList.clear();
+        mCurrentList.addAll(LitePal.order("id desc").find(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]));
+        RecyclerView recyclerView = findViewById(R.id.tracks);
+        assert recyclerView != null;
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new SongAdapter(this, mCurrentList));
+
+        //update the song number
+        mCounter.setText(mCurrentList.size() + "首");
     }
 
     public void onPlayButtonClick(View view) {
@@ -231,7 +244,8 @@ public class MusicListActivity extends PlayActivity {
                     if(LitePal.findAll(Song.class).isEmpty()) {
                         MusicContentUtils.getContentFromStorage(this);
 
-                        List<Song> currentList = LitePal.findAll(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]);
+                        List<Song> currentList = LitePal.order("id desc").
+                                find(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]);
                         RecyclerView recyclerView = findViewById(R.id.tracks);
                         assert recyclerView != null;
                         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -313,6 +327,17 @@ public class MusicListActivity extends PlayActivity {
             titleInfo.setText(info);
 
             mPlayButtonView.setImageResource(R.drawable.ic_pause_animatable);
+
+            //update the recycler view
+            mCurrentList.clear();
+            mCurrentList.addAll(LitePal.order("id desc").find(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]));
+            RecyclerView recyclerView = findViewById(R.id.tracks);
+            assert recyclerView != null;
+            recyclerView.setLayoutManager(new LinearLayoutManager(MyApplication.getContext()));
+            recyclerView.setAdapter(new SongAdapter(MyApplication.getContext(), mCurrentList));
+
+            //update the song number
+            mCounter.setText(mCurrentList.size() + "首");
         }
     }
 

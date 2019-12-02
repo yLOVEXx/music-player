@@ -23,16 +23,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import team.fzo.puppas.mini_player.MyActivityManager;
-import team.fzo.puppas.mini_player.MyApplication;
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.activities.MusicListActivity;
 import team.fzo.puppas.mini_player.model.Song;
@@ -68,7 +65,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         holder.song = mSongList.get(position);
 
         Bitmap album = MusicContentUtils.getArtwork(mContext,
-                holder.song.getId(), holder.song.getAlbumId(), true);
+                holder.song.getSongId(), holder.song.getAlbumId(), true);
         holder.mCoverView.setImageBitmap(album);
 
         holder.mTitleView.setText(holder.song.getName());
@@ -112,7 +109,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 TextView songNameView = dialogView.findViewById(R.id.song_name);
                 TextView singerNameView = dialogView.findViewById(R.id.singer_name);
                 Bitmap coverImage = MusicContentUtils.getArtwork(mContext,
-                        holder.song.getId(), holder.song.getAlbumId(), true);
+                        holder.song.getSongId(), holder.song.getAlbumId(), true);
 
                 coverView.setImageBitmap(coverImage);
                 songNameView.setText(holder.song.getName());
