@@ -91,6 +91,14 @@ public class MainActivity extends PlayActivity {
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_2:
+                        Intent intent = new Intent(MainActivity.this,MusicGradeActivity.class);
+                        startActivity(intent);
+                        break;
+                    default:
+                        break;
+                }
                 mDrawerLayout.closeDrawers();
                 return true;
             }
