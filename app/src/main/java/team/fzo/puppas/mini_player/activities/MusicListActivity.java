@@ -86,7 +86,6 @@ public class MusicListActivity extends PlayActivity {
 
         mCoverView = findViewById(R.id.cover);
         mTitleView = findViewById(R.id.title);
-        initSongListInfo();
 
         //设置播放按钮图片
         if(isPlaying()){
@@ -109,16 +108,23 @@ public class MusicListActivity extends PlayActivity {
         assert recyclerView != null;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new SongAdapter(this, currentList));
+
+        //设置歌单信息
+        initSongListInfo(currentList.size());
     }
 
 
-    private void initSongListInfo(){
+    private void initSongListInfo(int songNum){
         mMusicListName = findViewById(R.id.music_list_name);
         mCounter = findViewById(R.id.counter);
 
         MusicList list = LitePal.where("musicListId = ?", String.valueOf(sCurrentListId)).
                 find(MusicList.class).get(0);
         mMusicListName.setText(list.getMusicListName());
+
+        list.setSongNum(songNum);
+        list.save();
+        mCounter.setText(songNum + "首");
     }
 
     private void initCover(){

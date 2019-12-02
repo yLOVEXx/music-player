@@ -15,8 +15,9 @@ public class MusicList extends LitePalSupport {
     @Column(defaultValue = "unkonwn")
     private String musicListName;       //歌单名字
 
-    public MusicList() {
-    }
+    @Column(defaultValue = "0")
+    private int songNum;                //歌曲数目
+
 
     public String getMusicListName(){
         return musicListName;
@@ -50,6 +51,13 @@ public class MusicList extends LitePalSupport {
         this.selectedStatus = selectedStatus;
     }
 
+    public int getSongNum() {
+        return songNum;
+    }
+
+    public void setSongNum(int songNum) {
+        this.songNum = songNum;
+    }
 }
 
 
