@@ -189,10 +189,10 @@ public class MainActivity extends PlayActivity {
         //设置contentView
         View contentView = LayoutInflater.from(MainActivity.this).inflate(R.layout.popup_list, null);
         mPopWindow = new PopupWindow(contentView,
-                DrawerLayout.LayoutParams.FILL_PARENT, 425
+                DrawerLayout.LayoutParams.FILL_PARENT, 475
                 , true);
         mPopWindow.setContentView(contentView);
-        bgAlpha(0.3f);
+        bgAlpha(0.1f);
 
         mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override

@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="226dp"
         android:scaleType="centerCrop"
-        app:layout_heightPercent="29%"
         app:srcCompat="@drawable/manage_music_list_pic" />
 
     <android.support.v7.widget.Toolbar
