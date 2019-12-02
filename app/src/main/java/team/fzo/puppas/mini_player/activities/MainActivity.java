@@ -94,7 +94,7 @@ public class MainActivity extends PlayActivity {
                 switch (item.getItemId()) {
                     case R.id.nav_2:
                         Intent intent = new Intent(MainActivity.this,MusicGradeActivity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent,2);
                         break;
                     default:
                         break;
@@ -283,7 +283,11 @@ public class MainActivity extends PlayActivity {
                     musicListAdapter.notifyDataSetChanged();
                 }
                 break;
-
+            case 2:
+                if(resultCode == RESULT_OK){
+                    mNavigationView.setCheckedItem(R.id.nav_1);
+                }
+                break;
             default:
         }
     }
