@@ -109,7 +109,7 @@ public class PlayerNotificationUtils {
         sBigViews.setTextViewText(R.id.singer_name, song.getArtist());
 
         Bitmap coverImage = MusicContentUtils.getArtwork(MyApplication.getContext(),
-                song.getId(), song.getAlbumId(), true);
+                song.getSongId(), song.getAlbumId(), true);
 
         sNormalViews.setImageViewBitmap(R.id.cover, coverImage);
         sBigViews.setImageViewBitmap(R.id.cover, coverImage);

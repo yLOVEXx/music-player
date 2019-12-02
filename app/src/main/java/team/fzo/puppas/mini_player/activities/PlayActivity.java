@@ -170,10 +170,6 @@ public abstract class PlayActivity extends AppCompatActivity {
         return PlayService.getNextSongPos();
     }
 
-    protected int getPrevSongPos(){
-        return PlayService.getPrevSongPos();
-    }
-
     protected int getSongPos(){
         return PlayService.getSongPos();
     }
