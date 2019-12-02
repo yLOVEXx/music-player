@@ -26,6 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
 
                 <action android:name="musicPlayer.broadcast.NOTIFICATION_NEXT_CLICKED" />
+                <action android:name="musicPlayer.broadcast.NOTIFICATION_PREV_CLICKED" />
                 <action android:name="musicPlayer.broadcast.NOTIFICATION_PLAY_BUTTON_CLICKED" />
             </intent-filter>
         </activity>
@@ -37,6 +38,7 @@
                 <action android:name="musicPlayer.broadcast.SONG_SELECTED" />
                 <action android:name="musicPlayer.broadcast.SONG_FINISHED" />
                 <action android:name="musicPlayer.broadcast.PLAY_BUTTON_CLICKED" />
+                <action android:name="musicPlayer.broadcast.PREV_BUTTON_CLICKED" />
             </intent-filter>
         </activity>
         <activity
@@ -46,6 +48,7 @@
             <intent-filter>
                 <action android:name="musicPlayer.broadcast.SONG_FINISHED" />
                 <action android:name="musicPlayer.broadcast.PLAY_BUTTON_CLICKED" />
+                <action android:name="musicPlayer.broadcast.PREV_BUTTON_CLICKED" />
             </intent-filter>
         </activity>
 

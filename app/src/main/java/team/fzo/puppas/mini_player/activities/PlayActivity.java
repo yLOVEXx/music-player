@@ -146,6 +146,10 @@ public abstract class PlayActivity extends AppCompatActivity {
         PlayService.play(context, pos);
     }
 
+    protected void play(Context context, int pos, boolean isBack){
+        PlayService.play(context, pos, isBack);
+    }
+
     protected void seekTo(int pos){
         PlayService.seekTo(pos);
     }
@@ -158,6 +162,10 @@ public abstract class PlayActivity extends AppCompatActivity {
         PlayService.restart();
     }
 
+    protected static int getPlayMode(){
+        return PlayService.getPlayMode();
+    }
+
     protected void setPlayMode(int mode){
         PlayService.setPlayMode(mode);
     }
@@ -168,6 +176,10 @@ public abstract class PlayActivity extends AppCompatActivity {
 
     protected int getNextSongPos(){
         return PlayService.getNextSongPos();
+    }
+
+    protected int getPrevSongPos(){
+        return PlayService.getPrevSongPos();
     }
 
     protected int getSongPos(){

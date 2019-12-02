@@ -36,6 +36,8 @@ import android.widget.Toast;
 import com.jaygoo.widget.OnRangeChangedListener;
 import com.jaygoo.widget.RangeSeekBar;
 
+import java.util.Random;
+
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.adapter.TransitionAdapter;
 import team.fzo.puppas.mini_player.model.Song;
@@ -55,6 +57,7 @@ public class DetailActivity extends PlayActivity {
     private boolean mIsSeekBarTracking;
 
     private SongFinishedReceiver mSongFinishedReceiver;
+    private PrevButtonClickedReceiver mPrevButtonClickedReceiver;
     private PlayButtonClickedReceiver mPlayButtonClickedReceiver;
     private LocalBroadcastManager mBroadcastManager;
 
@@ -149,6 +152,11 @@ public class DetailActivity extends PlayActivity {
         intentFilter.addAction("musicPlayer.broadcast.PLAY_BUTTON_CLICKED");
         mPlayButtonClickedReceiver = new PlayButtonClickedReceiver();
         mBroadcastManager.registerReceiver(mPlayButtonClickedReceiver, intentFilter);
+
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("musicPlayer.broadcast.PREV_BUTTON_CLICKED");
+        mPrevButtonClickedReceiver = new PrevButtonClickedReceiver();
+        mBroadcastManager.registerReceiver(mPrevButtonClickedReceiver, intentFilter);
     }
 
     //设置seekbar的参数与监听事件
@@ -280,8 +288,9 @@ public class DetailActivity extends PlayActivity {
             playDrawable.start();
         }
 
-        int prevSongPos = 0;
-        play(this, prevSongPos);
+        //get the previous track
+        int prevSongPos = getPrevSongPos();
+        play(this, prevSongPos, true);
 
         Song song = getSongInPlayer();
         String info = song.getName() + " - " + song.getArtist();
@@ -321,6 +330,35 @@ public class DetailActivity extends PlayActivity {
         }
     }
 
+    private class PrevButtonClickedReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            AnimatedVectorDrawable playDrawable = (AnimatedVectorDrawable)mPlayButtonView.getDrawable();
+            if(!isPlaying()){
+                playDrawable.registerAnimationCallback(new PlayButtonAnimation(false));
+                if(mCoverView.isStarted()) {
+                    mCoverView.resume();
+                }
+                else{
+                    mCoverView.start();
+                }
+                playDrawable.start();
+            }
+
+            int prevSongPos = intent.getIntExtra("prevSongPos",0);
+            Song song = MusicContentUtils.gSongList.get(prevSongPos);
+
+            String info = song.getName() + " - " + song.getArtist();
+            mTitleView.setText(info);
+
+            mCoverImage = PlayService.getCoverImage();
+            mCoverImage = imageScale(mCoverImage, 900, 900);
+            mCoverView.setImageBitmap(mCoverImage);
+
+            mSeekBar.setRange(0, getDuration());
+        }
+    }
+
     private class PlayButtonClickedReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -349,12 +387,11 @@ public class DetailActivity extends PlayActivity {
     }
 
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mBroadcastManager.unregisterReceiver(mSongFinishedReceiver);
         mBroadcastManager.unregisterReceiver(mPlayButtonClickedReceiver);
+        mBroadcastManager.unregisterReceiver(mPrevButtonClickedReceiver);
     }
 }
