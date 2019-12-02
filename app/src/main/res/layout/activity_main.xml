@@ -64,7 +64,7 @@
                 android:id="@+id/playlist"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@id/music_image"
+                android:layout_below="@id/music_image_grade"
                 android:gravity="center_vertical"
                 android:padding="@dimen/activity_vertical_margin"
                 android:transitionGroup="true"

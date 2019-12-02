@@ -7,9 +7,27 @@
 
     <declare-styleable name="PlayButton">
         <attr name="mode" format="enum">
-            <enum name="play" value="0" />
-            <enum name="pause" value="1" />
+            <enum name="play" value="0"/>
+            <enum name="pause" value="1"/>
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="ProgressBar">
+        <attr name= "progressIndicator" format="reference"></attr>
+        <attr name= "offset" format ="dimension"></attr>
+        <attr name= "textSize" format ="dimension"></attr>
+        <attr name= "textColor" format="reference|color"></attr>
+        <attr name= "textStyle">
+            <flag name= "normal" value ="0"/>
+            <flag name= "bold" value ="1"/>
+            <flag name= "italic" value ="2"/>
+        </attr>
+        <attr name= "textAlign">
+            <flag name="left" value ="0"/>
+            <flag name="center" value ="1"/>
+            <flag name="right" value ="2"/>
+        </attr>
+    </declare-styleable >
+
 
 </resources>

@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import org.litepal.LitePal;
 import java.util.List;
 import team.fzo.puppas.mini_player.R;
@@ -24,7 +23,7 @@ public class ManageMusicListActivity extends PlayActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_music_list);
-        mFloatingActionButton = findViewById(R.id.floatingActionButton);
+        mFloatingActionButton = findViewById(R.id.floatingActionButton1);
         mMusicLists = LitePal.findAll(MusicList.class);
 
         mAllMusicLists = LitePal.findAll(MusicList.class);

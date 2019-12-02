@@ -92,6 +92,14 @@ public class MainActivity extends PlayActivity {
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nav_2:
+                        Intent intent = new Intent(MainActivity.this,MusicGradeActivity.class);
+                        startActivityForResult(intent,2);
+                        break;
+                    default:
+                        break;
+                }
                 mDrawerLayout.closeDrawers();
                 return true;
             }
@@ -282,7 +290,11 @@ public class MainActivity extends PlayActivity {
                     musicListAdapter.notifyDataSetChanged();
                 }
                 break;
-
+            case 2:
+                if(resultCode == RESULT_OK){
+                    mNavigationView.setCheckedItem(R.id.nav_1);
+                }
+                break;
             default:
         }
     }

@@ -8,19 +8,19 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="226dp"
+        android:layout_height="224dp"
         android:scaleType="centerCrop"
-        app:srcCompat="@drawable/manage_music_list_pic" />
+        app:srcCompat="@drawable/music_grade_pic" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/imageView"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:gravity="center"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="推荐歌单">
+        app:title="歌曲等级">
     </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.CoordinatorLayout
@@ -29,7 +29,7 @@
         android:layout_below="@+id/toolbar">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/manage_recycler_view"
+            android:id="@+id/music_grade_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none">
@@ -44,7 +44,7 @@
             android:layout_margin="20dp"
             android:clickable="true"
             android:scrollbarSize="4dp"
-            android:src="@drawable/ic_ok"
+            android:src="@drawable/ic_back"
             app:elevation="6dp" />
     </android.support.design.widget.CoordinatorLayout>
 

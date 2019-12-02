@@ -4,22 +4,26 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_1"
-            android:icon="@drawable/ic_mall"
-            android:title="商城" />
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="主页" />
         <item
         android:id="@+id/nav_2"
-        android:icon="@drawable/ic_moon"
+        android:icon="@drawable/ic_grade"
             android:title="我的音乐等级" />
         <item
             android:id="@+id/nav_3"
-            android:icon="@drawable/ic_theme_black"
-            android:title="主题" />
+            android:icon="@drawable/ic_mall"
+            android:title="商城" />
         <item
         android:id="@+id/nav_4"
         android:icon="@drawable/ic_clock"
             android:title="定时关闭"/>
         <item
-        android:id="@+id/nav_5"
+            android:id="@+id/nav_5"
+            android:icon="@drawable/ic_theme_black"
+            android:title="主题" />
+        <item
+        android:id="@+id/nav_6"
         android:icon="@drawable/ic_close"
             android:title="退出" />
 

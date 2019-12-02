@@ -35,7 +35,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
         public ViewHolder(View view){
             super(view);
             mView = view;
-            mMusicImage = view.findViewById(R.id.music_image);
+            mMusicImage = view.findViewById(R.id.music_image_grade);
             mMusicName = view.findViewById(R.id.music_name);
         }
     }

@@ -36,8 +36,9 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
 
+
     //avoid the incompatible problem
-    implementation ('com.github.Jay-Goo:RangeSeekBar:v3.0.0') {
+    implementation('com.github.Jay-Goo:RangeSeekBar:v3.0.0') {
         exclude group: 'com.android.support'
     }
 }
