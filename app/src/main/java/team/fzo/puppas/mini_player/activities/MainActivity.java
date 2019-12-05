@@ -97,6 +97,10 @@ public class MainActivity extends PlayActivity {
                         Intent intent = new Intent(MainActivity.this,MusicGradeActivity.class);
                         startActivityForResult(intent,2);
                         break;
+                    case R.id.nav_4:
+                        Intent intent1 = new Intent(MainActivity.this,SearchActivity.class);
+                        startActivityForResult(intent1,2);
+                        break;
                     default:
                         break;
                 }

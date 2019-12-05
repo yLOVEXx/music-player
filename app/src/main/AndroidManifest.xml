@@ -13,10 +13,13 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MusicGradeActivity"></activity>
+        <activity android:name=".activities.SearchActivity"
+            android:theme="@style/AppTheme">
+        </activity>
+        <activity android:name=".activities.MusicGradeActivity" />
         <activity
             android:name=".activities.ManageMusicListActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme">
@@ -56,7 +59,7 @@
             android:name=".service.PlayService"
             android:enabled="true"
             android:exported="false"
-            android:priority="1000"></service>
+            android:priority="1000" />
 
         <receiver
             android:name=".broadcast_receiver.NotificationClickReceiver"
