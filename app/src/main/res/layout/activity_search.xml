@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#5C1D1A1A"
+        android:gravity="center"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="扫描本地音乐"></android.support.v7.widget.Toolbar>
+
+    <team.fzo.puppas.mini_player.view.RadarView
+        android:id="@+id/radar"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="75dp"
+        app:circleColor="#F83939"
+        app:circleNum="4"
+        app:flicker="3"
+        app:raindropNum="4"
+        app:showCross="true"
+        app:speed="5"
+        app:sweepColor="#F83939" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:scrollbars="horizontal">
+
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:text="全盘扫描" />
+
+        <Button
+            android:id="@+id/btn_stop"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:text="返回" />
+    </LinearLayout>
+
+</LinearLayout>

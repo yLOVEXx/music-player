@@ -97,6 +97,10 @@ public class MainActivity extends PlayActivity {
                         Intent intent = new Intent(MainActivity.this,MusicGradeActivity.class);
                         startActivityForResult(intent,2);
                         break;
+                    case R.id.nav_4:
+                        Intent intent1 = new Intent(MainActivity.this,SearchActivity.class);
+                        startActivityForResult(intent1,2);
+                        break;
                     default:
                         break;
                 }
@@ -120,8 +124,8 @@ public class MainActivity extends PlayActivity {
         if(LitePal.findAll(MusicList.class).isEmpty())
             MusicListUtils.getListContent();
 
-        mSelectedMusicLists = LitePal.where("selectedStatus = ?","1").find(MusicList.class);
-
+        mSelectedMusicLists = LitePal.findAll(MusicList.class);
+        initMusicList();
         RecyclerView recyclerView = findViewById(R.id.recycle_view);
         assert recyclerView != null;
         musicListAdapter = new MusicListAdapter(mSelectedMusicLists,this);
@@ -276,6 +280,10 @@ public class MainActivity extends PlayActivity {
     //初始化歌单列表
     public void initMusicList(){
         mSelectedMusicLists.clear();
+        mSelectedMusicLists.addAll(
+                LitePal.where("MusicListId = ?","0").find(MusicList.class));
+        mSelectedMusicLists.addAll(
+                LitePal.where("MusicListId = ?","1").find(MusicList.class));
         mSelectedMusicLists.addAll(
                 LitePal.where("selectedStatus = ?","1").find(MusicList.class));
     }
