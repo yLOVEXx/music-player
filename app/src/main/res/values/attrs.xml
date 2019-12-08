@@ -28,6 +28,4 @@
             <flag name="right" value ="2"/>
         </attr>
     </declare-styleable >
-
-
 </resources>

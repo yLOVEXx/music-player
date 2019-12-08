@@ -40,13 +40,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         </LinearLayout>
-<!--
-        <TextView
-            android:id="@+id/duration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/inner_padding"
-            android:textAppearance="@style/TextAppearance.AppCompat.Caption" /> -->
     </LinearLayout>
 
 </FrameLayout>

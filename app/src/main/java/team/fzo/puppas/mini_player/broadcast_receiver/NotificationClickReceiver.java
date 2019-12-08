@@ -28,7 +28,9 @@ public class NotificationClickReceiver extends BroadcastReceiver {
         String currentActivityName = "activities.MusicListActivity";
 
         if(currentActivity.getLocalClassName().equals(currentActivityName)){
-
+            /*
+            当前Activity为MusicListActivity时，采用转场动画的方式打开DetailActivity
+             */
             View coverView = currentActivity.findViewById(R.id.cover);
             View titleView = currentActivity.findViewById(R.id.title);
             View timeView = currentActivity.findViewById(R.id.time);
