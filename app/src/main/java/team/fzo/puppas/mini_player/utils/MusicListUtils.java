@@ -22,9 +22,9 @@ public class MusicListUtils {
     //加载所有歌单到数据库
     public static void getListContent(){
         MusicList list;
-        sInitStatus[0] = 1;
-        sInitStatus[1] = 1;
-        for(int i = 2; i < sInitStatus.length; i++){
+       sInitStatus[0] = 1;
+       sInitStatus[1] = 1;
+        for(int i = 0; i < sInitStatus.length; i++){
             sInitStatus[i] = 0;
         }
 

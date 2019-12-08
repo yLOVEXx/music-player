@@ -280,6 +280,10 @@ public class MainActivity extends PlayActivity {
     //初始化歌单列表
     public void initMusicList(){
         mSelectedMusicLists.clear();
+        //mSelectedMusicLists.addAll(
+        //        LitePal.where("MusicListId = ?","0").find(MusicList.class));
+       // mSelectedMusicLists.addAll(
+       //         LitePal.where("MusicListId = ?","1").find(MusicList.class));
         mSelectedMusicLists.addAll(
                 LitePal.where("selectedStatus = ?","1").find(MusicList.class));
     }
