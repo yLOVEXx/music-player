@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/playlist_item_height"
+    android:layout_marginTop="5dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/playlist_picture"
+        android:layout_width="@dimen/cover_size_mini"
+        android:layout_height="@dimen/cover_size_mini"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/playlist_name"
+        android:layout_marginStart="@dimen/playlist_item_inner_margin"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:singleLine="true"
+        android:textColor="@color/white"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <net.igenius.customcheckbox.CustomCheckBox
+        android:id="@+id/check_box"
+        android:layout_width="@dimen/check_box_size"
+        android:layout_height="@dimen/check_box_size"
+        android:layout_marginStart="@dimen/playlist_item_inner_margin"
+        android:layout_marginTop="5dp"
+        app:color_checked="@color/colorAccent"
+        app:color_tick="@color/white"
+        app:color_unchecked_stroke="@color/colorPrimaryDark"
+        app:small_tick="false" />
+</LinearLayout>
+

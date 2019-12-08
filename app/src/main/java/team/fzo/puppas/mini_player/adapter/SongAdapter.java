@@ -22,17 +22,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.litepal.LitePal;
+
 import team.fzo.puppas.mini_player.MyActivityManager;
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.activities.MusicListActivity;
+import team.fzo.puppas.mini_player.model.MusicList;
 import team.fzo.puppas.mini_player.model.Song;
+import team.fzo.puppas.mini_player.utils.DensityUtils;
 import team.fzo.puppas.mini_player.utils.MusicContentUtils;
 import team.fzo.puppas.mini_player.service.PlayService;
 
@@ -103,7 +109,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
             public void onClick(View view) {
                 Activity currentActivity = MyActivityManager.getInstance().getCurrentActivity();
                 View  dialogView = currentActivity.getLayoutInflater().inflate(
-                        R.layout.song_detail_info,null);
+                        R.layout.dialog_song_detail_info,null);
 
                 ImageView coverView = dialogView.findViewById(R.id.cover);
                 TextView songNameView = dialogView.findViewById(R.id.song_name);
@@ -116,9 +122,44 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 singerNameView.setText(holder.song.getArtist());
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setView(dialogView);
-                builder.create();
-                builder.show();
+                AlertDialog dialog = builder.setView(dialogView).create();
+                dialog.show();
+
+                setOnAddToPlaylistClickListener(dialog);
+            }
+        });
+    }
+
+    private void setOnAddToPlaylistClickListener(final AlertDialog songDetailDialog){
+        songDetailDialog.getWindow().findViewById(R.id.add_to_playlist).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Activity currentActivity = MyActivityManager.getInstance().getCurrentActivity();
+                View  playlistDialogView = currentActivity.getLayoutInflater().inflate(
+                        R.layout.dialog_add_to_playlist,null);
+
+                List<MusicList> selectedPlaylist = LitePal.where("selectedStatus = ?","1").find(MusicList.class);
+                RecyclerView recyclerView = playlistDialogView.findViewById(R.id.playlist);
+                assert recyclerView != null;
+                recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+                recyclerView.setAdapter(new PlaylistInAddDialogAdapter(selectedPlaylist, mContext));
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                AlertDialog playlistDialog = builder.setView(playlistDialogView).create();
+                playlistDialog.show();
+
+                //set the maxHeight of recyclerView
+                ViewGroup.LayoutParams lp = recyclerView.getLayoutParams();
+                int item_num = mContext.getResources().getInteger(R.integer.max_item_in_add_playlist_dialog);
+                int item_height = mContext.getResources().getDimensionPixelSize(R.dimen.playlist_item_height);
+                if (selectedPlaylist.size() > item_num) {
+                    lp.height = item_height * item_num;
+                } else {
+                    lp.height = item_height * selectedPlaylist.size();
+                }
+                recyclerView.setLayoutParams(lp);
+
+                songDetailDialog.dismiss();
             }
         });
     }

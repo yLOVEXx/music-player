@@ -68,6 +68,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/add_to_playlist"
         android:layout_width="match_parent"
         android:layout_height="@dimen/song_detail_dialog_item_height"
         android:paddingTop="@dimen/song_detail_dialog_item_padding"
