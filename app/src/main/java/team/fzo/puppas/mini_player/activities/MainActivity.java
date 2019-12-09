@@ -94,13 +94,20 @@ public class MainActivity extends PlayActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_2:
+                        Intent intent1 = new Intent(MainActivity.this,LoginActivity.class);
+                        startActivityForResult(intent1,2);
+                        break;
+
+                    case R.id.nav_3:
                         Intent intent = new Intent(MainActivity.this,MusicGradeActivity.class);
                         startActivityForResult(intent,2);
                         break;
-                    case R.id.nav_4:
-                        Intent intent1 = new Intent(MainActivity.this,SearchActivity.class);
-                        startActivityForResult(intent1,2);
+
+                    case R.id.nav_5:
+                        Intent intent2 = new Intent(MainActivity.this,SearchActivity.class);
+                        startActivityForResult(intent2,2);
                         break;
+
                     default:
                         break;
                 }
