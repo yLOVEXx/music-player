@@ -13,9 +13,35 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.SearchActivity"
-            android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.LoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="登录"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>
+        <activity
+            android:name=".activities.RegisterActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="注册"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".activities.ForgetPwdActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="密码找回"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
+            android:name=".activities.SearchActivity"
+            android:theme="@style/AppTheme"></activity>
         <activity android:name=".activities.MusicGradeActivity" />
         <activity
             android:name=".activities.ManageMusicListActivity"
