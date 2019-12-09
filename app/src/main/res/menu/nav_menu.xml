@@ -8,7 +8,7 @@
             android:title="主页" />
         <item
             android:id="@+id/nav_2"
-            android:icon="@drawable/ic_grade"
+            android:icon="@drawable/ic_login"
             android:title="登录" />
         <item
             android:id="@+id/nav_3"
