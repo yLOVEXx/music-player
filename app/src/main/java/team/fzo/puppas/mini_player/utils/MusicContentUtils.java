@@ -116,6 +116,7 @@ public class MusicContentUtils {
         cursor.close();
     }
 
+
     //    转换歌曲时间的格式
     public static String formatTime(long time) {
         String ft;
