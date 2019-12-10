@@ -101,9 +101,6 @@ public class MusicListActivity extends PlayActivity {
         initBroadcastManager();
         mSongIndex = -1;
 
-        //获取读取sd卡的权限
-        getPermissionAndContent();
-
         // Set the recycler adapter
         mCurrentList = LitePal.order("id desc").find(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]);
 
@@ -223,49 +220,6 @@ public class MusicListActivity extends PlayActivity {
         }
     }
 
-
-
-    private void getPermissionAndContent(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
-            PackageManager.PERMISSION_GRANTED){
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-        }
-        else{
-            if(LitePal.findAll(Song.class).isEmpty()) {
-                MusicContentUtils.getContentFromStorage(this);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode){
-            case 1:
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if(LitePal.findAll(Song.class).isEmpty()) {
-                        MusicContentUtils.getContentFromStorage(this);
-
-                        List<Song> currentList = LitePal.order("id desc").
-                                find(MusicContentUtils.SONG_LIST_CLASS[sCurrentListId]);
-                        RecyclerView recyclerView = findViewById(R.id.tracks);
-                        assert recyclerView != null;
-                        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                        recyclerView.setAdapter(new SongAdapter(this, currentList));
-                    }
-                }
-                else{
-                    Toast.makeText(this, "您拒绝了请求", Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            default:
-        }
-    }
 
     public void onPaneClick(View view) {
         if(PlayService.getSongInPlayer() != null){
