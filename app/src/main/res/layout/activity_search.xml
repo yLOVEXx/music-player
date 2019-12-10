@@ -38,15 +38,20 @@
 
         <Button
             android:id="@+id/btn_start"
-            android:layout_width="360dp"
-            android:layout_height="wrap_content"
-            android:text="全盘扫描" />
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="24dp"
+            android:background="@drawable/bg_login_submit"
+            android:elevation="0dp"
+            android:gravity="center"
+            android:outlineProvider="none"
+            android:text="全盘扫描"
+            android:textColor="@color/white"
+            android:textSize="@dimen/font_18"
+            android:translationZ="0dp" />
 
-        <Button
-            android:id="@+id/btn_stop"
-            android:layout_width="360dp"
-            android:layout_height="wrap_content"
-            android:text="返回" />
     </LinearLayout>
 
 </LinearLayout>

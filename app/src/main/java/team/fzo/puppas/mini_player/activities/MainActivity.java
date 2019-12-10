@@ -45,7 +45,7 @@ public class MainActivity extends PlayActivity {
     private CustomBanner<Integer> mBanner;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
-    private NavigationView mNavigationView;
+    public static NavigationView mNavigationView;
     private PopupWindow mPopWindow;
     private MusicListAdapter musicListAdapter;
     private SwipeRefreshLayout mSwipeRefresh;
@@ -105,7 +105,7 @@ public class MainActivity extends PlayActivity {
 
                     case R.id.nav_5:
                         Intent intent2 = new Intent(MainActivity.this,SearchActivity.class);
-                        startActivityForResult(intent2,2);
+                        startActivity(intent2);
                         break;
 
                     default:

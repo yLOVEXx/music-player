@@ -34,6 +34,7 @@
     <string name="retrieve_pwd_email_label"><a>点击这里</a></string>
     <string name="reset_pwd_hint">请输入至少六位新密码</string>
     <string name="register_pwd_hint">请输入至少六位数密码</string>
+    <string name="register_pwd2_hint">请再次输入密码</string>
     <string name="reset_pwd_submit">确认</string>
     <string name="message_pwd_error">密码错误</string>
     <string name="message_username_null">用户名未填写！！！</string>
