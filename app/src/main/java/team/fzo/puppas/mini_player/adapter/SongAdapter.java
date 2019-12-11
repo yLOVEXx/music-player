@@ -82,7 +82,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(position == PlayService.getSongPos() && PlayService.isPlaying()){
+                if(MusicListActivity.getCurrentListId() == PlayService.getSongListId() &&
+                        position == PlayService.getSongPos() && PlayService.isPlaying()){
                     //如果重复点击则忽略
                     return;
                 }
