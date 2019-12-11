@@ -50,7 +50,6 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
 
@@ -104,6 +103,7 @@ public class SearchActivity extends AppCompatActivity {
             MainActivity.mNavigationView.setCheckedItem(R.id.nav_1);
             radarView.stop();
             moveTaskToBack(true);
+            //finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -411,7 +412,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else {
             mToast = Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT);
         }
-
         mToast.show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {//如果返回键按下
+            //此处写退向后台的处理
+            MainActivity.mNavigationView.setCheckedItem(R.id.nav_1);
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
