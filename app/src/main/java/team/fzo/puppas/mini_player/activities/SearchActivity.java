@@ -39,7 +39,6 @@ public class SearchActivity extends AppCompatActivity {
 
         radarView = findViewById(R.id.radar);
         startButton = findViewById(R.id.btn_start);
-        stopButton = findViewById(R.id.btn_stop);
         scanFlag = false;
 
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -51,16 +50,8 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                radarView.stop();
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
     }
+
 
     private void getPermissionAndContent(){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
@@ -109,7 +100,10 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode == KeyEvent.KEYCODE_BACK && scanFlag){
+            MainActivity.mNavigationView.setCheckedItem(R.id.nav_1);
+            radarView.stop();
             moveTaskToBack(true);
+            //finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);
