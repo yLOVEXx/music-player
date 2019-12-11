@@ -78,7 +78,7 @@ public class PlayService extends Service {
     }
 
     public static void play(int pos) {
-        if(sSongPos == NO_POSITION || sSongPos != pos){
+        if(sSongPos != pos){
             //save to the recent playlist
             if(sSongListId != 1)
                 MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
@@ -124,7 +124,7 @@ public class PlayService extends Service {
 
     public static void play(Context context, int pos) {
 
-        if(sSongPos == NO_POSITION || sSongPos != pos){
+        if(sSongPos != pos){
             //save to the recent playlist
             if(sSongListId != 1)
                 MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
@@ -206,7 +206,7 @@ public class PlayService extends Service {
     }
 
     public static void play(Context context, int pos, boolean isBack){
-        if(sSongPos == NO_POSITION || sSongPos != pos){
+        if(sSongPos != pos){
             //save to the recent playlist
             if(sSongListId != 1)
                 MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
