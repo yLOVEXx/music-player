@@ -78,7 +78,7 @@ public class PlayService extends Service {
     }
 
     public static void play(int pos) {
-        if(sSongPos == NO_POSITION || sSongPos != pos){
+        if(sSongPos != pos){
             //save to the recent playlist
             if(sSongListId != 1)
                 MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
@@ -107,15 +107,22 @@ public class PlayService extends Service {
             PlayerNotificationUtils.setRemoteViews(songInPlayer, true);
         }
         else{
-            if(!isPlaying()){
+            if(!isPlaying() && getPosition() < getDuration()){
                 //当前播放的歌曲处于暂停状态，重新启动播放器
                 sPlayer.start();
                 sCounter.restart();
                 PlayerNotificationUtils.setRemoteViews(true);
             }
+            else if(getPosition() >= getDuration()){
+                //当前歌曲播放完毕且下一首歌曲还为此歌曲
+                resetPlayer(getSongInPlayer().getPath());
+                sPlayer.start();
+                resetCounter((int)(getSongInPlayer().getDuration() / 1000));
+                sCounter.start();
 
-            if(sPlayMode == LIST_SHUFFLE){
-                sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+                if(sPlayMode == LIST_SHUFFLE){
+                    sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+                }
             }
         }
 
@@ -124,7 +131,7 @@ public class PlayService extends Service {
 
     public static void play(Context context, int pos) {
 
-        if(sSongPos == NO_POSITION || sSongPos != pos){
+        if(sSongPos != pos){
             //save to the recent playlist
             if(sSongListId != 1)
                 MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
@@ -155,24 +162,65 @@ public class PlayService extends Service {
             PlayerNotificationUtils.setRemoteViews(songInPlayer, true);
         }
         else{
-            if(!isPlaying()){
+            if(!isPlaying() && getPosition() < getDuration()){
                 //当前播放的歌曲处于暂停状态，重新启动播放器
                 sPlayer.start();
                 sCounter.restart();
-
                 PlayerNotificationUtils.setRemoteViews(true);
             }
+            else if(getPosition() >= getDuration()){
+                //当前歌曲播放完毕且下一首歌曲还为此歌曲
+                resetPlayer(getSongInPlayer().getPath());
+                sPlayer.start();
+                resetCounter((int)(getSongInPlayer().getDuration() / 1000));
+                sCounter.start();
 
-            if(sPlayMode == LIST_SHUFFLE){
-                sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+                if(sPlayMode == LIST_SHUFFLE){
+                    sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+                }
             }
         }
 
         PlayerNotificationUtils.sendPlayerNotification();
     }
 
+
+    //当播放不同歌单的歌曲时调用此版本
+    public static void play(Context context, int pos, int newSongListId){
+        //save to the recent playlist
+        if(sSongListId != 1)
+            MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
+
+        sSongListId = newSongListId;
+        MusicContentUtils.getContentFromDb();
+
+        //clear history record
+        sHistoryRecord.clear();
+
+        sSongPos = pos;
+        //calculate the next song will be played
+        if(sPlayMode == LIST_REPEAT){
+            sNextSongPos = sSongPos == MusicContentUtils.gSongList.size() - 1 ? 0 : sSongPos + 1;
+        }
+        else if(sPlayMode == LIST_SHUFFLE){
+            sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+        }
+
+        setCoverImage(context);
+
+        Song songInPlayer = MusicContentUtils.gSongList.get(sSongPos);
+        resetPlayer(songInPlayer.getPath());
+        sPlayer.start();
+
+        resetCounter((int)(songInPlayer.getDuration() / 1000));
+        sCounter.start();
+
+        PlayerNotificationUtils.setRemoteViews(songInPlayer, true);
+        PlayerNotificationUtils.sendPlayerNotification();
+    }
+
     public static void play(Context context, int pos, boolean isBack){
-        if(sSongPos == NO_POSITION || sSongPos != pos){
+        if(sSongPos != pos){
             //save to the recent playlist
             if(sSongListId != 1)
                 MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
@@ -203,16 +251,22 @@ public class PlayService extends Service {
             PlayerNotificationUtils.setRemoteViews(songInPlayer, true);
         }
         else{
-            if(!isPlaying()){
+            if(!isPlaying() && getPosition() < getDuration()){
                 //当前播放的歌曲处于暂停状态，重新启动播放器
                 sPlayer.start();
                 sCounter.restart();
-
                 PlayerNotificationUtils.setRemoteViews(true);
             }
+            else if(getPosition() >= getDuration()){
+                //当前歌曲播放完毕且下一首歌曲还为此歌曲
+                resetPlayer(getSongInPlayer().getPath());
+                sPlayer.start();
+                resetCounter((int)(getSongInPlayer().getDuration() / 1000));
+                sCounter.start();
 
-            if(sPlayMode == LIST_SHUFFLE){
-                sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+                if(sPlayMode == LIST_SHUFFLE){
+                    sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+                }
             }
         }
 

@@ -47,14 +47,12 @@ public class ProgressCounter extends Thread {
                 sleep(1000);    //sleep 1s
             }
 
-            if(mPosition == mDuration){
-                int nextSongPos = PlayService.getNextSongPos();
-                PlayService.play(MyApplication.getContext(), nextSongPos);
+            int nextSongPos = PlayService.getNextSongPos();
+            PlayService.play(MyApplication.getContext(), nextSongPos);
 
-                Intent intent = new Intent("musicPlayer.broadcast.SONG_FINISHED");
-                intent.putExtra("nextSongPos", nextSongPos);
-                broadcastManager.sendBroadcast(intent);
-            }
+            Intent intent = new Intent("musicPlayer.broadcast.SONG_FINISHED");
+            intent.putExtra("nextSongPos", nextSongPos);
+            broadcastManager.sendBroadcast(intent);
 
         } catch (InterruptedException e) {
             Log.d(TAG, "Player unbounded");

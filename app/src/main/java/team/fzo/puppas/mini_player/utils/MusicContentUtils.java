@@ -51,6 +51,8 @@ public class MusicContentUtils {
     private static final int SMALL_SIZE = R.dimen.cover_size_mini;
     private static final int BIG_SIZE = R.dimen.cover_size_maxi;
 
+
+    public static final int SONG_LIST_CLASS_NUM = 11;
     /*
     存储model的class对象，用于查找数据库
     */
