@@ -107,15 +107,22 @@ public class PlayService extends Service {
             PlayerNotificationUtils.setRemoteViews(songInPlayer, true);
         }
         else{
-            if(!isPlaying()){
+            if(!isPlaying() && getPosition() < getDuration()){
                 //当前播放的歌曲处于暂停状态，重新启动播放器
                 sPlayer.start();
                 sCounter.restart();
                 PlayerNotificationUtils.setRemoteViews(true);
             }
+            else if(getPosition() >= getDuration()){
+                //当前歌曲播放完毕且下一首歌曲还为此歌曲
+                resetPlayer(getSongInPlayer().getPath());
+                sPlayer.start();
+                resetCounter((int)(getSongInPlayer().getDuration() / 1000));
+                sCounter.start();
 
-            if(sPlayMode == LIST_SHUFFLE){
-                sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+                if(sPlayMode == LIST_SHUFFLE){
+                    sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+                }
             }
         }
 
@@ -155,21 +162,28 @@ public class PlayService extends Service {
             PlayerNotificationUtils.setRemoteViews(songInPlayer, true);
         }
         else{
-            if(!isPlaying()){
+            if(!isPlaying() && getPosition() < getDuration()){
                 //当前播放的歌曲处于暂停状态，重新启动播放器
                 sPlayer.start();
                 sCounter.restart();
-
                 PlayerNotificationUtils.setRemoteViews(true);
             }
+            else if(getPosition() >= getDuration()){
+                //当前歌曲播放完毕且下一首歌曲还为此歌曲
+                resetPlayer(getSongInPlayer().getPath());
+                sPlayer.start();
+                resetCounter((int)(getSongInPlayer().getDuration() / 1000));
+                sCounter.start();
 
-            if(sPlayMode == LIST_SHUFFLE){
-                sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+                if(sPlayMode == LIST_SHUFFLE){
+                    sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+                }
             }
         }
 
         PlayerNotificationUtils.sendPlayerNotification();
     }
+
 
     //当播放不同歌单的歌曲时调用此版本
     public static void play(Context context, int pos, int newSongListId){
@@ -237,16 +251,22 @@ public class PlayService extends Service {
             PlayerNotificationUtils.setRemoteViews(songInPlayer, true);
         }
         else{
-            if(!isPlaying()){
+            if(!isPlaying() && getPosition() < getDuration()){
                 //当前播放的歌曲处于暂停状态，重新启动播放器
                 sPlayer.start();
                 sCounter.restart();
-
                 PlayerNotificationUtils.setRemoteViews(true);
             }
+            else if(getPosition() >= getDuration()){
+                //当前歌曲播放完毕且下一首歌曲还为此歌曲
+                resetPlayer(getSongInPlayer().getPath());
+                sPlayer.start();
+                resetCounter((int)(getSongInPlayer().getDuration() / 1000));
+                sCounter.start();
 
-            if(sPlayMode == LIST_SHUFFLE){
-                sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+                if(sPlayMode == LIST_SHUFFLE){
+                    sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+                }
             }
         }
 

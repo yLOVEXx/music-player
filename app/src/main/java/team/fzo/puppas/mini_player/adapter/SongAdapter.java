@@ -82,6 +82,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(position == PlayService.getSongPos() && PlayService.isPlaying()){
+                    //如果重复点击则忽略
+                    return;
+                }
+
                 boolean isPlaying = PlayService.isPlaying();
 
                 //保持播放歌单与访问歌单的一致
