@@ -3,6 +3,7 @@ package team.fzo.puppas.mini_player.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +12,25 @@ import android.widget.TextView;
 
 import net.igenius.customcheckbox.CustomCheckBox;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.model.MusicList;
+import team.fzo.puppas.mini_player.utils.MusicContentUtils;
 
 public class PlaylistInAddDialogAdapter extends RecyclerView.Adapter<PlaylistInAddDialogAdapter.ViewHolder>{
-    private final List<MusicList> myMusicList;
+    private final List<MusicList> mMyMusicList;
     private Context mContext;
+    private List<Boolean> mCheckedList;
 
     public PlaylistInAddDialogAdapter(List<MusicList> myMusicList, Context context){
-        this.myMusicList = myMusicList;
+        this.mMyMusicList = myMusicList;
         mContext = context;
+        mCheckedList = new ArrayList<>();
+        for(int i = 0; i < mMyMusicList.size(); ++i){
+            mCheckedList.add(false);
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -46,26 +54,38 @@ public class PlaylistInAddDialogAdapter extends RecyclerView.Adapter<PlaylistInA
     public PlaylistInAddDialogAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.music_list_item_in_add_dialog, parent,false);
+
         final PlaylistInAddDialogAdapter.ViewHolder holder = new PlaylistInAddDialogAdapter.ViewHolder(view);
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final PlaylistInAddDialogAdapter.ViewHolder holder, final int position){
-        MusicList musicList = myMusicList.get(position);
+        MusicList musicList = mMyMusicList.get(position);
         holder.mMusicImage.setImageResource(musicList.getMusicListAlbumId());
         holder.mMusicName.setText(musicList.getMusicListName());
+
+        holder.mCheckBox.setOnCheckedChangeListener(new CustomCheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CustomCheckBox checkBox, boolean isChecked) {
+                mCheckedList.set(position, isChecked);
+            }
+        });
     }
 
     @Override
     public int getItemCount(){
-        return myMusicList.size();
+        return mMyMusicList.size();
+    }
+
+    public List<Integer> getSelectedPlaylistId(){
+        List<Integer> idList = new ArrayList<>();
+        for(int i = 0; i < mCheckedList.size(); ++i){
+            if(mCheckedList.get(i)){
+                idList.add(mMyMusicList.get(i).getMusicListId());
+            }
+        }
+
+        return idList;
     }
 }

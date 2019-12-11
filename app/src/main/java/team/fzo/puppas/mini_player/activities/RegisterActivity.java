@@ -34,13 +34,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
+        Log.d("aaa", "asd");
         switch (view.getId()) {
             case R.id.ib_navigation_back:
                 finish();
                 break;
 
             case R.id.bt_register_submit:
-                String address = "127.0.0.1:8080";
+
+                String address = "192.168.137.1:8080/register";
                 String username = mUsername.getText().toString();
                 String password = mPassword.getText().toString();
                 HttpUtils.sendHttpRequestByPost(address, username, password,
@@ -48,7 +50,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                                 String responseData = Objects.requireNonNull(response.body()).string();
-                                Log.d("aaa", responseData);
                             }
 
                             @Override

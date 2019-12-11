@@ -171,6 +171,40 @@ public class PlayService extends Service {
         PlayerNotificationUtils.sendPlayerNotification();
     }
 
+    //当播放不同歌单的歌曲时调用此版本
+    public static void play(Context context, int pos, int newSongListId){
+        //save to the recent playlist
+        if(sSongListId != 1)
+            MusicContentUtils.storeInPlaylist(getSongInPlayer(), 1);
+
+        sSongListId = newSongListId;
+        MusicContentUtils.getContentFromDb();
+
+        //clear history record
+        sHistoryRecord.clear();
+
+        sSongPos = pos;
+        //calculate the next song will be played
+        if(sPlayMode == LIST_REPEAT){
+            sNextSongPos = sSongPos == MusicContentUtils.gSongList.size() - 1 ? 0 : sSongPos + 1;
+        }
+        else if(sPlayMode == LIST_SHUFFLE){
+            sNextSongPos = new Random().nextInt(MusicContentUtils.gSongList.size());
+        }
+
+        setCoverImage(context);
+
+        Song songInPlayer = MusicContentUtils.gSongList.get(sSongPos);
+        resetPlayer(songInPlayer.getPath());
+        sPlayer.start();
+
+        resetCounter((int)(songInPlayer.getDuration() / 1000));
+        sCounter.start();
+
+        PlayerNotificationUtils.setRemoteViews(songInPlayer, true);
+        PlayerNotificationUtils.sendPlayerNotification();
+    }
+
     public static void play(Context context, int pos, boolean isBack){
         if(sSongPos == NO_POSITION || sSongPos != pos){
             //save to the recent playlist

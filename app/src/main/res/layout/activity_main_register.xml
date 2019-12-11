@@ -176,7 +176,7 @@
         android:layout_height="48dp"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:background="@drawable/bg_login_submit_lock"
+        android:background="@drawable/bg_login_submit"
         android:elevation="0dp"
         android:outlineProvider="none"
         android:text="@string/register_done_hint"

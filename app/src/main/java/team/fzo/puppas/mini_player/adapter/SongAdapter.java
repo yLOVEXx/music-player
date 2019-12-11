@@ -43,6 +43,7 @@ import team.fzo.puppas.mini_player.utils.MusicContentUtils;
 import team.fzo.puppas.mini_player.service.PlayService;
 
 import java.util.List;
+import java.util.Objects;
 
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
@@ -81,21 +82,20 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean isPlaying = PlayService.isPlaying();
 
                 //保持播放歌单与访问歌单的一致
                 if(MusicListActivity.getCurrentListId() != PlayService.getSongListId()){
-
-                    PlayService.setSongListId(MusicListActivity.getCurrentListId());
-                    MusicContentUtils.getContentFromDb();
+                    PlayService.play(mContext, position, MusicListActivity.getCurrentListId());
+                }
+                else{
+                    PlayService.play(mContext, position);
                 }
 
                 /*
                 send broadcast to activity for loading the album ic_launcher and starting the play button
                 animation when click the song item
                  */
-                boolean isPlaying = PlayService.isPlaying();
-                PlayService.play(mContext, position);
-
                 Intent intent = new Intent("musicPlayer.broadcast.SONG_SELECTED");
                 intent.putExtra("songIndex", holder.getAdapterPosition());
                 intent.putExtra("isPlaying", isPlaying);
@@ -125,13 +125,14 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 AlertDialog dialog = builder.setView(dialogView).create();
                 dialog.show();
 
-                setOnAddToPlaylistClickListener(dialog);
+                setOnAddToPlaylistClickListener(dialog, holder.song);
             }
         });
     }
 
-    private void setOnAddToPlaylistClickListener(final AlertDialog songDetailDialog){
-        songDetailDialog.getWindow().findViewById(R.id.add_to_playlist).setOnClickListener(new View.OnClickListener(){
+    //设置点击添加到歌单项的事件
+    private void setOnAddToPlaylistClickListener(final AlertDialog songDetailDialog, final Song song){
+        Objects.requireNonNull(songDetailDialog.getWindow()).findViewById(R.id.add_to_playlist).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Activity currentActivity = MyActivityManager.getInstance().getCurrentActivity();
@@ -141,13 +142,10 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 List<MusicList> selectedPlaylist = LitePal.where("selectedStatus = ?","1").find(MusicList.class);
                 RecyclerView recyclerView = playlistDialogView.findViewById(R.id.playlist);
                 assert recyclerView != null;
+                PlaylistInAddDialogAdapter playlistInAddDialogAdapter = new PlaylistInAddDialogAdapter(
+                        selectedPlaylist, mContext);
+                recyclerView.setAdapter(playlistInAddDialogAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-                recyclerView.setAdapter(new PlaylistInAddDialogAdapter(selectedPlaylist, mContext));
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                AlertDialog playlistDialog = builder.setView(playlistDialogView).create();
-                playlistDialog.show();
-
                 //set the maxHeight of recyclerView
                 ViewGroup.LayoutParams lp = recyclerView.getLayoutParams();
                 int item_num = mContext.getResources().getInteger(R.integer.max_item_in_add_playlist_dialog);
@@ -159,7 +157,39 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 }
                 recyclerView.setLayoutParams(lp);
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                AlertDialog playlistDialog = builder.setView(playlistDialogView).create();
+                playlistDialog.show();
+
+                setOnCancelButtonClick(playlistDialog);
+                setOnOkButtonClick(playlistDialog, playlistInAddDialogAdapter, song);
+
                 songDetailDialog.dismiss();
+            }
+        });
+    }
+
+    private void setOnCancelButtonClick(final AlertDialog playlistDialog){
+        Objects.requireNonNull(playlistDialog.getWindow()).findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                playlistDialog.dismiss();
+            }
+        });
+    }
+
+    private void setOnOkButtonClick(final AlertDialog playlistDialog,
+                                    final PlaylistInAddDialogAdapter playlistInAddDialogAdapter,
+                                    final Song song){
+        Objects.requireNonNull(playlistDialog.getWindow()).findViewById(R.id.ok).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                List<Integer> playlistId = playlistInAddDialogAdapter.getSelectedPlaylistId();
+                for(int i = 0; i < playlistId.size(); ++i){
+                    MusicContentUtils.storeInPlaylist(song, playlistId.get(i));
+                }
+
+                playlistDialog.dismiss();
             }
         });
     }
