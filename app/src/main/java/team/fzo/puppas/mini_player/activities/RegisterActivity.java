@@ -1,17 +1,14 @@
 package team.fzo.puppas.mini_player.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,17 +30,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText mUsername;
     private EditText mPassword1;
     private EditText mPassword2;
-    private Button mBtRegistSubmit;
-    private Button mBtRegistSubmit2;
-    private ImageView mIvRegistUsernameDel;
-    private ImageView mIvRegistPwd1Del;
-    private ImageView mIvRegistPwd2Del;
-    private LinearLayout mLlRegistUsername;
-    private LinearLayout mLlRegistPwd1;
-    private LinearLayout mLlRegistPwd2;
-    private String mSUserName;
-    private String mSPwd_First;
-    private String mSPwd_Second;
+    private Button mBtRegisterSubmit;
+    private ImageView mIvRegisterUsernameDel;
+    private ImageView mIvRegisterPwd1Del;
+    private ImageView mIvRegisterPwd2Del;
+    private LinearLayout mLlRegisterUsername;
+    private LinearLayout mLlRegisterPwd1;
+    private LinearLayout mLlRegisterPwd2;
+    private String mInputUserName;
+    private String mInputPwdFirst;
+    private String mInputPwdSecond;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +51,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mPassword2 = findViewById(R.id.et_register_pwd_input2);
         mUsername = findViewById(R.id.et_register_username);
         //button
-        mBtRegistSubmit = findViewById(R.id.bt_register_submit);
+        mBtRegisterSubmit = findViewById(R.id.bt_register_submit);
         //delete
-        mIvRegistUsernameDel = findViewById(R.id.iv_register_username_del);
-        mIvRegistPwd1Del = findViewById(R.id.iv_register_pwd_del);
-        mIvRegistPwd2Del = findViewById(R.id.iv_register_pwd_del2);
+        mIvRegisterUsernameDel = findViewById(R.id.iv_register_username_del);
+        mIvRegisterPwd1Del = findViewById(R.id.iv_register_pwd_del);
+        mIvRegisterPwd2Del = findViewById(R.id.iv_register_pwd_del2);
 
         //LinerLayout
-        mLlRegistUsername = findViewById(R.id.ll_register_two_username);
-        mLlRegistPwd1 = findViewById(R.id.ll_register_two_pwd);
-        mLlRegistPwd2 = findViewById(R.id.ll_register_two_pwd2);
+        mLlRegisterUsername = findViewById(R.id.ll_register_two_username);
+        mLlRegisterPwd1 = findViewById(R.id.ll_register_two_pwd);
+        mLlRegisterPwd2 = findViewById(R.id.ll_register_two_pwd2);
 
         findViewById(R.id.ib_navigation_back).setOnClickListener(this);
 
@@ -72,10 +68,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mPassword1.setOnClickListener(this);
         mPassword2.setOnClickListener(this);
         mUsername.setOnClickListener(this);
-        mBtRegistSubmit.setOnClickListener(this);
-        mIvRegistUsernameDel.setOnClickListener(this);
-        mIvRegistPwd1Del.setOnClickListener(this);
-        mIvRegistPwd2Del.setOnClickListener(this);
+        mBtRegisterSubmit.setOnClickListener(this);
+        mIvRegisterUsernameDel.setOnClickListener(this);
+        mIvRegisterPwd1Del.setOnClickListener(this);
+        mIvRegisterPwd2Del.setOnClickListener(this);
         //注册其他时间
         mUsername.setOnFocusChangeListener(this);
         mUsername.addTextChangedListener(this);
@@ -98,37 +94,37 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void afterTextChanged(Editable s){
-        mSUserName = mUsername.getText().toString().trim();
-        mSPwd_First = mPassword1.getText().toString().trim();
-        mSPwd_Second = mPassword2.getText().toString().trim();
+        mInputUserName = mUsername.getText().toString().trim();
+        mInputPwdFirst = mPassword1.getText().toString().trim();
+        mInputPwdSecond = mPassword2.getText().toString().trim();
 
 
         //是否显示清除按钮
-        if (mSUserName.length() > 0) {
-            mIvRegistUsernameDel.setVisibility(View.VISIBLE);
+        if (mInputUserName.length() > 0) {
+            mIvRegisterUsernameDel.setVisibility(View.VISIBLE);
         } else {
-            mIvRegistUsernameDel.setVisibility(View.INVISIBLE);
+            mIvRegisterUsernameDel.setVisibility(View.INVISIBLE);
         }
-        if (mSPwd_First.length() > 0) {
-            mIvRegistPwd1Del.setVisibility(View.VISIBLE);
+        if (mInputPwdFirst.length() > 0) {
+            mIvRegisterPwd1Del.setVisibility(View.VISIBLE);
         } else {
-            mIvRegistPwd1Del.setVisibility(View.INVISIBLE);
+            mIvRegisterPwd1Del.setVisibility(View.INVISIBLE);
         }
-        if (mSPwd_Second.length() > 0) {
-            mIvRegistPwd2Del.setVisibility(View.VISIBLE);
+        if (mInputPwdSecond.length() > 0) {
+            mIvRegisterPwd2Del.setVisibility(View.VISIBLE);
         } else {
-            mIvRegistPwd2Del.setVisibility(View.INVISIBLE);
+            mIvRegisterPwd2Del.setVisibility(View.INVISIBLE);
         }
 
 
 
         //登录按钮是否可用
-        if (!TextUtils.isEmpty(mSUserName) && !TextUtils.isEmpty(mSPwd_First) && !TextUtils.isEmpty(mSPwd_Second)) {
-            mBtRegistSubmit.setBackgroundResource(R.drawable.bg_login_submit);
-            mBtRegistSubmit.setTextColor(getResources().getColor(R.color.white));
+        if (!TextUtils.isEmpty(mInputUserName) && !TextUtils.isEmpty(mInputPwdFirst) && !TextUtils.isEmpty(mInputPwdSecond)) {
+            mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit);
+            mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.white));
         } else {
-            mBtRegistSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
-            mBtRegistSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
+            mBtRegisterSubmit.setBackgroundResource(R.drawable.bg_login_submit_lock);
+            mBtRegisterSubmit.setTextColor(getResources().getColor(R.color.account_lock_font_color));
         }
     }
 
@@ -139,23 +135,23 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         if (id == R.id.et_register_username) {
             if (hasFocus) {
-                mLlRegistUsername.setActivated(true);
-                mLlRegistPwd1.setActivated(false);
-                mLlRegistPwd2.setActivated(false);
+                mLlRegisterUsername.setActivated(true);
+                mLlRegisterPwd1.setActivated(false);
+                mLlRegisterPwd2.setActivated(false);
             }
         }
         else if(id == R.id.et_register_pwd_input){
             if (hasFocus) {
-                mLlRegistPwd1.setActivated(true);
-                mLlRegistUsername.setActivated(false);
-                mLlRegistPwd2.setActivated(false);
+                mLlRegisterPwd1.setActivated(true);
+                mLlRegisterUsername.setActivated(false);
+                mLlRegisterPwd2.setActivated(false);
             }
         }
         else {
             if (hasFocus) {
-                mLlRegistPwd2.setActivated(true);
-                mLlRegistUsername.setActivated(false);
-                mLlRegistPwd1.setActivated(false);
+                mLlRegisterPwd2.setActivated(true);
+                mLlRegisterUsername.setActivated(false);
+                mLlRegisterPwd1.setActivated(false);
             }
         }
     }
@@ -207,20 +203,20 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.bt_register_submit:
-                if (mSPwd_First.length() < 6) {
+                if (mInputPwdFirst.length() < 6) {
                     Toast.makeText(this, "密码位数小于6位，请重修输入", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                if (mSPwd_First.length() > 16) {
+                if (mInputPwdFirst.length() > 16) {
                     Toast.makeText(this, "密码位数超出限制，请重新输入", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                if (!mSPwd_First.equals(mSPwd_Second)) {
+                if (!mInputPwdFirst.equals(mInputPwdSecond)) {
                     Toast.makeText(this, "两次密码输入有误，请重修输入！", Toast.LENGTH_SHORT).show();
                     break;
                 }
 
-                String address = "192.168.137.1:8080/register";
+                String address = "http://120.55.170.121:8080/register";
                 String username = mUsername.getText().toString();
                 String password = mPassword1.getText().toString();
                 HttpUtils.sendHttpRequestByPost(address, username, password,
@@ -228,6 +224,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                                 String responseData = Objects.requireNonNull(response.body()).string();
+                                Log.d("aaa", responseData);
                             }
 
                             @Override
