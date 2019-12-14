@@ -145,7 +145,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 View  playlistDialogView = currentActivity.getLayoutInflater().inflate(
                         R.layout.dialog_add_to_playlist,null);
 
-                List<MusicList> selectedPlaylist = LitePal.where("selectedStatus = ?","1").find(MusicList.class);
+                List<MusicList> selectedPlaylist = getSelectedPlaylist(song);
                 RecyclerView recyclerView = playlistDialogView.findViewById(R.id.playlist);
                 assert recyclerView != null;
                 PlaylistInAddDialogAdapter playlistInAddDialogAdapter = new PlaylistInAddDialogAdapter(
@@ -173,6 +173,21 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 songDetailDialog.dismiss();
             }
         });
+    }
+
+    private List<MusicList> getSelectedPlaylist(Song song){
+        List<MusicList> selectedPlaylist = LitePal.where("selectedStatus = ?","1").find(MusicList.class);
+        for(int i = 0; i < selectedPlaylist.size(); ++i){
+            if(LitePal.where("songId = ?", String.valueOf(song.getSongId()))
+                    .find(MusicContentUtils.SONG_LIST_CLASS[selectedPlaylist.get(i).getMusicListId()])
+                    .size() >
+                    0){
+                selectedPlaylist.remove(i);
+                --i;
+            }
+        }
+
+        return selectedPlaylist;
     }
 
     private void setOnCancelButtonClick(final AlertDialog playlistDialog){
