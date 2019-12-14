@@ -1,5 +1,6 @@
 package team.fzo.puppas.mini_player.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -224,6 +225,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                                 String responseData = Objects.requireNonNull(response.body()).string();
+                                Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
+                                startActivity(intent);
                                 Log.d("aaa", responseData);
                             }
 
