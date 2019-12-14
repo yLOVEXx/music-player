@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Response;
+import team.fzo.puppas.mini_player.MyApplication;
 import team.fzo.puppas.mini_player.R;
 import team.fzo.puppas.mini_player.utils.HttpUtils;
 
@@ -224,14 +225,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                                 String responseData = Objects.requireNonNull(response.body()).string();
-                                Log.d("aaa", responseData);
                             }
 
                             @Override
                             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-
+                                Toast.makeText(MyApplication.getContext(), "请求失败", Toast.LENGTH_SHORT).show();
                             }
                         });
+                break;
+
+            default:
         }
     }
 
