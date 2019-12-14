@@ -41,7 +41,7 @@ public class HttpUtils {
         OkHttpClient client = new OkHttpClient();
 
         RequestBody body = new FormBody.Builder()
-                            .add("username", username)
+                            .add("name", username)
                             .add("password", password)
                             .build();
         Request request = new Request.Builder()

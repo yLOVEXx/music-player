@@ -23,11 +23,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Response;
+import team.fzo.puppas.mini_player.MyApplication;
 import team.fzo.puppas.mini_player.R;
+import team.fzo.puppas.mini_player.utils.HttpUtils;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener, ViewTreeObserver.OnGlobalLayoutListener, TextWatcher {
-
-    private String TAG = "ifu25";
 
     private ImageButton mIbNavigationBack;
     private LinearLayout mLlLoginPull;
@@ -383,7 +390,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     //登录
     private void loginRequest() {
+        String address = "http://120.55.170.121:8080/login";
+        String username = mEtLoginUsername.getText().toString();
+        String password = mEtLoginPwd.getText().toString();
+        HttpUtils.sendHttpRequestByPost(address, username, password,
+                new okhttp3.Callback(){
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        String responseData = Objects.requireNonNull(response.body()).string();
+                    }
 
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        Toast.makeText(MyApplication.getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     //微博登录
