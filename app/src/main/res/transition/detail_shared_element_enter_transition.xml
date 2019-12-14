@@ -7,12 +7,5 @@
     <transition class="team.fzo.puppas.mini_player.transition.ProgressViewTransition" />
     <!--Cover-->
     <transition class="com.andremion.music.MusicCoverViewTransition" />
-    <!--Others-->
-    <transitionSet>
-        <changeBounds />
-        <changeTransform />
-        <changeClipBounds />
-        <changeImageTransform />
-    </transitionSet>
 
 </transitionSet>
