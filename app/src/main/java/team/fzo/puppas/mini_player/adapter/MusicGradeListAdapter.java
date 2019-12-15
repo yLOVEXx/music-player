@@ -60,7 +60,20 @@ public class MusicGradeListAdapter extends RecyclerView.Adapter<MusicGradeListAd
                 holder.song.getSongId(), holder.song.getAlbumId(), true);
         holder.mMusicImage.setImageBitmap(album);
         holder.mMusicName.setText(holder.song.getName());
-        holder.mProgressBar.setProgress(80);
+        if(position == 0)
+            holder.mProgressBar.setProgress(80);
+        else if(position == 1)
+            holder.mProgressBar.setProgress(70);
+        else if(position == 2)
+            holder.mProgressBar.setProgress(60);
+        else if(position == 3)
+            holder.mProgressBar.setProgress(50);
+        else if(position == 4)
+            holder.mProgressBar.setProgress(30);
+        else if(position == 5)
+            holder.mProgressBar.setProgress(20);
+        else
+            holder.mProgressBar.setProgress(0);
     }
 
     @Override
