@@ -228,13 +228,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 String responseData = Objects.requireNonNull(response.body()).string();
                                 Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
                                 startActivity(intent);
-                                Log.d("aaa", responseData);
 
                             }
 
                             @Override
                             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                                Toast.makeText(MyApplication.getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MyApplication.getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
                         });
                 break;
