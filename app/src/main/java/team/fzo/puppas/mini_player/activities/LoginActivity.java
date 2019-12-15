@@ -398,6 +398,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                         String responseData = Objects.requireNonNull(response.body()).string();
+                        Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                        startActivity(intent);
                     }
 
                     @Override
