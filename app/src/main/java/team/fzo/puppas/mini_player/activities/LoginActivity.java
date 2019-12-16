@@ -3,6 +3,7 @@ package team.fzo.puppas.mini_player.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.alibaba.fastjson.JSON;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -399,11 +402,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                         String responseData = Objects.requireNonNull(response.body()).string();
+                        String status = JSON.parseObject(responseData).getString("code");
+                        if(status.equals("SUCCESS")) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MyApplication.getContext(), "登录成功", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else{
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MyApplication.getContext(), "登录失败", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
 
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        Toast.makeText(MyApplication.getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(MyApplication.getContext(), "请求失败", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
     }
