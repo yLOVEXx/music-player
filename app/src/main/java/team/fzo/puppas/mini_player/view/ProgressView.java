@@ -161,7 +161,7 @@ public class ProgressView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        //当前进度比例
+
         final float scale = mMax > 0 ? mProgress / (float) mMax : 0;
         float startAngle = MIDDLE_ANGLE - START_ANGLE * mMorph;
         float sweepAngle = FULL_PROGRESS_ANGLE * mMorph;

@@ -23,6 +23,7 @@ import android.content.res.TypedArray;
 import android.transition.Transition;
 import android.transition.TransitionValues;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Property;
 import android.view.ViewGroup;
 
@@ -31,8 +32,8 @@ import team.fzo.puppas.mini_player.view.ProgressView;
 
 public class ProgressViewTransition extends Transition {
 
-    private static final String PROP_NAME_MORPH = ProgressViewTransition.class.getName() + ":morph";
-    private static final String[] sTransitionProperties = {PROP_NAME_MORPH};
+    private static final String PROPNAME_MORPH = ProgressViewTransition.class.getName() + ":morph";
+    private static final String[] sTransitionProperties = {PROPNAME_MORPH};
     private static final Property<ProgressView, Float> MORPH_PROPERTY =
             new Property<ProgressView, Float>(Float.class, "morph") {
                 @Override
@@ -75,7 +76,7 @@ public class ProgressViewTransition extends Transition {
 
     private void captureValues(TransitionValues transitionValues, Object value) {
         if (transitionValues.view instanceof ProgressView) {
-            transitionValues.values.put(PROP_NAME_MORPH, value);
+            transitionValues.values.put(PROPNAME_MORPH, value);
         }
     }
 
